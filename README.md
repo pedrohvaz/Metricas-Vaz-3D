@@ -31,6 +31,10 @@ static/               ícones, imagem de prévia e manifesto (copiados para a ra
 scripts/              utilitários (gerar imagens dos produtos)
 ```
 
+## Identidade visual
+
+Cores e logotipo da MV 3D: preto, roxo-violeta (`#9B30FF`), azul elétrico (`#1E9BFF`) e prata. As cores ficam no início de `assets/css/site.css` (variáveis `--violet`, `--blue`, `--grad`). O logotipo está em `assets/img/` (`logo-original.webp` e versões menores) e os ícones do navegador em `static/`.
+
 ## Tarefas comuns
 
 **Gerar o site**

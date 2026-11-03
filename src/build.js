@@ -54,7 +54,7 @@ function header(atual) {
 <header class="site-header">
   <div class="wrap hdr">
     <a class="brand" href="${B}" aria-label="${esc(site.nome)}, página inicial">
-      <svg viewBox="0 0 200 200" aria-hidden="true"><use href="#mark"/></svg>
+      <img class="logo" src="${B}assets/img/logo-128.webp" alt="" width="46" height="46">
       <span><b>${esc(site.nome)}</b><small>${esc(site.slogan)}</small></span>
     </a>
     <nav class="nav" aria-label="Principal">
@@ -82,7 +82,7 @@ function footer() {
   <div class="wrap">
     <div class="foot">
       <div>
-        <a class="brand" href="${B}"><svg viewBox="0 0 200 200" aria-hidden="true"><use href="#mark"/></svg><span><b>${esc(site.nome)}</b><small>${esc(site.slogan)}</small></span></a>
+        <a class="brand" href="${B}"><img class="logo" src="${B}assets/img/logo-256.webp" alt="Logotipo MV 3D" width="88" height="88" loading="lazy"><span><b>${esc(site.nome)}</b><small>${esc(site.slogan)}</small></span></a>
         <p style="margin-top:16px;max-width:30em">Impressão 3D de decoração, colecionáveis, brinquedos e projetos sob encomenda, com envio para todo o Brasil.</p>
       </div>
       <div><h4>Loja</h4><ul><li><a href="${B}produtos/">Produtos</a></li><li><a href="${B}encomenda/">Sob encomenda</a></li><li><a href="${B}#materiais">Materiais</a></li><li><a href="${B}sobre/">Sobre</a></li></ul></div>
@@ -116,9 +116,9 @@ function layout({ path: p, titulo, descricao, conteudo, nav = '', jsonld = [], o
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(titulo)}</title>
 <meta name="description" content="${esc(descricao)}">
-${canonical ? `<link rel="canonical" href="${canonical}">\n` : ''}<meta name="theme-color" content="#14161A">
-<link rel="icon" href="${B}favicon.svg" type="image/svg+xml">
+${canonical ? `<link rel="canonical" href="${canonical}">\n` : ''}<meta name="theme-color" content="#07060C">
 <link rel="icon" href="${B}favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="${B}favicon-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="${B}apple-touch-icon.png">
 <link rel="manifest" href="${B}site.webmanifest">
 <meta property="og:type" content="website">
@@ -183,7 +183,7 @@ function card(p) {
 
 const orgLd = () => {
   const e = site.empresa, o = { '@context': 'https://schema.org', '@type': 'Store', name: site.nome, description: 'Impressão 3D de decoração, colecionáveis, brinquedos e peças sob encomenda.', telephone: '+' + site.whatsapp, priceRange: 'R$' };
-  if (SITE_URL) { o.url = absUrl(''); o.logo = absUrl('icon-512.png'); o.image = absUrl('og-image.png'); }
+  if (SITE_URL) { o.url = absUrl(''); o.logo = absUrl('assets/img/logo-512.webp'); o.image = absUrl('og-image.png'); }
   if (!isTodo(e.email)) o.email = e.email;
   if (!isTodo(e.razao_social)) o.legalName = e.razao_social;
   if (!isTodo(e.cidade_uf)) o.address = { '@type': 'PostalAddress', addressLocality: e.cidade_uf.split('/')[0].trim(), addressRegion: (e.cidade_uf.split('/')[1] || '').trim(), addressCountry: 'BR' };
@@ -203,7 +203,7 @@ const add = (p, html) => paginas.push([p, html]);
     .replace('<div id="heroArt"></div>', MV.art('dragon', 'roxo'))
     .replace(/<button class="btn btn-primary" type="button" data-open="dragao"([^>]*)>Ver<\/button>/, `<a class="btn btn-primary" href="${P.dragao ? P.dragao.url : B + 'produtos/'}"$1>Ver</a>`);
   const destaques = loja.destaques.filter(id => P[id]).map(id => card(P[id])).join('');
-  const make = partial('make').replace('<figure class="scene" id="makeScene"></figure>', `<figure class="scene" id="makeScene">${MV.cenaProcesso('#FFC83D')}</figure>`);
+  const make = partial('make').replace('<figure class="scene" id="makeScene"></figure>', `<figure class="scene" id="makeScene">${MV.cenaProcesso('#9B30FF')}</figure>`);
   const kinds = partial('kinds').replace('<div class="kinds-grid" id="kindsGrid"></div>', `<div class="kinds-grid" id="kindsGrid">${site.tipos.map(t => `<a class="kind" href="${t.cat ? `${B}produtos/?categoria=${t.cat}` : `${B}encomenda/`}">
   <div class="kind-img">${MV.art(t.art, '#B9BEC9')}</div>
   <div class="kind-body"><h3>${esc(t.titulo)}</h3><p>${esc(t.texto)}</p>

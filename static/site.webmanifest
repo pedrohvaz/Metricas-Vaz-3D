@@ -4,8 +4,8 @@
   "lang": "pt-BR",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0E1014",
-  "theme_color": "#14161A",
+  "background_color": "#07060C",
+  "theme_color": "#07060C",
   "icons": [
     {
       "src": "/icon-192.png",
@@ -16,11 +16,6 @@
       "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
-    },
-    {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
     }
   ]
 }

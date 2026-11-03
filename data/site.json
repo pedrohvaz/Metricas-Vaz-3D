@@ -1,7 +1,7 @@
 {
   "_leia": "Configurações gerais do site. Depois de editar, rode: node src/build.js",
   "nome": "Métricas Vaz 3D",
-  "slogan": "Impressão 3D",
+  "slogan": "Soluções em impressão 3D",
   "url": "",
   "_url": "Endereço do site publicado, com barra no final. Ex.: https://metricasvaz3d.com.br/ . Necessário para sitemap, prévia no WhatsApp e Google.",
   "base": "/",
