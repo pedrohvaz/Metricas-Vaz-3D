@@ -69,7 +69,7 @@ if (cartDlg) {
   $('#openCart').addEventListener('click', () => { renderCart(); $('#cartOk').hidden = true; cartDlg.showModal(); });
   cartDlg.addEventListener('click', e => {
     const c = e.target.closest('[data-close]');
-    if (e.target === cartDlg || c) { cartDlg.close(); if (c && c.dataset.goto) location.href = S.base + 'produtos/'; return; }
+    if (e.target === cartDlg || c) { cartDlg.close(); if (c && c.dataset.goto) { const l = document.querySelector('#mainNav a[href*="produtos"]'); location.href = l ? l.href : S.base + 'produtos/'; } return; }
     const b = e.target.closest('[data-cq]');
     if (b) { const it = cart.find(i => i.key === b.dataset.key); if (!it) return; it.qtd += +b.dataset.cq; if (it.qtd <= 0) cart = cart.filter(i => i !== it); save(); renderCart(); }
   });

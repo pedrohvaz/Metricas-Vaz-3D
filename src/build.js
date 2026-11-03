@@ -5,7 +5,9 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const DIST = path.join(ROOT, 'dist');
+const ARGS = process.argv.slice(2);
+const SAIDA = (ARGS.find(a => a.startsWith('--saida=')) || '--saida=dist').split('=')[1];
+const DIST = path.join(ROOT, SAIDA);
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const site = JSON.parse(read('data/site.json'));
 const loja = JSON.parse(read('data/produtos.json'));
@@ -13,7 +15,18 @@ const MV = require('./art.js');
 MV.setCores(loja.cores);
 
 /* ---------- utilidades ---------- */
-const B = site.base || '/';
+/* Links: no modo normal usam site.base (ex.: "/"). Com --relativo, cada página usa caminhos
+   relativos e links terminados em index.html, para abrir o site direto do computador,
+   em pré-visualizações ou no GitHub Pages sem domínio. */
+const RELATIVO = ARGS.includes('--relativo') || site.base === './';
+const B = '__BASE__/';
+function ajustaLinks(html, pagina) {
+  const prof = pagina.endsWith('.html') ? 0 : pagina.split('/').filter(Boolean).length;
+  const prefixo = RELATIVO ? '../'.repeat(prof) : (site.base || '/');
+  html = html.replace(/__PREFIXO__/g, prefixo);
+  if (RELATIVO) html = html.replace(/__BASE__\/((?:[\w-]+\/)*)(?=["'?#<\s])/g, (m, dir) => prefixo + dir + 'index.html');
+  return html.replace(/__BASE__\//g, prefixo);
+}
 const SITE_URL = (site.url || '').trim();
 const absUrl = p => SITE_URL ? SITE_URL.replace(/\/+$/, '') + '/' + String(p).replace(/^\/+/, '') : '';
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -116,7 +129,7 @@ function layout({ path: p, titulo, descricao, conteudo, nav = '', jsonld = [], o
   const canonical = absUrl(p);
   const og = SITE_URL ? absUrl(ogImage) : B + ogImage;
   const dados = {
-    base: B, whatsapp: site.whatsapp, whatsapp_exibir: site.whatsapp_exibir, nome: site.nome,
+    base: '__PREFIXO__', whatsapp: site.whatsapp, whatsapp_exibir: site.whatsapp_exibir, nome: site.nome,
     cores: loja.cores, categorias: CAT,
     produtos: produtos.map(x => ({ id: x.id, ref: x.ref, nome: x.nome, preco: x.preco, art: x.art, cores: x.cores, personalizavel: !!x.personalizavel, url: x.url, fotos: x.fotos })),
   };
@@ -395,7 +408,7 @@ add('404.html', layout({ path: '404.html', titulo: `Página não encontrada | ${
 /* ---------- gravação ---------- */
 fs.rmSync(DIST, { recursive: true, force: true });
 const write = (rel, data) => { const f = path.join(DIST, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, data); };
-for (const [p, html] of paginas) write(p.endsWith('.html') ? p : p + 'index.html', html);
+for (const [p, html] of paginas) write(p.endsWith('.html') ? p : p + 'index.html', ajustaLinks(html, p));
 
 const copyDir = (src, dst) => { if (!fs.existsSync(src)) return; for (const e of fs.readdirSync(src, { withFileTypes: true })) { const s = path.join(src, e.name), d = path.join(dst, e.name); if (e.isDirectory()) { fs.mkdirSync(d, { recursive: true }); copyDir(s, d); } else fs.copyFileSync(s, d); } };
 fs.mkdirSync(path.join(DIST, 'assets'), { recursive: true });
@@ -410,7 +423,7 @@ if (SITE_URL) {
 write('robots.txt', `User-agent: *\nAllow: /\n${SITE_URL ? `Sitemap: ${absUrl('sitemap.xml')}\n` : ''}`);
 
 /* ---------- relatório ---------- */
-console.log(`✔ ${paginas.length} páginas geradas em dist/ (${produtos.length} produtos)`);
+console.log(`✔ ${paginas.length} páginas geradas em ${SAIDA}/ (${produtos.length} produtos)${RELATIVO ? ' com links relativos' : ''}`);
 if (!SITE_URL) console.log('! data/site.json: "url" está vazio. Preencha depois de publicar para gerar sitemap.xml e prévia completa no WhatsApp/Google.');
 const semFoto = produtos.filter(p => !p.fotos.length).length;
 if (semFoto) console.log(`! ${semFoto} produtos ainda usam desenho no lugar de foto.`);

@@ -4,6 +4,7 @@
   "description": "Site da Métricas Vaz 3D: loja de impressão 3D com pedido pelo WhatsApp.",
   "scripts": {
     "build": "node src/build.js",
+    "build:relativo": "node src/build.js --relativo --saida=preview",
     "imagens": "node scripts/gerar-imagens.js"
   },
   "engines": { "node": ">=18" }

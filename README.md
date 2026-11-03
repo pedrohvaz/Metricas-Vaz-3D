@@ -45,6 +45,14 @@ node src/build.js
 
 O gerador avisa o que falta preencher. Para ver o resultado, abra `dist/index.html` com um servidor local, por exemplo `npx serve dist`.
 
+**Versão com links relativos** (para abrir os arquivos direto do computador, mandar uma prévia ou publicar no GitHub Pages sem domínio):
+
+```bash
+node src/build.js --relativo --saida=preview
+```
+
+Gera a pasta `preview/`, em que todos os links são relativos e terminam em `index.html`.
+
 **Adicionar ou editar um produto:** edite `data/produtos.json`. Cada produto tem `id` (não mude depois de publicado), `ref`, `nome`, `cat`, `preco`, `material`, `tamanho`, `tempo`, `desc`, `cores` e `art`. O endereço da página é criado a partir do nome.
 
 **Colocar fotos reais:** salve as fotos em `assets/img/produtos/` (de preferência quadradas, 1000 × 1000, em `.jpg` ou `.webp`) e liste no produto: `"fotos": ["dragao-1.jpg", "dragao-2.jpg"]`. A primeira foto vira a imagem do card, da prévia e do Google; com mais de uma, a página do produto mostra miniaturas.
