@@ -272,5 +272,36 @@ document.addEventListener('click', e => {
   if (s) { const el = document.getElementById(s.dataset.scrollto); if (el) el.scrollIntoView(); }
 });
 $$('.wa-num').forEach(el => { el.textContent = S.whatsapp_exibir; });
+
+/* ---------- modo claro / escuro ---------- */
+const root = document.documentElement, themeBtn = $('#themeBtn');
+function aplicaTema(t) {
+  const claro = t === 'light';
+  root.setAttribute('data-theme', claro ? 'light' : 'dark');
+  if (themeBtn) themeBtn.setAttribute('aria-label', claro ? 'Ativar modo escuro' : 'Ativar modo claro');
+  const tc = $('#themeColor'); if (tc) tc.content = claro ? '#FFFFFF' : '#07060C';
+}
+aplicaTema(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+if (themeBtn) themeBtn.addEventListener('click', () => {
+  const novo = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  aplicaTema(novo);
+  try { localStorage.setItem('mv3d-tema', novo); } catch (e) { }
+});
+
+/* ---------- menu no celular ---------- */
+const menuBtn = $('#menuBtn'), nav = $('#mainNav');
+function menu(abrir) {
+  if (!menuBtn) return;
+  nav.classList.toggle('open', abrir);
+  menuBtn.setAttribute('aria-expanded', abrir);
+  menuBtn.setAttribute('aria-label', abrir ? 'Fechar menu' : 'Abrir menu');
+}
+if (menuBtn) {
+  menuBtn.addEventListener('click', () => { const abrir = !nav.classList.contains('open'); menu(abrir); if (abrir) { const a = nav.querySelector('a'); if (a) a.focus(); } });
+  nav.addEventListener('click', e => { if (e.target.closest('a')) menu(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav.classList.contains('open')) { menu(false); menuBtn.focus(); } });
+  document.addEventListener('click', e => { if (nav.classList.contains('open') && !e.target.closest('#mainNav') && !e.target.closest('#menuBtn')) menu(false); });
+  matchMedia('(min-width: 821px)').addEventListener('change', e => { if (e.matches) menu(false); });
+}
 renderCart();
 })();

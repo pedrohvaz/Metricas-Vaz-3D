@@ -57,13 +57,24 @@ function header(atual) {
       <img class="logo" src="${B}assets/img/logo-128.webp" alt="" width="46" height="46">
       <span><b>${esc(site.nome)}</b><small>${esc(site.slogan)}</small></span>
     </a>
-    <nav class="nav" aria-label="Principal">
+    <nav class="nav" id="mainNav" aria-label="Principal">
+      <a href="${B}" class="nav-home"${atual === '' ? ' aria-current="page"' : ''}>Início</a>
       ${NAV.map(([h, t]) => `<a href="${B}${h}"${atual === h ? ' aria-current="page"' : ''}>${t}</a>`).join('\n      ')}
     </nav>
-    <button class="btn cart-btn" id="openCart" type="button" aria-label="Abrir carrinho">
-      ${ICON.cart}
-      <span class="cart-lbl">Carrinho</span> <span class="count" id="cartCount">0</span>
-    </button>
+    <div class="hdr-actions">
+      <button class="icon-btn theme-btn" id="themeBtn" type="button" aria-label="Ativar modo claro" title="Modo claro / escuro">
+        <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+        <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>
+      </button>
+      <button class="btn cart-btn" id="openCart" type="button" aria-label="Abrir carrinho">
+        ${ICON.cart}
+        <span class="cart-lbl">Carrinho</span> <span class="count" id="cartCount">0</span>
+      </button>
+      <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mainNav">
+        <svg class="ico-bars" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="ico-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
   </div>
 </header>`;
 }
@@ -114,9 +125,10 @@ function layout({ path: p, titulo, descricao, conteudo, nav = '', jsonld = [], o
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try{var t=localStorage.getItem('mv3d-tema');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 <title>${esc(titulo)}</title>
 <meta name="description" content="${esc(descricao)}">
-${canonical ? `<link rel="canonical" href="${canonical}">\n` : ''}<meta name="theme-color" content="#07060C">
+${canonical ? `<link rel="canonical" href="${canonical}">\n` : ''}<meta name="theme-color" content="#07060C" id="themeColor">
 <link rel="icon" href="${B}favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="${B}favicon-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="${B}apple-touch-icon.png">
