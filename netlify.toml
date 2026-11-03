@@ -1,0 +1,12 @@
+# Publicação no Netlify: o site é gerado a partir de data/ e src/ a cada envio ao GitHub.
+[build]
+  command = "node src/build.js"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

@@ -1,0 +1,313 @@
+{
+  "_leia": "Produtos da loja. id: código interno (não mude depois de publicar). art: desenho usado enquanto não houver foto (dragon, vase, knight, moon, octopus, tower, cat, keychain, hex, pig, phone, gear). fotos: lista de arquivos em assets/img/produtos/ (ex.: [\"dragao-1.jpg\"]); quando houver fotos, elas substituem o desenho.",
+  "destaques": [
+    "dragao",
+    "lua",
+    "guerreira",
+    "chaveiro"
+  ],
+  "categorias": {
+    "decoracao": "Decoração e utilidades",
+    "colecionaveis": "Colecionáveis e miniaturas",
+    "brinquedos": "Brinquedos e presentes"
+  },
+  "cores": {
+    "rosa": {
+      "nome": "Rosa",
+      "hex": "#F2679F"
+    },
+    "roxo": {
+      "nome": "Roxo",
+      "hex": "#7C5CE0"
+    },
+    "verde": {
+      "nome": "Verde",
+      "hex": "#46B97A"
+    },
+    "laranja": {
+      "nome": "Laranja",
+      "hex": "#F07F3C"
+    },
+    "amarelo": {
+      "nome": "Amarelo",
+      "hex": "#F2C14A"
+    },
+    "azul": {
+      "nome": "Azul",
+      "hex": "#3E8FD9"
+    },
+    "menta": {
+      "nome": "Verde menta",
+      "hex": "#6CCFC0"
+    },
+    "branco": {
+      "nome": "Branco",
+      "hex": "#F2F2F4"
+    },
+    "preto": {
+      "nome": "Preto fosco",
+      "hex": "#33353C"
+    },
+    "pedra": {
+      "nome": "Cinza pedra",
+      "hex": "#9AA0AE"
+    },
+    "cinza": {
+      "nome": "Cinza resina",
+      "hex": "#A8ADB8"
+    },
+    "perola": {
+      "nome": "Branco pérola",
+      "hex": "#F5EBD6"
+    }
+  },
+  "materiais": [
+    {
+      "nome": "PLA",
+      "cor": "#F2679F",
+      "res": 3,
+      "det": 3,
+      "camada": "0,12–0,2 mm",
+      "temp": "até 55 °C",
+      "uso": "Decoração, brinquedos, peças de exposição"
+    },
+    {
+      "nome": "PETG",
+      "cor": "#3E8FD9",
+      "res": 4,
+      "det": 3,
+      "camada": "0,16–0,2 mm",
+      "temp": "até 75 °C",
+      "uso": "Utilidades, peças em contato com água, uso externo"
+    },
+    {
+      "nome": "Resina",
+      "cor": "#A8ADB8",
+      "res": 2,
+      "det": 5,
+      "camada": "0,05 mm",
+      "temp": "até 50 °C",
+      "uso": "Miniaturas, joias, protótipos com detalhe fino"
+    },
+    {
+      "nome": "TPU",
+      "cor": "#46B97A",
+      "res": 5,
+      "det": 2,
+      "camada": "0,2 mm",
+      "temp": "até 80 °C",
+      "uso": "Peças flexíveis, capas, vedações, amortecedores"
+    }
+  ],
+  "produtos": [
+    {
+      "id": "dragao",
+      "ref": "PC-001",
+      "nome": "Dragão Articulado",
+      "cat": "brinquedos",
+      "preco": 59.9,
+      "material": "PLA",
+      "tamanho": "300 mm de comprimento",
+      "tempo": "7 h",
+      "art": "dragon",
+      "tag": "Mais vendido",
+      "cores": [
+        "roxo",
+        "verde",
+        "laranja",
+        "azul"
+      ],
+      "desc": "Impresso em peça única com articulações funcionais: cada segmento do corpo se movimenta sem montagem.",
+      "fotos": []
+    },
+    {
+      "id": "vaso",
+      "ref": "DC-014",
+      "nome": "Vaso Espiral",
+      "cat": "decoracao",
+      "preco": 49.9,
+      "material": "PETG",
+      "tamanho": "180 mm de altura",
+      "tempo": "6 h",
+      "art": "vase",
+      "cores": [
+        "menta",
+        "branco",
+        "rosa",
+        "azul"
+      ],
+      "desc": "Parede contínua em espiral, impressa em modo vaso. O PETG torna a peça estanque, própria para flores naturais.",
+      "fotos": []
+    },
+    {
+      "id": "guerreira",
+      "ref": "CL-007",
+      "nome": "Miniatura Guerreira",
+      "cat": "colecionaveis",
+      "preco": 34.9,
+      "material": "Resina 8K",
+      "tamanho": "Escala 32 mm",
+      "tempo": "3 h",
+      "art": "knight",
+      "tag": "Resina",
+      "cores": [
+        "cinza",
+        "preto"
+      ],
+      "desc": "Impressão em resina de alta resolução. Entregue sem pintura, com suportes removidos e superfície pronta para primer.",
+      "fotos": []
+    },
+    {
+      "id": "lua",
+      "ref": "DC-021",
+      "nome": "Luminária Lua",
+      "cat": "decoracao",
+      "preco": 89.9,
+      "material": "PLA translúcido",
+      "tamanho": "120 mm de diâmetro",
+      "tempo": "9 h",
+      "art": "moon",
+      "tag": "LED incluso",
+      "cores": [
+        "perola",
+        "amarelo"
+      ],
+      "desc": "Relevo de crateras que aparece com a luz acesa. Acompanha base de madeira e LED de luz quente com cabo USB.",
+      "fotos": []
+    },
+    {
+      "id": "polvo",
+      "ref": "PC-004",
+      "nome": "Polvo Articulado",
+      "cat": "brinquedos",
+      "preco": 24.9,
+      "material": "PLA",
+      "tamanho": "90 mm",
+      "tempo": "2 h",
+      "art": "octopus",
+      "cores": [
+        "rosa",
+        "azul",
+        "amarelo",
+        "roxo"
+      ],
+      "desc": "Tentáculos articulados impressos no lugar. Peça de mesa e lembrança para eventos.",
+      "fotos": []
+    },
+    {
+      "id": "torre",
+      "ref": "CL-012",
+      "nome": "Torre de Dados",
+      "cat": "colecionaveis",
+      "preco": 74.9,
+      "material": "PLA",
+      "tamanho": "200 mm de altura",
+      "tempo": "11 h",
+      "art": "tower",
+      "cores": [
+        "pedra",
+        "preto",
+        "roxo"
+      ],
+      "desc": "Rampas internas que embaralham os dados antes da bandeja de saída. Para mesas de RPG e jogos de tabuleiro.",
+      "fotos": []
+    },
+    {
+      "id": "gato",
+      "ref": "DC-009",
+      "nome": "Cachepô Gato",
+      "cat": "decoracao",
+      "preco": 34.9,
+      "material": "PLA",
+      "tamanho": "100 mm",
+      "tempo": "4 h",
+      "art": "cat",
+      "cores": [
+        "branco",
+        "preto",
+        "rosa",
+        "amarelo"
+      ],
+      "desc": "Para suculentas e cactos, com furo de drenagem e prato encaixável.",
+      "fotos": []
+    },
+    {
+      "id": "chaveiro",
+      "ref": "PC-010",
+      "nome": "Chaveiro Personalizado",
+      "cat": "brinquedos",
+      "preco": 14.9,
+      "material": "PLA",
+      "tamanho": "60 × 30 mm",
+      "tempo": "40 min",
+      "art": "keychain",
+      "tag": "Personalizado",
+      "personalizavel": true,
+      "cores": [
+        "preto",
+        "azul",
+        "rosa",
+        "verde",
+        "amarelo"
+      ],
+      "desc": "Nome em alto-relevo, com até 10 caracteres. Argola metálica inclusa. Disponível em quantidade para eventos e empresas.",
+      "fotos": []
+    },
+    {
+      "id": "organizador",
+      "ref": "DC-030",
+      "nome": "Organizador Hexagonal",
+      "cat": "decoracao",
+      "preco": 44.9,
+      "material": "PLA",
+      "tamanho": "150 × 120 mm",
+      "tempo": "6 h",
+      "art": "hex",
+      "cores": [
+        "azul",
+        "preto",
+        "branco",
+        "menta"
+      ],
+      "desc": "Três compartimentos em alturas diferentes para canetas, pincéis e ferramentas.",
+      "fotos": []
+    },
+    {
+      "id": "porquinho",
+      "ref": "PC-002",
+      "nome": "Cofrinho Porquinho",
+      "cat": "brinquedos",
+      "preco": 39.9,
+      "material": "PLA",
+      "tamanho": "120 mm",
+      "tempo": "5 h",
+      "art": "pig",
+      "cores": [
+        "rosa",
+        "amarelo",
+        "menta"
+      ],
+      "desc": "Cofre com tampa inferior removível para retirar as moedas.",
+      "fotos": []
+    },
+    {
+      "id": "suporte",
+      "ref": "DC-005",
+      "nome": "Suporte de Celular",
+      "cat": "decoracao",
+      "preco": 22.9,
+      "material": "PETG",
+      "tamanho": "90 mm",
+      "tempo": "2 h",
+      "art": "phone",
+      "cores": [
+        "preto",
+        "branco",
+        "azul",
+        "laranja"
+      ],
+      "desc": "Inclinação de 60°, compatível com capas e com passagem para o cabo de carregamento.",
+      "fotos": []
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+<dialog id="cart" class="drawer" aria-labelledby="cartTitle">
+  <div class="dr-head">
+    <h2 id="cartTitle">Carrinho</h2>
+    <button class="x" type="button" data-close aria-label="Fechar carrinho"><svg aria-hidden="true"><use href="#x-ico"/></svg></button>
+  </div>
+  <div class="dr-body">
+    <div id="cartLines"></div>
+    <div class="empty" id="cartEmpty" hidden>
+      <svg viewBox="0 0 200 200" aria-hidden="true"><use href="#mark"/></svg>
+      <p>Seu carrinho está vazio.</p>
+      <button class="btn btn-primary" type="button" data-close data-goto="#produtos">Ver produtos</button>
+    </div>
+    <form class="checkout" id="checkout" novalidate>
+      <h3>Dados do pedido</h3>
+      <div class="field"><label for="c-nome">Nome completo</label><input id="c-nome" autocomplete="name" required></div>
+      <fieldset class="field"><legend>Entrega</legend>
+        <div class="radios">
+          <label class="sw"><input type="radio" name="entrega" value="correios" checked>Correios</label>
+          <label class="sw"><input type="radio" name="entrega" value="retirada">Retirada combinada</label>
+        </div>
+      </fieldset>
+      <div class="field" id="cepField"><label for="c-cep">CEP</label><input id="c-cep" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" maxlength="9"><small>O frete é calculado pelo CEP na conversa.</small></div>
+      <fieldset class="field"><legend>Pagamento</legend>
+        <div class="radios">
+          <label class="sw"><input type="radio" name="pag" value="Pix" checked>Pix</label>
+          <label class="sw"><input type="radio" name="pag" value="Cartão de crédito">Cartão de crédito</label>
+        </div>
+      </fieldset>
+      <div class="field"><label for="c-obs">Observações <small>(opcional)</small></label><textarea id="c-obs" placeholder="Presente, outra cor, prazo…" style="min-height:76px"></textarea></div>
+      <details class="preview-wrap"><summary>Ver a mensagem que será enviada</summary><pre class="preview" id="cartPreview"></pre></details>
+    </form>
+  </div>
+  <div class="dr-foot" id="cartFoot">
+    <div class="total"><span>Subtotal · frete não incluso</span><b id="cartTotal">R$ 0,00</b></div>
+    <a class="btn btn-wa btn-block" id="cartSend" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#wa-ico"/></svg>Finalizar pelo WhatsApp</a>
+    <p class="err" id="cartErr" role="alert" hidden></p>
+    <p class="ok" id="cartOk" hidden>A conversa abriu numa nova aba com o pedido. Se não abriu, <button type="button" class="linkbtn" data-copy="cart">copie a mensagem</button> e envie para <b class="wa-num"></b>.</p>
+  </div>
+</dialog>

@@ -1,0 +1,133 @@
+{
+  "_leia": "Configurações gerais do site. Depois de editar, rode: node src/build.js",
+  "nome": "Métricas Vaz 3D",
+  "slogan": "Impressão 3D",
+  "url": "",
+  "_url": "Endereço do site publicado, com barra no final. Ex.: https://metricasvaz3d.com.br/ . Necessário para sitemap, prévia no WhatsApp e Google.",
+  "base": "/",
+  "_base": "Deixe / no Netlify ou domínio próprio. No GitHub Pages sem domínio use /nome-do-repositorio/",
+  "whatsapp": "553199936219",
+  "whatsapp_exibir": "(31) 9993-6219",
+  "horario": "Segunda a sábado, 9h às 18h",
+  "prazo_producao": "2 a 5 dias úteis",
+  "area_impressao": "25 × 21 × 21 cm",
+  "empresa": {
+    "razao_social": "[PREENCHER: razão social ou nome completo]",
+    "documento": "[PREENCHER: CNPJ ou CPF]",
+    "cidade_uf": "[PREENCHER: cidade/UF]",
+    "email": "[PREENCHER: e-mail de contato]",
+    "endereco": "",
+    "_endereco": "Opcional. Se vender só online, pode deixar vazio."
+  },
+  "redes": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "_leia": "Coloque só o usuário, sem @. Ex.: metricasvaz3d. Vazio = não aparece."
+  },
+  "politicas_atualizadas_em": "2026-11-03",
+  "tipos": [
+    {
+      "art": "knight",
+      "titulo": "Miniaturas de mesa",
+      "texto": "Resina de alta resolução com detalhes finos. Saem sem suportes, prontas para o primer e a pintura.",
+      "tags": [
+        "Fácil de pintar",
+        "Camada de 0,05 mm",
+        "Base inclusa"
+      ],
+      "cat": "colecionaveis",
+      "link_texto": "Ver colecionáveis"
+    },
+    {
+      "art": "dragon",
+      "titulo": "Brinquedos articulados",
+      "texto": "Impressos numa peça só e já saem com as articulações funcionando. Sem cola e sem montagem.",
+      "tags": [
+        "Sem montagem",
+        "Peça única",
+        "Várias cores"
+      ],
+      "cat": "brinquedos",
+      "link_texto": "Ver brinquedos"
+    },
+    {
+      "art": "vase",
+      "titulo": "Decoração e utilidades",
+      "texto": "Vasos, luminárias, organizadores e suportes em PLA e PETG, na cor que combina com o ambiente.",
+      "tags": [
+        "PETG estanque",
+        "Cor à escolha",
+        "Uso diário"
+      ],
+      "cat": "decoracao",
+      "link_texto": "Ver decoração"
+    },
+    {
+      "art": "gear",
+      "titulo": "Peças sob medida",
+      "texto": "Reposição, suportes e protótipos feitos a partir do seu desenho, foto ou medidas.",
+      "tags": [
+        "Medidas exatas",
+        "PETG ou TPU",
+        "Orçamento grátis"
+      ],
+      "cat": null,
+      "link_texto": "Pedir orçamento"
+    }
+  ],
+  "faq": {
+    "loja": [
+      {
+        "pergunta": "Qual é o prazo de produção?",
+        "resposta": "A maioria das peças fica pronta em 2 a 5 dias úteis após a confirmação do pagamento. Encomendas grandes ou em quantidade têm o prazo informado no orçamento. O prazo dos Correios é somado depois."
+      },
+      {
+        "pergunta": "Como é calculado o frete?",
+        "resposta": "Pelo CEP de destino, na conversa do WhatsApp, com as opções PAC e SEDEX. Também é possível combinar a retirada."
+      },
+      {
+        "pergunta": "Quais são as formas de pagamento?",
+        "resposta": "Pix ou cartão de crédito. Depois de confirmar o pedido, enviamos a chave Pix ou o link de pagamento."
+      },
+      {
+        "pergunta": "Posso pedir uma cor que não está no site?",
+        "resposta": "Sim. Temos outras cores em estoque, incluindo filamentos seda, metalizados e que brilham no escuro. Informe a cor nas observações do pedido."
+      },
+      {
+        "pergunta": "Vocês imprimem arquivos de terceiros?",
+        "resposta": "Sim. Envie o STL ou o link na seção de encomendas. Verificamos se o modelo é imprimível e se precisa de ajustes antes do orçamento."
+      },
+      {
+        "pergunta": "As peças têm marcas de camada?",
+        "resposta": "Peças em filamento mostram linhas finas de camada, próprias do processo. Peças em resina saem com superfície lisa e alto nível de detalhe."
+      }
+    ],
+    "encomendas": [
+      {
+        "pergunta": "Quanto custa uma peça sob encomenda?",
+        "resposta": "Depende do tamanho, do material, do tempo de máquina e de precisar ou não de modelagem. O orçamento é grátis e sem compromisso."
+      },
+      {
+        "pergunta": "Em quanto tempo recebo o orçamento?",
+        "resposta": "Respondemos pelo WhatsApp no horário de atendimento, de segunda a sábado. Projetos que precisam de modelagem podem levar um pouco mais."
+      },
+      {
+        "pergunta": "Vocês fazem a modelagem 3D?",
+        "resposta": "Sim. Se você não tem o arquivo, desenhamos a peça a partir de foto, rascunho ou medidas, e enviamos uma imagem do modelo para você aprovar antes de imprimir."
+      },
+      {
+        "pergunta": "Que arquivos vocês aceitam?",
+        "resposta": "STL, OBJ e 3MF para impressão. Para referência, qualquer imagem, PDF ou link (Thingiverse, Printables, Google Drive)."
+      },
+      {
+        "pergunta": "E se a peça precisar encaixar em outra?",
+        "resposta": "Confirmamos as medidas com você antes de imprimir. Para encaixes justos, podemos imprimir primeiro uma amostra rápida para testar."
+      },
+      {
+        "pergunta": "Fazem brindes e pedidos para empresas?",
+        "resposta": "Sim. Chaveiros com logo, troféus, displays e brindes em quantidade. Informe o nome da empresa no formulário."
+      }
+    ]
+  }
+}

@@ -1,0 +1,83 @@
+  <section id="viewEncomenda" class="enc-page" hidden aria-labelledby="encTitle">
+    <div class="cat-hero"><div class="wrap">
+      <nav class="crumbs mono" aria-label="Você está em"><a href="#inicio">Início</a> / <span>Sob encomenda</span></nav>
+      <h1 id="encTitle">Impressão 3D sob encomenda</h1>
+      <p>Peças únicas, reposições, protótipos e brindes produzidos a partir do seu arquivo, desenho ou foto. O orçamento é gratuito e feito pelo WhatsApp.</p>
+      <div class="enc-ctas">
+        <button class="btn btn-primary" type="button" data-scrollto="pedido">Pedir orçamento</button>
+        <button class="btn" type="button" data-scrollto="preco">Como calculamos o preço</button>
+      </div>
+    </div></div>
+  <section class="section" id="pedido">
+    <div class="wrap split">
+      <div>
+        <span class="label">Orçamento gratuito</span>
+        <h2 class="h2">Projetos sob medida, do arquivo à peça pronta</h2>
+        <p style="color:var(--muted);margin-top:16px;max-width:34em">Para peças únicas, pequenas tiragens ou brindes corporativos. Trabalhamos a partir do seu arquivo STL, de uma foto ou de uma descrição.</p>
+        <ol class="steps">
+          <li><div><b>Envio do projeto</b><p>Arquivo, referência ou descrição, com medidas e quantidade.</p></div></li>
+          <li><div><b>Análise e orçamento</b><p>Indicamos o material, a orientação de impressão, o valor e o prazo.</p></div></li>
+          <li><div><b>Produção</b><p>Impressão, remoção de suportes e acabamento.</p></div></li>
+          <li><div><b>Entrega</b><p>Envio pelos Correios ou retirada combinada.</p></div></li>
+        </ol>
+        <ul class="apps"><li>Peças de reposição</li><li>Protótipos</li><li>Brindes corporativos</li><li>Topos de bolo</li><li>Cosplay e props</li><li>Troféus</li><li>Miniaturas</li><li>Suportes sob medida</li></ul>
+      </div>
+      <div class="panel">
+        <h3>Solicitar orçamento</h3>
+        <p>Preencha os campos, anexe imagens do projeto se tiver e envie pelo WhatsApp.</p>
+        <form class="form" id="quoteForm" novalidate>
+          <div class="field"><label for="q-nome">Nome</label><input id="q-nome" autocomplete="name" placeholder="Seu nome" required></div>
+          <div class="field"><label for="q-emp">Empresa <small>(opcional)</small></label><input id="q-emp" autocomplete="organization" placeholder="Se for para empresa"></div>
+          <div class="field full"><label for="q-desc">Descrição da peça</label><textarea id="q-desc" placeholder="Ex.: suporte de parede para dois controles de videogame, acabamento preto fosco" required></textarea></div>
+          <div class="field"><label for="q-tam">Dimensões aproximadas</label><input id="q-tam" placeholder="Ex.: 150 × 100 × 50 mm"></div>
+          <div class="field"><label for="q-qtd">Quantidade</label><input id="q-qtd" type="number" min="1" value="1" inputmode="numeric"></div>
+          <div class="field"><label for="q-mat">Material</label><select id="q-mat"><option>Preciso de indicação</option><option>PLA</option><option>PETG</option><option>Resina</option><option>TPU (flexível)</option></select></div>
+          <div class="field"><label for="q-cor">Cor</label><input id="q-cor" placeholder="Ex.: preto fosco"></div>
+          <div class="field full">
+            <span class="lbl" style="font-weight:500;font-size:.88rem">Imagens do projeto <small>(opcional, até 5)</small></span>
+            <label class="drop" id="drop" for="q-fotos">
+              <input id="q-fotos" type="file" accept="image/*" multiple>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+              <span><b>Selecionar imagens</b> ou arraste para cá</span>
+              <small>Fotos, desenhos técnicos ou referências · JPG, PNG, HEIC · até 10 MB cada</small>
+            </label>
+            <ul class="thumbs" id="thumbs" aria-label="Imagens selecionadas"></ul>
+            <small id="fotoCount" aria-live="polite"></small>
+          </div>
+          <div class="field full"><label for="q-link">Link do arquivo <small>(opcional)</small></label><input id="q-link" inputmode="url" placeholder="Printables, Thingiverse, Google Drive…"></div>
+          <div class="field full"><label for="q-prazo">Prazo desejado <small>(opcional)</small></label><input id="q-prazo" placeholder="Ex.: até 20/12"></div>
+          <div class="full" style="display:flex;flex-direction:column;gap:10px">
+            <a class="btn btn-wa btn-block" id="quoteSend" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#wa-ico"/></svg><span id="quoteSendTxt">Enviar pedido de orçamento</span></a>
+            <p class="err" id="quoteErr" role="alert" hidden></p>
+            <p class="ok" id="quoteOk" hidden>A conversa abriu numa nova aba com a mensagem pronta. Se não abriu, <button type="button" class="linkbtn" data-copy="quote">copie a mensagem</button> e envie para <b class="wa-num"></b>.</p>
+            <p class="ok" id="quoteFotoTip" hidden><b>Anexe as imagens:</b> na conversa do WhatsApp, toque no ícone de clipe ou de câmera e envie as imagens selecionadas aqui.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+
+    <section class="section" id="preco">
+      <div class="wrap">
+        <div class="head"><div><span class="label">Orçamento</span><h2 class="h2">O que define o preço</h2><p>Cada projeto é calculado a partir destes pontos. Você recebe o valor fechado antes de qualquer impressão.</p></div></div>
+        <ul class="fatores"><li><span class="fat-tag mono">cm³</span><b>Tamanho</b><p>Quanto maior a peça, mais material e mais horas de máquina.</p></li><li><span class="fat-tag mono">PLA · PETG</span><b>Material</b><p>PLA, PETG, resina e TPU têm custos e resistências diferentes.</p></li><li><span class="fat-tag mono">0,05–0,2 mm</span><b>Tempo de impressão</b><p>Camadas mais finas dão mais detalhe e levam mais tempo.</p></li><li><span class="fat-tag mono">STL · 3MF</span><b>Modelagem 3D</b><p>Sem arquivo pronto, incluímos o desenho da peça no computador.</p></li><li><span class="fat-tag mono">opcional</span><b>Acabamento</b><p>Lixa, primer e pintura entram como opcionais.</p></li><li><span class="fat-tag mono">tiragem</span><b>Quantidade</b><p>Em tiragens maiores, o valor por peça costuma cair.</p></li></ul>
+      </div>
+    </section>
+
+    <section class="section enc-info">
+      <div class="wrap enc-2col">
+        <div>
+          <span class="label">Checklist</span>
+          <h2 class="h2">O que enviar no pedido</h2>
+          <ul class="enviar"><li>Foto, desenho ou print da ideia, com as medidas aproximadas</li><li>Arquivo 3D (STL, OBJ ou 3MF), se você já tiver</li><li>Quantidade e cor desejadas</li><li>Para que a peça vai ser usada: calor, água, peso ou encaixe</li><li>A data em que você precisa receber</li></ul>
+          <button class="btn btn-primary" type="button" data-scrollto="pedido" style="margin-top:24px">Ir para o formulário</button>
+        </div>
+        <div>
+          <span class="label">Perguntas frequentes</span>
+          <h2 class="h2">Dúvidas sobre encomendas</h2>
+          <div class="faq enc-faq"><details open><summary>Quanto custa uma peça sob encomenda?</summary><p>Depende do tamanho, do material, do tempo de máquina e de precisar ou não de modelagem. O orçamento é grátis e sem compromisso.</p></details><details><summary>Em quanto tempo recebo o orçamento?</summary><p>Respondemos pelo WhatsApp no horário de atendimento, de segunda a sábado. Projetos que precisam de modelagem podem levar um pouco mais.</p></details><details><summary>Vocês fazem a modelagem 3D?</summary><p>Sim. Se você não tem o arquivo, desenhamos a peça a partir de foto, rascunho ou medidas, e enviamos uma imagem do modelo para você aprovar antes de imprimir.</p></details><details><summary>Que arquivos vocês aceitam?</summary><p>STL, OBJ e 3MF para impressão. Para referência, qualquer imagem, PDF ou link (Thingiverse, Printables, Google Drive).</p></details><details><summary>E se a peça precisar encaixar em outra?</summary><p>Confirmamos as medidas com você antes de imprimir. Para encaixes justos, podemos imprimir primeiro uma amostra rápida para testar.</p></details><details><summary>Fazem brindes e pedidos para empresas?</summary><p>Sim. Chaveiros com logo, troféus, displays e brindes em quantidade. Informe o nome da empresa no formulário.</p></details></div>
+        </div>
+      </div>
+    </section>
+  </section>
