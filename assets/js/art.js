@@ -43,14 +43,14 @@ function cenaProcesso(acc){
   <title id="cenaT">Etapas de produção: rascunho no caderno, modelagem 3D no computador, impressão na impressora 3D e peça pronta</title>
   <defs>
     <radialGradient id="lamp" cx="0.16" cy="0.05" r="0.75"><stop offset="0" stop-color="#FFD58A" stop-opacity=".38"/><stop offset="1" stop-color="#FFD58A" stop-opacity="0"/></radialGradient>
-    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A2640"/><stop offset="1" stop-color="#1A1729"/></linearGradient>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26221F"/><stop offset="1" stop-color="#161412"/></linearGradient>
     <clipPath id="printClip"><rect x="560" y="297" width="160" height="52"/></clipPath>
     <marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#fff"/></marker>
     <pattern id="scrgrid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#fff" stroke-opacity=".07"/></pattern>
   </defs>
   <rect width="760" height="480" fill="url(#wall)"/>
   <rect width="760" height="480" fill="url(#lamp)"/>
-  <rect y="372" width="760" height="108" fill="#3A3452"/><rect y="372" width="760" height="4" fill="#4C4566"/>
+  <rect y="372" width="760" height="108" fill="#33302C"/><rect y="372" width="760" height="4" fill="#47413A"/>
 
   <!-- 1 caderno com rascunho -->
   <g transform="rotate(-6 125 270)">
@@ -75,22 +75,22 @@ function cenaProcesso(acc){
   <rect x="470" y="88" width="52" height="192" fill="#2E3039"/>
   ${[0,1,2,3,4,5,6].map(i=>`<rect x="476" y="${98+i*14}" width="${20+((i*13)%20)}" height="5" rx="2" fill="#fff" fill-opacity=".18"/>`).join('')}
   <path d="M276 250 L460 250 M290 266 L446 266" stroke="#fff" stroke-opacity=".12"/>
-  ${sub('dragon','roxo','285','92','176')}
+  ${sub('dragon','laranja','285','92','176')}
   ${sub('dragon','#fff','285','92','176','wire')}
   <text x="300" y="274" font-family="IBM Plex Mono, JetBrains Mono, monospace" font-size="8" fill="#fff" fill-opacity=".45">300.0 × 120.0 × 86.0 mm</text>
   <rect x="270" y="388" width="200" height="24" rx="5" fill="#ECEDF1"/>
   ${[0,1,2].map(r=>[...Array(12)].map((_,c)=>`<rect x="${276+c*16}" y="${392+r*7}" width="12" height="4" rx="1" fill="#C6C9D2"/>`).join('')).join('')}
 
   <!-- 3 impressora -->
-  <circle cx="610" cy="44" r="27" fill="${CORES.roxo.hex}"/><circle cx="610" cy="44" r="27" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="2"/>
+  <circle cx="610" cy="44" r="27" fill="${CORES.laranja.hex}"/><circle cx="610" cy="44" r="27" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="2"/>
   <circle cx="610" cy="44" r="9" fill="#1B1B22"/><rect x="606" y="44" width="8" height="30" fill="#1B1B22"/>
-  <path d="M630 60 Q680 120 648 262" fill="none" stroke="${CORES.roxo.hex}" stroke-width="2.5"/>
+  <path d="M630 60 Q680 120 648 262" fill="none" stroke="${CORES.laranja.hex}" stroke-width="2.5"/>
   <rect x="568" y="72" width="14" height="300" fill="#16161C"/><rect x="702" y="72" width="14" height="300" fill="#16161C"/>
   <rect x="568" y="72" width="148" height="12" fill="#16161C"/>
   <rect x="582" y="348" width="120" height="9" rx="2" fill="#3B3D47"/>
   <rect x="560" y="356" width="164" height="22" rx="4" fill="#16161C"/>
   <rect x="660" y="362" width="40" height="10" rx="2" fill="#2E3039"/><rect x="664" y="364" width="18" height="6" rx="1" fill="#5EEAD4" fill-opacity=".7"/>
-  <g clip-path="url(#printClip)">${sub('dragon','roxo','586','254','112')}</g>
+  <g clip-path="url(#printClip)">${sub('dragon','laranja','586','254','112')}</g>
   <rect x="582" y="262" width="120" height="7" rx="3" fill="#2A2C36"/>
   <g class="scene-head">
     <rect x="618" y="254" width="38" height="28" rx="5" fill="${acc}" stroke="#16161C" stroke-width="2"/>
@@ -99,7 +99,7 @@ function cenaProcesso(acc){
 
   <!-- 4 peça pronta -->
   <ellipse cx="610" cy="452" rx="66" ry="7" fill="#000" fill-opacity=".3"/>
-  ${sub('dragon','roxo','538','330','140')}
+  ${sub('dragon','laranja','538','330','140')}
   ${sub('octopus','rosa','484','392','68')}
   ${sub('vase','menta','60','392','70')}
 

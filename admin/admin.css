@@ -1,7 +1,7 @@
 /* Painel administrativo Métricas Vaz 3D — mesma identidade da loja (escuro, violeta e azul). */
 :root{
-  --bg:#07060C; --bg-alt:#0E0C18; --surface:#13111F; --surface-2:#1A1730; --ink:#F1F0F7; --muted:#A5A2B8; --line:#24213A; --line-strong:#3A3560;
-  --accent:#B57BFF; --accent-soft:#22173D; --grad:linear-gradient(90deg,#8A2BE2,#1F6FE5); --grad-bright:linear-gradient(90deg,#B347FF,#1E9BFF);
+  --bg:#0C0C0D; --bg-alt:#141416; --surface:#1B1B1E; --surface-2:#232327; --ink:#F5F5F6; --muted:#A8A8B0; --line:#2B2B30; --line-strong:#414148;
+  --accent:#FF7A33; --accent-soft:#2E1C10; --grad:linear-gradient(90deg,#F26522,#E0480E); --grad-bright:linear-gradient(90deg,#FF8A3D,#FF9A4D);
   --wa:#2FC26A; --wa-ink:#05140A; --pos:#4ED48A; --neg:#FF8A80; --warn:#F2C14A;
   --s-ent:#3987e5; --s-sai:#d95926; /* séries do gráfico (validadas para daltonismo no fundo escuro) */
   --font-display:"Archivo","Helvetica Neue",Arial,sans-serif; --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --font-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -15,8 +15,8 @@ a{color:var(--accent)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 [hidden]{display:none!important}
 input,select,textarea{font:inherit;color:var(--ink);background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:8px;padding:.6em .75em;width:100%;min-width:0}
-input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px rgba(181,123,255,.18)}
-input[type=checkbox],input[type=radio]{width:auto;accent-color:#9B30FF}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px rgba(255,122,51,.18)}
+input[type=checkbox],input[type=radio]{width:auto;accent-color:#F26522}
 input[type=color]{padding:2px;height:42px}
 input[readonly]{opacity:.7}
 textarea{resize:vertical}
@@ -44,10 +44,10 @@ textarea{resize:vertical}
 .atraso{color:var(--warn);font-style:normal;font-weight:600}
 
 /* acesso */
-body.acesso{min-height:100vh;display:grid;place-items:center;background:radial-gradient(50% 60% at 70% 20%,rgba(155,48,255,.18),transparent 70%),radial-gradient(40% 50% at 10% 90%,rgba(30,155,255,.12),transparent 70%),var(--bg)}
+body.acesso{min-height:100vh;display:grid;place-items:center;background:radial-gradient(50% 60% at 70% 20%,rgba(242,101,34,.18),transparent 70%),radial-gradient(40% 50% at 10% 90%,rgba(255,154,77,.12),transparent 70%),var(--bg)}
 .login{width:100%;padding:24px 16px}
-.login-card{max-width:400px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:32px 28px;display:flex;flex-direction:column;gap:12px;box-shadow:0 30px 80px -40px rgba(155,48,255,.5)}
-.login-card img{border-radius:50%;box-shadow:0 0 24px rgba(155,48,255,.4)}
+.login-card{max-width:400px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:32px 28px;display:flex;flex-direction:column;gap:12px;box-shadow:0 30px 80px -40px rgba(242,101,34,.5)}
+.login-card img{width:auto;height:96px;align-self:flex-start;filter:drop-shadow(0 4px 18px rgba(242,101,34,.35))}
 .login-card h1{font-size:1.6rem}
 .login-card p{color:var(--muted);margin:0}
 .login-card .frm{grid-template-columns:1fr}
@@ -57,14 +57,14 @@ body.acesso{min-height:100vh;display:grid;place-items:center;background:radial-g
 body.painel #app{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
 .lateral{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:18px;padding:18px 14px;background:var(--bg-alt);border-right:1px solid var(--line);overflow-y:auto}
 .marca{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);padding:4px 6px}
-.marca img{border-radius:50%}
+.marca img{width:auto;height:38px}
 .marca b{display:block;font:800 1rem/1.1 var(--font-display);font-stretch:85%}
 .marca small{font:500 .65rem/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
 .menu{display:flex;flex-direction:column;gap:2px}
 .menu a{display:flex;align-items:center;gap:12px;padding:.62em .75em;border-radius:8px;color:var(--muted);text-decoration:none;font-weight:500}
 .menu a svg{width:19px;height:19px;flex:none}
 .menu a:hover{color:var(--ink);background:var(--surface)}
-.menu a[aria-current]{color:var(--ink);background:var(--accent-soft);box-shadow:inset 3px 0 0 #9B30FF}
+.menu a[aria-current]{color:var(--ink);background:var(--accent-soft);box-shadow:inset 3px 0 0 #F26522}
 .badge{margin-left:auto;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--grad);color:#fff;font:600 .72rem/22px var(--font-mono);text-align:center;font-style:normal}
 .lateral-pe{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding:12px 6px 0;border-top:1px solid var(--line);font-size:.85rem}
 .lateral-pe a{color:var(--muted);text-decoration:none}
@@ -109,7 +109,7 @@ a.kpi:hover{border-color:var(--line-strong)}
 .cor.grande{width:34px;height:34px;margin:0}
 .pil{display:inline-block;padding:.2em .6em;border-radius:999px;font:500 .72rem/1.4 var(--font-body);background:var(--surface-2);border:1px solid var(--line-strong);color:var(--ink);white-space:nowrap}
 .st-novo,.st-orcamento{background:rgba(57,135,229,.16);border-color:rgba(57,135,229,.5)}
-.st-em_conversa,.st-imprimindo,.st-acabamento{background:rgba(155,48,255,.18);border-color:rgba(181,123,255,.5)}
+.st-em_conversa,.st-imprimindo,.st-acabamento{background:rgba(242,101,34,.18);border-color:rgba(255,122,51,.5)}
 .st-aprovado,.st-pronto,.st-enviado,.st-entregue,.st-convertido{background:rgba(78,212,138,.14);border-color:rgba(78,212,138,.5)}
 .st-recusado,.st-cancelado{background:rgba(255,138,128,.12);border-color:rgba(255,138,128,.45)}
 

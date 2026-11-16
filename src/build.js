@@ -105,7 +105,7 @@ function header(atual) {
 <header class="site-header">
   <div class="wrap hdr">
     <a class="brand" href="${B}" aria-label="${esc(site.nome)}, página inicial">
-      <img class="logo" src="${B}assets/img/logo-128.webp" alt="" width="46" height="46">
+      <img class="logo" src="${B}assets/img/logo-128.webp" alt="" width="128" height="106">
       <span><b>${esc(site.nome)}</b><small>${esc(site.slogan)}</small></span>
     </a>
     <nav class="nav" id="mainNav" aria-label="Principal">
@@ -117,10 +117,11 @@ function header(atual) {
         <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
         <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>
       </button>
-      <button class="btn cart-btn" id="openCart" type="button" aria-label="Abrir carrinho">
-        ${ICON.cart}
-        <span class="cart-lbl">Carrinho</span> <span class="count" id="cartCount">0</span>
+      <a class="icon-btn busca-btn" href="${B}produtos/#catQ" aria-label="Buscar produto" title="Buscar produto">${ICON.search}</a>
+      <button class="icon-btn cart-btn" id="openCart" type="button" aria-label="Abrir carrinho">
+        ${ICON.cart}<span class="count" id="cartCount">0</span>
       </button>
+      <a class="btn btn-primary orc-btn" href="${B}encomenda/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg><span>Orçamento</span></a>
       <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mainNav">
         <svg class="ico-bars" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         <svg class="ico-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
@@ -144,7 +145,7 @@ function footer() {
   <div class="wrap">
     <div class="foot">
       <div>
-        <a class="brand" href="${B}"><img class="logo" src="${B}assets/img/logo-256.webp" alt="Logotipo MV 3D" width="88" height="88" loading="lazy"><span><b>${esc(site.nome)}</b><small>${esc(site.slogan)}</small></span></a>
+        <a class="brand" href="${B}"><img class="logo" src="${B}assets/img/logo-256.webp" alt="Logotipo MV 3D" width="256" height="212" loading="lazy"><span><b>${esc(site.nome)}</b><small>${esc(site.slogan)}</small></span></a>
         <p style="margin-top:16px;max-width:30em">Impressão 3D de decoração, colecionáveis, brinquedos e projetos sob encomenda, com envio para todo o Brasil.</p>
       </div>
       <div><h4>Loja</h4><ul><li><a href="${B}produtos/">Produtos</a></li><li><a href="${B}encomenda/">Sob encomenda</a></li><li><a href="${B}#materiais">Materiais</a></li><li><a href="${B}sobre/">Sobre</a></li></ul></div>
@@ -173,14 +174,14 @@ function layout({ path: p, titulo, descricao, conteudo, nav = '', jsonld = [], o
     api: !!PB,
   };
   return `<!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>try{var t=localStorage.getItem('mv3d-tema');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 <title>${esc(titulo)}</title>
 <meta name="description" content="${esc(descricao)}">
-${canonical ? `<link rel="canonical" href="${canonical}">\n` : ''}<meta name="theme-color" content="#07060C" id="themeColor">
+${canonical ? `<link rel="canonical" href="${canonical}">\n` : ''}<meta name="theme-color" content="#0C0C0D" id="themeColor">
 <link rel="icon" href="${B}favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="${B}favicon-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="${B}apple-touch-icon.png">
@@ -237,11 +238,12 @@ function card(p) {
     <div class="info">
       <span class="label">${esc(CAT[p.cat])}</span>
       <h3><a href="${p.url}">${esc(p.nome)}</a></h3>
+      <p class="desc">${esc(p.desc)}</p>
       <span class="meta">${esc(p.material)} · ${esc(p.tamanho)}</span>
       <div class="pricerow"><span class="price${p.consulta ? ' consulta' : ''}">${precoTxt(p)}</span>
         <div class="dots" role="group" aria-label="Cores de ${esc(p.nome)}">${p.cores.map(c => `<button class="dot" type="button" style="--c:${loja.cores[c].hex}" data-dot="${p.id}" data-cor="${c}" aria-pressed="${c === cor}" title="${esc(loja.cores[c].nome)}"><span class="sr">${esc(loja.cores[c].nome)}</span></button>`).join('')}</div>
       </div>
-      ${p.consulta ? `<a class="add" href="${p.url}#consulta">Solicitar orçamento</a>` : p.personalizavel ? `<a class="add" href="${p.url}">Personalizar</a>` : `<button class="add" type="button" data-quick="${p.id}">Adicionar ao carrinho</button>`}
+      ${p.consulta ? `<a class="add" href="${p.url}#consulta">Solicitar orçamento</a>` : p.personalizavel ? `<a class="add" href="${p.url}">Personalizar</a>` : `<button class="add" type="button" data-quick="${p.id}">${ICON.cart}Adicionar ao carrinho</button>`}
     </div>
   </article>`;
 }
@@ -264,19 +266,9 @@ const add = (p, html) => paginas.push([p, html]);
 
 // Início
 (function () {
-  const heroP = P.dragao;
-  const heroFoto = heroP && heroP.fotos.length;
-  let hero = partial('hero')
-    .replace('<div id="heroArt"></div>', heroFoto ? fotoTag(heroP, { classe: 'hero-foto', largura: 1000, prioridade: true }) : MV.art('dragon', 'roxo'))
-    .replace(/<button class="btn btn-primary" type="button" data-open="dragao"([^>]*)>Ver<\/button>/, `<a class="btn btn-primary" href="${heroP ? heroP.url : B + 'produtos/'}"$1>Ver</a>`);
-  if (heroFoto) hero = hero
-    .replace(/\s*<div class="dim [hv]">.*?<\/div>/g, '')
-    .replace('<figure class="showcase"', '<figure class="showcase has-foto"')
-    .replace(/aria-label="[^"]*"/, `aria-label="${esc(heroP.nome)}"`)
-    .replace(/<span class="label corner">[^<]*<\/span>/, '')
-    .replace(/<span>PLA · impresso em peça única<\/span>/, `<span>${esc(heroP.material)} · peça única · ${precoTxt(heroP)}</span>`);
+  const hero = partial('hero');
   const destaques = loja.destaques.filter(id => P[id]).map(id => card(P[id])).join('');
-  const make = partial('make').replace('<figure class="scene" id="makeScene"></figure>', `<figure class="scene" id="makeScene">${MV.cenaProcesso('#9B30FF')}</figure>`);
+  const make = partial('make').replace('<figure class="scene" id="makeScene"></figure>', `<figure class="scene" id="makeScene">${MV.cenaProcesso('#F26522')}</figure>`);
   const kinds = partial('kinds').replace('<div class="kinds-grid" id="kindsGrid"></div>', `<div class="kinds-grid" id="kindsGrid">${site.tipos.map(t => `<a class="kind" href="${t.cat ? `${B}produtos/?categoria=${t.cat}` : `${B}encomenda/`}">
   ${t.foto && P[t.foto] && P[t.foto].fotos.length ? `<div class="kind-img has-foto">${fotoTag(P[t.foto], { largura: 1000 })}</div>` : `<div class="kind-img">${MV.art(t.art, '#B9BEC9')}</div>`}
   <div class="kind-body"><h3>${esc(t.titulo)}</h3><p>${esc(t.texto)}</p>
@@ -290,9 +282,9 @@ const add = (p, html) => paginas.push([p, html]);
 ${partial('assure')}
   <section class="section" id="destaques">
     <div class="wrap">
-      <div class="head">
-        <div><span class="label">Destaques</span><h2>Mais pedidos</h2><p>Escolha a cor do filamento em cada peça. Os valores não incluem o frete.</p></div>
-        <a class="btn" href="${B}produtos/">Ver todos os ${produtos.length} produtos</a>
+      <div class="head head-marca">
+        <div><h2>Produtos em <em>destaque</em></h2><p>Escolha a cor do filamento em cada peça. Os valores não incluem o frete.</p></div>
+        <a class="ver-todos" href="${B}produtos/">Ver todos os ${produtos.length} produtos <span aria-hidden="true">›</span></a>
       </div>
       <div class="grid">${destaques}</div>
     </div>
@@ -318,7 +310,8 @@ ${materiais}
     path: '', nav: '', titulo: `${site.nome} | Impressão 3D sob encomenda e pronta entrega`,
     descricao: 'Peças impressas em 3D com acabamento de estúdio: decoração, colecionáveis, brinquedos articulados e projetos sob encomenda. Pedido pelo WhatsApp e envio para todo o Brasil.',
     conteudo, jsonld: [orgLd()],
-    extraHead: heroFoto ? preload(`${B}${esc(fotoUrl(heroP, heroP.fotos[0]))}`) : '',
+    extraHead: `<link rel="preload" as="image" href="${B}assets/img/hero-1920.webp" imagesrcset="${B}assets/img/hero-1280.webp 1280w, ${B}assets/img/hero-1920.webp 1920w" imagesizes="100vw" media="(min-width: 761px)" fetchpriority="high">
+<link rel="preload" as="image" href="${B}assets/img/hero-celular.webp" media="(max-width: 760px)" fetchpriority="high">`,
   }));
 })();
 
@@ -407,7 +400,7 @@ for (const p of produtos) {
 </section>
 <section class="section alt">
   <div class="wrap">
-    <div class="head"><div><span class="label">Veja também</span><h2>Você também pode gostar</h2></div><a class="btn" href="${B}produtos/">Ver todos</a></div>
+    <div class="head head-marca"><div><h2>Você também <em>pode gostar</em></h2></div><a class="ver-todos" href="${B}produtos/">Ver todos <span aria-hidden="true">›</span></a></div>
     <div class="grid">${relacionados.map(card).join('')}</div>
   </div>
 </section>`;

@@ -374,7 +374,7 @@ function aplicaTema(t) {
   const claro = t === 'light';
   root.setAttribute('data-theme', claro ? 'light' : 'dark');
   if (themeBtn) themeBtn.setAttribute('aria-label', claro ? 'Ativar modo escuro' : 'Ativar modo claro');
-  const tc = $('#themeColor'); if (tc) tc.content = claro ? '#FFFFFF' : '#07060C';
+  const tc = $('#themeColor'); if (tc) tc.content = claro ? '#FFFFFF' : '#0C0C0D';
 }
 aplicaTema(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
 if (themeBtn) themeBtn.addEventListener('click', () => {
