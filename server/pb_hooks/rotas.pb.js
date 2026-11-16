@@ -81,71 +81,22 @@ routerAdd('POST', '/api/mv/publicar', (e) => {
   return e.json(r.ok ? 200 : 500, r);
 }, $apis.requireAuth('users', '_superusers'));
 
-/* Importa os produtos atuais do site (data/produtos.json + fotos) para o banco. Só roda com a tabela vazia. */
+/* Importa os produtos atuais do site (data/produtos.json + fotos) para o banco. Só roda se ainda não houver produtos da loja. */
 routerAdd('POST', '/api/mv/importar-catalogo', (e) => {
   const U = require(`${__hooks}/lib/util.js`);
+  const I = require(`${__hooks}/lib/importar.js`);
   if (!U.ehDono(e.auth)) throw new ForbiddenError('Apenas o dono pode importar o catálogo.');
-  if (e.app.countRecords('produtos') > 0) throw new BadRequestError('Já existem produtos cadastrados. A importação só roda com o catálogo vazio.');
-  const loja = JSON.parse(toString($os.readFile(U.RAIZ + '/data/produtos.json')));
-  const col = e.app.findCollectionByNameOrId('produtos');
-  const destaques = loja.destaques || [];
-  const pasta = U.RAIZ + '/assets/img/produtos/';
-  const arquivo = nome => { try { return $filesystem.fileFromPath(pasta + nome); } catch (err) { return null; } };
-  let n = 0;
-  e.app.store().set('mv_pausar_publicacao', true);
-  try {
-    loja.produtos.forEach((p, i) => {
-      const r = new Record(col);
-      r.set('codigo', p.id);
-      r.set('ref', p.ref || '');
-      r.set('nome', p.nome);
-      r.set('categoria', p.cat);
-      r.set('preco', p.preco || 0);
-      r.set('sob_consulta', !(p.preco > 0));
-      r.set('material', p.material || '');
-      r.set('tamanho', p.tamanho || '');
-      r.set('tempo', p.tempo || '');
-      r.set('camada', p.camada || '');
-      r.set('art', p.art || '');
-      r.set('tag', p.tag || '');
-      r.set('personalizavel', !!p.personalizavel);
-      r.set('cores', p.cores || []);
-      r.set('descricao', p.desc || '');
-      r.set('destaque', destaques.indexOf(p.id) >= 0);
-      r.set('ordem', destaques.indexOf(p.id) >= 0 ? destaques.indexOf(p.id) : 10 + i);
-      r.set('ativo', true);
-      const fotos = (p.fotos || []).map(arquivo).filter(Boolean);
-      if (fotos.length) r.set('fotos', fotos);
-      const jpg = (p.fotos || [])[0] ? arquivo(p.fotos[0].replace(/\.webp$/i, '.jpg')) : null;
-      if (jpg) r.set('foto_previa', jpg);
-      e.app.save(r);
-      n++;
-    });
-  } finally {
-    e.app.store().remove('mv_pausar_publicacao');
-  }
+  const r = I.importarCatalogo(e.app);
+  if (r.motivo === 'ja_existem') throw new BadRequestError('Os produtos da loja já foram importados.');
   const pub = U.publicarSite(e.app);
-  return e.json(200, { importados: n, publicado: pub.ok, saida: pub.saida });
+  return e.json(200, { importados: r.importados, publicado: pub.ok, saida: pub.saida });
 }, $apis.requireAuth('users', '_superusers'));
 
 /* Catálogos internos disponíveis em data/importar/<nome>.json (ex.: natal). */
 routerAdd('GET', '/api/mv/colecoes', (e) => {
   const U = require(`${__hooks}/lib/util.js`);
   if (!U.ehDono(e.auth)) throw new ForbiddenError('Apenas o dono.');
-  const lista = [];
-  let arquivos = [];
-  try { arquivos = $os.readDir(U.RAIZ + '/data/importar'); } catch (err) { arquivos = []; }
-  for (const a of arquivos) {
-    const nome = a.name();
-    if (a.isDir() || !/\.json$/.test(nome)) continue;
-    try {
-      const d = JSON.parse(toString($os.readFile(U.RAIZ + '/data/importar/' + nome)));
-      const colecao = String(d.colecao || nome.replace(/\.json$/, ''));
-      const ja = e.app.findRecordsByFilter('produtos', 'codigo ~ {:p}', '', 0, 0, { p: colecao + '-%' }).length;
-      lista.push({ colecao, arquivo: nome, total: (d.itens || []).length, importados: ja, fonte: d.fonte || '' });
-    } catch (err) { /* arquivo inválido */ }
-  }
-  return e.json(200, lista);
+  return e.json(200, require(`${__hooks}/lib/importar.js`).listarColecoes(e.app));
 }, $apis.requireAuth('users', '_superusers'));
 
 /* Importa um catálogo interno como produtos OCULTOS (interno = true), sem duplicar os que já existem. */
@@ -154,45 +105,6 @@ routerAdd('POST', '/api/mv/importar-colecao', (e) => {
   if (!U.ehDono(e.auth)) throw new ForbiddenError('Apenas o dono pode importar catálogos.');
   const colecao = String((e.requestInfo().body || {}).colecao || '').replace(/[^a-z0-9-]/g, '');
   if (!colecao) throw new BadRequestError('Informe a coleção.');
-  let d;
-  try { d = JSON.parse(toString($os.readFile(U.RAIZ + '/data/importar/' + colecao + '.json'))); }
+  try { return e.json(200, require(`${__hooks}/lib/importar.js`).importarColecao(e.app, colecao)); }
   catch (err) { throw new NotFoundError('Catálogo não encontrado em data/importar/' + colecao + '.json'); }
-  const col = e.app.findCollectionByNameOrId('produtos');
-  const pastaImg = U.RAIZ + '/data/importar/' + colecao + '/';
-  const categoria = colecao === 'natal' ? 'natal' : 'decoracao';
-  let criados = 0, existentes = 0, semFoto = 0;
-  e.app.store().set('mv_pausar_publicacao', true);
-  try {
-    for (const it of (d.itens || [])) {
-      let existe = null;
-      try { existe = e.app.findFirstRecordByData('produtos', 'codigo', it.codigo); } catch (err) { existe = null; }
-      if (existe) { existentes++; continue; }
-      if (it.marca_registrada) continue; // personagens e marcas de terceiros não entram no catálogo
-      const r = new Record(col);
-      r.set('codigo', it.codigo);
-      r.set('ref', 'NT-' + String(it.numero).padStart(3, '0'));
-      r.set('nome', String(it.nome).slice(0, 100));
-      r.set('categoria', categoria);
-      r.set('preco', 0);
-      r.set('sob_consulta', true);
-      r.set('material', 'PLA');
-      r.set('art', 'gear');
-      r.set('cores', ['vermelho', 'verde', 'branco', 'dourado']);
-      r.set('descricao', ('Modelo "' + it.nome_original + '" de ' + it.criador + ' (' + (d.fonte || 'MakerWorld') + ').').slice(0, 1000));
-      r.set('credito', String(it.criador || '').slice(0, 120));
-      if (it.link) r.set('link_modelo', it.link);
-      r.set('licenca', 'nao_verificada');
-      r.set('interno', true);
-      r.set('ativo', false);
-      r.set('ordem', 1000 + Number(it.numero || 0));
-      if (it.arquivo) {
-        try { r.set('foto_referencia', $filesystem.fileFromPath(pastaImg + it.arquivo)); } catch (err) { semFoto++; }
-      } else semFoto++;
-      e.app.save(r);
-      criados++;
-    }
-  } finally {
-    e.app.store().remove('mv_pausar_publicacao');
-  }
-  return e.json(200, { colecao, criados, existentes, sem_foto: semFoto });
 }, $apis.requireAuth('users', '_superusers'));
