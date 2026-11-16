@@ -88,7 +88,10 @@ const matFam = p => /resina/i.test(p.material) ? 'Resina' : /petg/i.test(p.mater
 const faixa = p => p.consulta ? 'consulta' : p.preco <= 30 ? 'ate30' : p.preco <= 60 ? '30a60' : '60mais';
 const precoTxt = p => p.consulta ? 'Sob consulta' : money(p.preco);
 const camada = p => p.camada || (/resina/i.test(p.material) ? '0,05 mm' : '0,2 mm');
-const fotoUrl = (p, f, thumb) => `${p.fotoDir}${f}${thumb && PB ? `?thumb=${thumb}` : ''}`;
+// no banco o nome do arquivo já muda a cada envio; nos arquivos locais a versão vai no endereço (cache do Netlify)
+const fotoUrl = (p, f, thumb) => p.fotoDir.startsWith('api/') ? `${p.fotoDir}${f}${thumb && PB ? `?thumb=${thumb}` : ''}` : `${p.fotoDir}${f}${ver(p.fotoDir + f)}`;
+/* imagens do topo com versão */
+const comVersao = html => html.replace(/assets\/img\/hero-[\w-]+\.webp/g, m => m + ver(m));
 const imgProduto = p => p.fotos.length ? fotoUrl(p, p.fotos[0]) : `assets/img/produtos/${p.slug}.png`;
 /* Prévia de link (WhatsApp, Instagram, Facebook): WebP nem sempre aparece, então usa a versão .jpg de mesmo nome quando existir. */
 const imgPrevia = p => {
@@ -216,7 +219,7 @@ ${GSV ? `<meta name="google-site-verification" content="${esc(GSV)}">\n` : ''}${
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@700&display=swap">
-<link rel="stylesheet" href="${B}assets/css/site.css">
+<link rel="stylesheet" href="${B}assets/css/site.css${ver('assets/css/site.css')}">
 ${jsonld.map(j => `<script type="application/ld+json">${JSON.stringify(j)}</script>`).join('\n')}
 ${extraHead}
 </head>
@@ -231,8 +234,8 @@ ${footer()}
 ${partial('cart')}
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>window.SITE=${JSON.stringify(dados)};</script>
-<script src="${B}assets/js/art.js"></script>
-<script src="${B}assets/js/site.js"></script>
+<script src="${B}assets/js/art.js${ver('assets/js/art.js')}"></script>
+<script src="${B}assets/js/site.js${ver('assets/js/site.js')}"></script>
 </body>
 </html>
 `;
@@ -283,7 +286,7 @@ const add = (p, html) => paginas.push([p, html]);
 
 // Início
 (function () {
-  const hero = partial('hero');
+  const hero = comVersao(partial('hero'));
   const destaques = loja.destaques.filter(id => P[id]).map(id => card(P[id])).join('');
   const make = partial('make').replace('<figure class="scene" id="makeScene"></figure>', `<figure class="scene" id="makeScene">${MV.cenaProcesso('#F26522')}</figure>`);
   const kinds = partial('kinds').replace('<div class="kinds-grid" id="kindsGrid"></div>', `<div class="kinds-grid" id="kindsGrid">${site.tipos.map(t => `<a class="kind" href="${t.cat ? `${B}produtos/?categoria=${t.cat}` : `${B}encomenda/`}">
@@ -327,8 +330,8 @@ ${materiais}
     path: '', nav: '', titulo: `${site.nome} | Impressão 3D sob encomenda e pronta entrega`,
     descricao: 'Peças impressas em 3D com acabamento de estúdio: decoração, colecionáveis, brinquedos articulados e projetos sob encomenda. Pedido pelo WhatsApp e envio para todo o Brasil.',
     conteudo, jsonld: [orgLd()],
-    extraHead: `<link rel="preload" as="image" href="${B}assets/img/hero-1920.webp" imagesrcset="${B}assets/img/hero-1280.webp 1280w, ${B}assets/img/hero-1920.webp 1920w" imagesizes="100vw" media="(min-width: 761px)" fetchpriority="high">
-<link rel="preload" as="image" href="${B}assets/img/hero-celular.webp" media="(max-width: 760px)" fetchpriority="high">`,
+    extraHead: comVersao(`<link rel="preload" as="image" href="${B}assets/img/hero-1920.webp" imagesrcset="${B}assets/img/hero-1280.webp 1280w, ${B}assets/img/hero-1920.webp 1920w" imagesizes="100vw" media="(min-width: 761px)" fetchpriority="high">
+<link rel="preload" as="image" href="${B}assets/img/hero-celular.webp" media="(max-width: 760px)" fetchpriority="high">`),
   }));
 })();
 
@@ -446,15 +449,15 @@ if (PB) add('calculadora/', layout({
   descricao: 'Envie o arquivo STL e veja na hora uma estimativa de preço para imprimir sua peça em PLA, PETG ou TPU, em até 4 cores. Orçamento final grátis pelo WhatsApp.',
   conteudo: `${pageHero([['Início', B], ['Calcular preço']], 'Calcule o preço da sua peça', 'Envie o arquivo STL, escolha material, cores e quantidade e veja uma estimativa na hora.')}
 ${partial('calculadora')}
-<script src="${B}assets/js/stl.js" defer></script>
-<script src="${B}assets/js/calculadora.js" defer></script>`,
+<script src="${B}assets/js/stl.js${ver('assets/js/stl.js')}" defer></script>
+<script src="${B}assets/js/calculadora.js${ver('assets/js/calculadora.js')}" defer></script>`,
   jsonld: [crumbsLd([['Início', B], ['Calcular preço', B + 'calculadora/']])],
 }));
 
 // Ideias de Natal (vitrine de modelos de designers com licença comercial)
 if (VITRINE.length) {
   const cardIdeia = v => `<article class="card ideia">
-    <div class="media">${v.foto ? `<img src="${B}${esc(v.foto)}" alt="${esc(v.nome)}" width="600" height="600" loading="lazy" decoding="async">` : MV.art('gear', 'vermelho')}${v.fotoDesigner && v.credito ? `<span class="foto-credito">Foto: ${esc(v.credito)}</span>` : ''}</div>
+    <div class="media">${v.foto ? `<img src="${B}${esc(v.foto)}${v.foto.startsWith('api/') ? '' : ver(v.foto)}" alt="${esc(v.nome)}" width="600" height="600" loading="lazy" decoding="async">` : MV.art('gear', 'vermelho')}${v.fotoDesigner && v.credito ? `<span class="foto-credito">Foto: ${esc(v.credito)}</span>` : ''}</div>
     <div class="info">
       <span class="label">Coleção de Natal</span>
       <h3>${esc(v.nome)}</h3>
