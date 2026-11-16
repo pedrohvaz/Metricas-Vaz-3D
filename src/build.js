@@ -44,8 +44,18 @@ produtos.forEach(p => { p.url = `${B}produtos/${p.slug}/`; p.path = `produtos/${
 const P = Object.fromEntries(produtos.map(p => [p.id, p]));
 const matFam = p => /resina/i.test(p.material) ? 'Resina' : /petg/i.test(p.material) ? 'PETG' : /tpu/i.test(p.material) ? 'TPU' : 'PLA';
 const faixa = p => p.preco <= 30 ? 'ate30' : p.preco <= 60 ? '30a60' : '60mais';
-const camada = p => /resina/i.test(p.material) ? '0,05 mm' : '0,2 mm';
+const camada = p => p.camada || (/resina/i.test(p.material) ? '0,05 mm' : '0,2 mm');
 const imgProduto = p => p.fotos.length ? `assets/img/produtos/${p.fotos[0]}` : `assets/img/produtos/${p.slug}.png`;
+/* Prévia de link (WhatsApp, Instagram, Facebook): WebP nem sempre aparece, então usa a versão .jpg de mesmo nome quando existir. */
+const imgPrevia = p => {
+  const img = imgProduto(p), jpg = img.replace(/\.webp$/i, '.jpg');
+  return jpg !== img && fs.existsSync(path.join(ROOT, jpg)) ? jpg : img;
+};
+const fotoTag = (p, { classe = '', largura = 600, prioridade = false } = {}) =>
+  `<img${classe ? ` class="${classe}"` : ''} src="${B}assets/img/produtos/${esc(p.fotos[0])}" alt="${esc(p.nome)} impresso em 3D em ${esc(p.material)}" width="${largura}" height="${largura}" decoding="async"${prioridade ? ' fetchpriority="high"' : ' loading="lazy"'}>`;
+const preload = src => `<link rel="preload" as="image" href="${src}" fetchpriority="high">`;
+const GA = (site.google_analytics || '').trim();
+const GSV = (site.google_verificacao || '').trim();
 
 const LINKS = { topo: '', inicio: '', produtos: 'produtos/', encomenda: 'encomenda/', duvidas: 'duvidas/', materiais: '#materiais' };
 const fixLinks = html => html.replace(/href="#([a-z][\w-]*)"/g, (m, id) => id in LINKS ? `href="${B}${LINKS[id]}"` : m);
@@ -152,7 +162,10 @@ ${canonical ? `<link rel="canonical" href="${canonical}">\n` : ''}<meta name="th
 <meta property="og:title" content="${esc(titulo)}">
 <meta property="og:description" content="${esc(descricao)}">
 <meta property="og:image" content="${og}">
+<meta property="og:image:alt" content="${esc(titulo)}">
 ${canonical ? `<meta property="og:url" content="${canonical}">\n` : ''}<meta name="twitter:card" content="summary_large_image">
+${GSV ? `<meta name="google-site-verification" content="${esc(GSV)}">\n` : ''}${GA ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${esc(GA)}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config',${JSON.stringify(GA)});</script>\n` : ''}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@700&display=swap">
@@ -189,9 +202,7 @@ const pageHero = (itens, h1, lead, extra = '', id = 'pageTitle') => `<div class=
 
 function card(p) {
   const cor = p.cores[0];
-  const media = p.fotos.length
-    ? `<img src="${B}assets/img/produtos/${esc(p.fotos[0])}" alt="${esc(p.nome)}" loading="lazy" width="600" height="600">`
-    : MV.art(p.art, cor);
+  const media = p.fotos.length ? fotoTag(p) : MV.art(p.art, cor);
   return `<article class="card" data-id="${p.id}" data-cat="${p.cat}" data-mat="${matFam(p)}" data-faixa="${faixa(p)}" data-preco="${p.preco}" data-pers="${p.personalizavel ? 1 : 0}" data-ordem="${p.ordem}" data-busca="${esc((p.nome + ' ' + p.material + ' ' + CAT[p.cat] + ' ' + p.desc).toLowerCase())}">
     <a class="media" href="${p.url}" aria-label="Ver ${esc(p.nome)}" tabindex="-1">${p.tag ? `<span class="badge">${esc(p.tag)}</span>` : ''}${media}</a>
     <div class="info">
@@ -224,13 +235,21 @@ const add = (p, html) => paginas.push([p, html]);
 
 // Início
 (function () {
+  const heroP = P.dragao;
+  const heroFoto = heroP && heroP.fotos.length;
   let hero = partial('hero')
-    .replace('<div id="heroArt"></div>', MV.art('dragon', 'roxo'))
-    .replace(/<button class="btn btn-primary" type="button" data-open="dragao"([^>]*)>Ver<\/button>/, `<a class="btn btn-primary" href="${P.dragao ? P.dragao.url : B + 'produtos/'}"$1>Ver</a>`);
+    .replace('<div id="heroArt"></div>', heroFoto ? fotoTag(heroP, { classe: 'hero-foto', largura: 1000, prioridade: true }) : MV.art('dragon', 'roxo'))
+    .replace(/<button class="btn btn-primary" type="button" data-open="dragao"([^>]*)>Ver<\/button>/, `<a class="btn btn-primary" href="${heroP ? heroP.url : B + 'produtos/'}"$1>Ver</a>`);
+  if (heroFoto) hero = hero
+    .replace(/\s*<div class="dim [hv]">.*?<\/div>/g, '')
+    .replace('<figure class="showcase"', '<figure class="showcase has-foto"')
+    .replace(/aria-label="[^"]*"/, `aria-label="${esc(heroP.nome)}"`)
+    .replace(/<span class="label corner">[^<]*<\/span>/, '')
+    .replace(/<span>PLA · impresso em peça única<\/span>/, `<span>${esc(heroP.material)} · peça única · ${money(heroP.preco)}</span>`);
   const destaques = loja.destaques.filter(id => P[id]).map(id => card(P[id])).join('');
   const make = partial('make').replace('<figure class="scene" id="makeScene"></figure>', `<figure class="scene" id="makeScene">${MV.cenaProcesso('#9B30FF')}</figure>`);
   const kinds = partial('kinds').replace('<div class="kinds-grid" id="kindsGrid"></div>', `<div class="kinds-grid" id="kindsGrid">${site.tipos.map(t => `<a class="kind" href="${t.cat ? `${B}produtos/?categoria=${t.cat}` : `${B}encomenda/`}">
-  <div class="kind-img">${MV.art(t.art, '#B9BEC9')}</div>
+  ${t.foto && P[t.foto] && P[t.foto].fotos.length ? `<div class="kind-img has-foto">${fotoTag(P[t.foto], { largura: 1000 })}</div>` : `<div class="kind-img">${MV.art(t.art, '#B9BEC9')}</div>`}
   <div class="kind-body"><h3>${esc(t.titulo)}</h3><p>${esc(t.texto)}</p>
     <ul class="pills">${t.tags.map(x => `<li>${ICON.check}${esc(x)}</li>`).join('')}</ul>
     <span class="kind-more">${esc(t.link_texto)} <span aria-hidden="true">→</span></span></div>
@@ -270,6 +289,7 @@ ${materiais}
     path: '', nav: '', titulo: `${site.nome} | Impressão 3D sob encomenda e pronta entrega`,
     descricao: 'Peças impressas em 3D com acabamento de estúdio: decoração, colecionáveis, brinquedos articulados e projetos sob encomenda. Pedido pelo WhatsApp e envio para todo o Brasil.',
     conteudo, jsonld: [orgLd()],
+    extraHead: heroFoto ? preload(`${B}assets/img/produtos/${esc(heroP.fotos[0])}`) : '',
   }));
 })();
 
@@ -313,7 +333,7 @@ for (const p of produtos) {
   const cor = p.cores[0];
   const itens = [['Início', B], ['Produtos', B + 'produtos/'], [CAT[p.cat], `${B}produtos/?categoria=${p.cat}`], [p.nome]];
   const media = p.fotos.length
-    ? `<div class="pdp-gallery"><img id="pdpFoto" src="${B}assets/img/produtos/${esc(p.fotos[0])}" alt="${esc(p.nome)}" width="1000" height="1000">${p.fotos.length > 1 ? `<div class="pdp-thumbs">${p.fotos.map((f, i) => `<button type="button" data-foto="${B}assets/img/produtos/${esc(f)}" aria-label="Foto ${i + 1}"><img src="${B}assets/img/produtos/${esc(f)}" alt="" loading="lazy"></button>`).join('')}</div>` : ''}</div>`
+    ? `<div class="pdp-gallery"><img id="pdpFoto" src="${B}assets/img/produtos/${esc(p.fotos[0])}" alt="${esc(p.nome)} impresso em 3D em ${esc(p.material)}" width="1000" height="1000" decoding="async" fetchpriority="high">${p.fotos.length > 1 ? `<div class="pdp-thumbs">${p.fotos.map((f, i) => `<button type="button" data-foto="${B}assets/img/produtos/${esc(f)}" aria-label="Foto ${i + 1}"><img src="${B}assets/img/produtos/${esc(f)}" alt="" loading="lazy"></button>`).join('')}</div>` : ''}</div>`
     : `<div class="pdp-art" id="pdpArt">${MV.art(p.art, cor)}</div><span class="label corner">Ref. ${esc(p.ref)} · ${esc(p.tamanho)}</span>`;
   const relacionados = [...produtos.filter(x => x.cat === p.cat && x.id !== p.id), ...produtos.filter(x => x.cat !== p.cat)].slice(0, 4);
   const conteudo = `<div class="cat-hero slim"><div class="wrap">${crumbs(itens)}</div></div>
@@ -356,10 +376,10 @@ for (const p of produtos) {
   const ld = {
     '@context': 'https://schema.org', '@type': 'Product', name: p.nome, description: p.desc, sku: p.ref, category: CAT[p.cat], material: p.material,
     brand: { '@type': 'Brand', name: site.nome },
-    image: SITE_URL ? absUrl(imgProduto(p)) : B + imgProduto(p),
+    image: SITE_URL ? absUrl(imgPrevia(p)) : B + imgPrevia(p),
     offers: { '@type': 'Offer', price: p.preco.toFixed(2), priceCurrency: 'BRL', availability: 'https://schema.org/MadeToOrder', itemCondition: 'https://schema.org/NewCondition', ...(SITE_URL ? { url: absUrl(p.path) } : {}) },
   };
-  add(p.path, layout({ path: p.path, nav: 'produtos/', titulo: `${p.nome} em ${p.material} | ${site.nome}`, descricao: `${p.desc} ${money(p.preco)}. ${p.material}, ${p.tamanho}. Escolha a cor e peça pelo WhatsApp.`.slice(0, 300), conteudo, jsonld: [ld, crumbsLd(itens.map(([t, h], i) => [t, i === itens.length - 1 ? B + p.path : h]))], ogImage: imgProduto(p) }));
+  add(p.path, layout({ path: p.path, nav: 'produtos/', titulo: `${p.nome} em ${p.material} | ${site.nome}`, descricao: `${p.desc} ${money(p.preco)}. ${p.material}, ${p.tamanho}. Escolha a cor e peça pelo WhatsApp.`.slice(0, 300), conteudo, jsonld: [ld, crumbsLd(itens.map(([t, h], i) => [t, i === itens.length - 1 ? B + p.path : h]))], ogImage: imgPrevia(p), extraHead: p.fotos.length ? preload(`${B}assets/img/produtos/${esc(p.fotos[0])}`) : '' }));
 }
 
 // Sob encomenda
@@ -385,6 +405,18 @@ for (const p of produtos) {
   add('duvidas/', layout({ path: 'duvidas/', nav: 'duvidas/', titulo: `Dúvidas frequentes | ${site.nome}`, descricao: 'Prazo de produção, frete, pagamento por Pix ou cartão, cores, arquivos STL e encomendas: respostas sobre como comprar peças impressas em 3D.', conteudo, jsonld: [faqLd] }));
 })();
 
+/* Equipamento (página Sobre): especificações de data/site.json → impressora; a foto só aparece se o arquivo existir. */
+function blocoImpressora() {
+  const imp = site.impressora;
+  if (!imp) return '';
+  const temFoto = imp.foto && fs.existsSync(path.join(ROOT, imp.foto));
+  const specs = [['Impressora', imp.modelo], ['Tecnologia', imp.tipo], ['Área de impressão', imp.area], ['Multicor', imp.cores], ['Materiais', imp.materiais]].filter(([, v]) => v);
+  return `<div class="equip${temFoto ? '' : ' sem-foto'}">
+  ${temFoto ? `<figure class="equip-foto"><img src="${B}${esc(imp.foto)}" alt="${esc(imp.modelo)} usada na produção das peças" width="1000" height="1000" loading="lazy" decoding="async"><figcaption>Nossa ${esc(imp.modelo)} em produção</figcaption></figure>` : ''}
+  <dl class="tech equip-specs">${specs.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+</div>`;
+}
+
 // Páginas de texto (sobre, trocas, privacidade)
 function textoPage(arquivo, pathP, titulo, h1, lead, descricao, nav = '') {
   const e = site.empresa;
@@ -392,7 +424,8 @@ function textoPage(arquivo, pathP, titulo, h1, lead, descricao, nav = '') {
     .replace(/\{\{nome\}\}/g, esc(site.nome)).replace(/\{\{razao_social\}\}/g, esc(e.razao_social)).replace(/\{\{documento\}\}/g, esc(e.documento))
     .replace(/\{\{cidade_uf\}\}/g, esc(e.cidade_uf)).replace(/\{\{email\}\}/g, esc(e.email)).replace(/\{\{whatsapp\}\}/g, esc(site.whatsapp_exibir))
     .replace(/\{\{horario\}\}/g, esc(site.horario)).replace(/\{\{prazo\}\}/g, esc(site.prazo_producao)).replace(/\{\{atualizado\}\}/g, new Date(site.politicas_atualizadas_em + 'T12:00:00').toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' }))
-    .replace(/\{\{base\}\}/g, B).replace(/\{\{wa_link\}\}/g, waLink(`Olá, ${site.nome}!`));
+    .replace(/\{\{base\}\}/g, B).replace(/\{\{wa_link\}\}/g, waLink(`Olá, ${site.nome}!`))
+    .replace(/\{\{impressora\}\}/g, blocoImpressora());
   corpo = todo(corpo);
   const conteudo = `${pageHero([['Início', B], [h1]], esc(h1), lead)}
 <section class="section"><div class="wrap"><article class="prose">${corpo}</article></div></section>`;

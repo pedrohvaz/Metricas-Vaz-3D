@@ -53,7 +53,7 @@
       "hex": "#9AA0AE"
     },
     "cinza": {
-      "nome": "Cinza resina",
+      "nome": "Cinza",
       "hex": "#A8ADB8"
     },
     "perola": {
@@ -66,10 +66,10 @@
       "nome": "PLA",
       "cor": "#F2679F",
       "res": 3,
-      "det": 3,
-      "camada": "0,12–0,2 mm",
+      "det": 4,
+      "camada": "0,08–0,2 mm",
       "temp": "até 55 °C",
-      "uso": "Decoração, brinquedos, peças de exposição"
+      "uso": "Decoração, brinquedos, miniaturas e peças de exposição"
     },
     {
       "nome": "PETG",
@@ -79,15 +79,6 @@
       "camada": "0,16–0,2 mm",
       "temp": "até 75 °C",
       "uso": "Utilidades, peças em contato com água, uso externo"
-    },
-    {
-      "nome": "Resina",
-      "cor": "#A8ADB8",
-      "res": 2,
-      "det": 5,
-      "camada": "0,05 mm",
-      "temp": "até 50 °C",
-      "uso": "Miniaturas, joias, protótipos com detalhe fino"
     },
     {
       "nome": "TPU",
@@ -118,7 +109,9 @@
         "azul"
       ],
       "desc": "Impresso em peça única com articulações funcionais: cada segmento do corpo se movimenta sem montagem.",
-      "fotos": []
+      "fotos": [
+        "dragao.webp"
+      ]
     },
     {
       "id": "vaso",
@@ -137,7 +130,9 @@
         "azul"
       ],
       "desc": "Parede contínua em espiral, impressa em modo vaso. O PETG torna a peça estanque, própria para flores naturais.",
-      "fotos": []
+      "fotos": [
+        "vaso.webp"
+      ]
     },
     {
       "id": "guerreira",
@@ -145,17 +140,20 @@
       "nome": "Miniatura Guerreira",
       "cat": "colecionaveis",
       "preco": 34.9,
-      "material": "Resina 8K",
+      "material": "PLA",
       "tamanho": "Escala 32 mm",
       "tempo": "3 h",
       "art": "knight",
-      "tag": "Resina",
+      "tag": "Detalhe fino",
       "cores": [
         "cinza",
         "preto"
       ],
-      "desc": "Impressão em resina de alta resolução. Entregue sem pintura, com suportes removidos e superfície pronta para primer.",
-      "fotos": []
+      "desc": "Impressa em PLA com camada fina de 0,08 mm para preservar os detalhes da armadura e do rosto. Entregue sem pintura, com suportes removidos e pronta para o primer.",
+      "fotos": [
+        "guerreira.webp"
+      ],
+      "camada": "0,08 mm"
     },
     {
       "id": "lua",
@@ -173,7 +171,9 @@
         "amarelo"
       ],
       "desc": "Relevo de crateras que aparece com a luz acesa. Acompanha base de madeira e LED de luz quente com cabo USB.",
-      "fotos": []
+      "fotos": [
+        "lua.webp"
+      ]
     },
     {
       "id": "polvo",
@@ -192,7 +192,9 @@
         "roxo"
       ],
       "desc": "Tentáculos articulados impressos no lugar. Peça de mesa e lembrança para eventos.",
-      "fotos": []
+      "fotos": [
+        "polvo.webp"
+      ]
     },
     {
       "id": "torre",
@@ -210,7 +212,9 @@
         "roxo"
       ],
       "desc": "Rampas internas que embaralham os dados antes da bandeja de saída. Para mesas de RPG e jogos de tabuleiro.",
-      "fotos": []
+      "fotos": [
+        "torre.webp"
+      ]
     },
     {
       "id": "gato",
@@ -229,7 +233,9 @@
         "amarelo"
       ],
       "desc": "Para suculentas e cactos, com furo de drenagem e prato encaixável.",
-      "fotos": []
+      "fotos": [
+        "gato.webp"
+      ]
     },
     {
       "id": "chaveiro",
@@ -251,7 +257,9 @@
         "amarelo"
       ],
       "desc": "Nome em alto-relevo, com até 10 caracteres. Argola metálica inclusa. Disponível em quantidade para eventos e empresas.",
-      "fotos": []
+      "fotos": [
+        "chaveiro.webp"
+      ]
     },
     {
       "id": "organizador",
@@ -270,7 +278,9 @@
         "menta"
       ],
       "desc": "Três compartimentos em alturas diferentes para canetas, pincéis e ferramentas.",
-      "fotos": []
+      "fotos": [
+        "organizador.webp"
+      ]
     },
     {
       "id": "porquinho",
@@ -288,7 +298,9 @@
         "menta"
       ],
       "desc": "Cofre com tampa inferior removível para retirar as moedas.",
-      "fotos": []
+      "fotos": [
+        "porquinho.webp"
+      ]
     },
     {
       "id": "suporte",
@@ -307,7 +319,9 @@
         "laranja"
       ],
       "desc": "Inclinação de 60°, compatível com capas e com passagem para o cabo de carregamento.",
-      "fotos": []
+      "fotos": [
+        "suporte.webp"
+      ]
     }
   ]
 }

@@ -1,0 +1,2 @@
+Salve aqui a foto da impressora como kobra-x.webp (quadrada, ~1000 x 1000).
+O gerador mostra a foto na pagina Sobre automaticamente quando o arquivo existir.

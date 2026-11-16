@@ -10,7 +10,7 @@
   "whatsapp_exibir": "(31) 9993-6219",
   "horario": "Segunda a sábado, 9h às 18h",
   "prazo_producao": "2 a 5 dias úteis",
-  "area_impressao": "25 × 21 × 21 cm",
+  "area_impressao": "26 × 26 × 26 cm",
   "empresa": {
     "razao_social": "[PREENCHER: razão social ou nome completo]",
     "documento": "[PREENCHER: CNPJ ou CPF]",
@@ -25,15 +25,20 @@
     "facebook": "",
     "_leia": "Coloque só o usuário, sem @. Ex.: metricasvaz3d. Vazio = não aparece."
   },
+  "google_analytics": "",
+  "_google_analytics": "Opcional. ID do Google Analytics 4 (ex.: G-ABC123XYZ). Vazio = sem estatísticas. Se ativar, atualize a seção de cookies em src/paginas/privacidade.html.",
+  "google_verificacao": "",
+  "_google_verificacao": "Opcional. Código da tag meta do Google Search Console (só o valor de content=\"...\"). Vazio = não aparece.",
   "politicas_atualizadas_em": "2026-11-03",
   "tipos": [
     {
       "art": "knight",
+      "foto": "guerreira",
       "titulo": "Miniaturas de mesa",
-      "texto": "Resina de alta resolução com detalhes finos. Saem sem suportes, prontas para o primer e a pintura.",
+      "texto": "Miniaturas em PLA com camada fina, que preserva rostos, armaduras e texturas. Saem prontas para o primer e a pintura.",
       "tags": [
         "Fácil de pintar",
-        "Camada de 0,05 mm",
+        "Camada de 0,08 mm",
         "Base inclusa"
       ],
       "cat": "colecionaveis",
@@ -41,6 +46,7 @@
     },
     {
       "art": "dragon",
+      "foto": "polvo",
       "titulo": "Brinquedos articulados",
       "texto": "Impressos numa peça só e já saem com as articulações funcionando. Sem cola e sem montagem.",
       "tags": [
@@ -53,6 +59,7 @@
     },
     {
       "art": "vase",
+      "foto": "lua",
       "titulo": "Decoração e utilidades",
       "texto": "Vasos, luminárias, organizadores e suportes em PLA e PETG, na cor que combina com o ambiente.",
       "tags": [
@@ -95,12 +102,16 @@
         "resposta": "Sim. Temos outras cores em estoque, incluindo filamentos seda, metalizados e que brilham no escuro. Informe a cor nas observações do pedido."
       },
       {
+        "pergunta": "Vocês imprimem peças com mais de uma cor?",
+        "resposta": "Sim. Nossa impressora troca o filamento sozinha durante a impressão e faz até 4 cores na mesma peça, sem pintura. Ótimo para chaveiros, logotipos e brindes. Informe as cores nas observações do pedido."
+      },
+      {
         "pergunta": "Vocês imprimem arquivos de terceiros?",
         "resposta": "Sim. Envie o STL ou o link na seção de encomendas. Verificamos se o modelo é imprimível e se precisa de ajustes antes do orçamento."
       },
       {
         "pergunta": "As peças têm marcas de camada?",
-        "resposta": "Peças em filamento mostram linhas finas de camada, próprias do processo. Peças em resina saem com superfície lisa e alto nível de detalhe."
+        "resposta": "Sim, linhas finas de camada são próprias da impressão com filamento. Em peças pequenas e detalhadas usamos camadas mais finas, que deixam a superfície mais lisa."
       }
     ],
     "encomendas": [
@@ -129,5 +140,14 @@
         "resposta": "Sim. Chaveiros com logo, troféus, displays e brindes em quantidade. Informe o nome da empresa no formulário."
       }
     ]
+  },
+  "impressora": {
+    "modelo": "Anycubic Kobra X",
+    "tipo": "Impressora de filamento (FDM)",
+    "area": "26 × 26 × 26 cm",
+    "cores": "Até 4 cores na mesma peça",
+    "materiais": "PLA, PETG e TPU",
+    "foto": "assets/img/estudio/kobra-x.webp",
+    "_foto": "Foto da sua impressora. Salve em assets/img/estudio/kobra-x.webp (o gerador só mostra a foto se o arquivo existir)."
   }
 }

@@ -552,3 +552,38 @@ mark.todo{background:#FFE58A;color:#3A2E00;border-radius:4px;padding:.05em .3em;
 }
 @media (max-width:480px){.icon-btn{width:42px;height:42px}.brand .logo{width:40px;height:40px}}
 @media (max-width:480px){.brand small{display:none}.brand b{font-size:1rem;line-height:1.15}.hdr-actions{gap:6px}}
+
+/* ===== Fotos reais dos produtos ===== */
+/* Cartões: fundo neutro igual ao das fotos, zoom suave ao passar o mouse */
+.media:has(img){background:#D9D6D2}
+.media img{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.card:hover .media img{transform:scale(1.045)}
+.media:has(img) .badge{background:rgba(10,8,18,.78);color:#fff;border-color:transparent;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+/* Destaque da página inicial */
+.showcase.has-foto{aspect-ratio:1/1;background:#D9D6D2}
+.showcase .hero-foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.showcase.has-foto .feature{background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 18px 40px -16px rgba(0,0,0,.45)}
+@media (max-width:900px){.showcase.has-foto{aspect-ratio:4/3}}
+/* Categorias com foto */
+.kind-img{aspect-ratio:16/11}
+.kind-img.has-foto{background:#D9D6D2}
+.kind-img.has-foto::before,.kind-img.has-foto::after{display:none}
+.kind-img.has-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.kind:hover .kind-img.has-foto img{transform:scale(1.05)}
+/* Página do produto */
+.pdp-media:has(.pdp-gallery){background:#D9D6D2}
+@media (max-width:860px){.pdp-media:has(.pdp-gallery){aspect-ratio:1/1}}
+@media (prefers-reduced-motion:reduce){.media img,.kind-img.has-foto img{transition:none}}
+
+/* Equipamento (página Sobre) */
+.equip{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start;margin-top:20px}
+.equip.sem-foto{grid-template-columns:1fr}
+.equip-foto{margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#D9D6D2}
+.equip-foto img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover}
+.equip-foto figcaption{padding:10px 14px;font-size:.85rem;color:var(--muted);background:var(--surface)}
+.equip-specs{margin:0}
+.equip .equip-specs{grid-template-columns:1fr}
+.equip .equip-specs div{border-right:0;border-bottom:1px solid var(--line)}
+.equip .equip-specs div:last-child{border-bottom:0}
+.equip.sem-foto{max-width:520px}
+@media (max-width:640px){.equip{grid-template-columns:1fr}}

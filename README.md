@@ -57,6 +57,14 @@ Gera a pasta `preview/`, em que todos os links são relativos e terminam em `ind
 
 **Colocar fotos reais:** salve as fotos em `assets/img/produtos/` (de preferência quadradas, 1000 × 1000, em `.jpg` ou `.webp`) e liste no produto: `"fotos": ["dragao-1.jpg", "dragao-2.jpg"]`. A primeira foto vira a imagem do card, da prévia e do Google; com mais de uma, a página do produto mostra miniaturas.
 
+Formato recomendado: a foto em `.webp` (leve, para o site) e uma cópia `.jpg` com o mesmo nome (ex.: `dragao.webp` + `dragao.jpg`). Liste só o `.webp` em `fotos`; o gerador usa o `.jpg` automaticamente na prévia do WhatsApp e do Google, que nem sempre mostram WebP.
+
+As fotos atuais (`assets/img/produtos/<id>.webp`) são **imagens ilustrativas geradas por IA**, no mesmo fundo cinza-claro. Ao fotografar as peças de verdade, use fundo liso claro, luz difusa (janela ou softbox) e enquadramento quadrado para manter o catálogo uniforme, e substitua os arquivos com o mesmo nome. Para destacar uma categoria da página inicial com foto, use `"foto": "<id do produto>"` em `tipos` (`data/site.json`).
+
+**Foto da impressora:** salve uma foto da sua Kobra X como `assets/img/estudio/kobra-x.webp` (quadrada, ~1000 × 1000) e gere o site de novo. Ela aparece na página Sobre, ao lado das especificações (`impressora` em `data/site.json`).
+
+**Google:** em `data/site.json`, `google_analytics` recebe o ID do GA4 (ex.: `G-ABC123XYZ`) e `google_verificacao` o código da tag meta do Search Console. Vazios, não aparecem no site.
+
 **Trocar os destaques da página inicial:** edite `destaques` em `data/produtos.json`.
 
 **Mudar número do WhatsApp, horário ou prazos:** `data/site.json`.
