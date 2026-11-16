@@ -32,8 +32,8 @@ if (PB) {
     VITRINE = (ler('interno=true && licenca="comercial_ok" && marca!=true && categoria="natal"').items || []).map(r => {
       const dir = `api/files/${r.collectionId}/${r.id}/`;
       const propria = (r.fotos || [])[0];
-      return { nome: r.nome, credito: r.credito, link: r.link_modelo, foto: propria ? dir + propria : r.foto_referencia ? dir + r.foto_referencia : '', fotoDesigner: !propria && !!r.foto_referencia };
-    }).filter(v => v.link);
+      return { nome: r.nome, ref: r.ref, credito: r.credito, foto: propria ? dir + propria : r.foto_referencia ? dir + r.foto_referencia : '', fotoDesigner: !propria && !!r.foto_referencia };
+    });
   } catch (e) { VITRINE = []; }
   const recs = dados.items || [];
   if (!recs.length) console.log('! O banco ainda não tem produtos: a loja usa data/produtos.json até você importar o catálogo no painel (Produtos → Importar).');
@@ -449,23 +449,22 @@ ${partial('calculadora')}
 // Ideias de Natal (vitrine de modelos de designers com licença comercial)
 if (VITRINE.length) {
   const cardIdeia = v => `<article class="card ideia">
-    <a class="media" href="${esc(v.link)}" target="_blank" rel="noopener nofollow" aria-label="Ver ${esc(v.nome)} no MakerWorld">${v.foto ? `<img src="${B}${esc(v.foto)}?thumb=600x600" alt="${esc(v.nome)}" width="600" height="600" loading="lazy" decoding="async">` : MV.art('gear', 'vermelho')}${v.fotoDesigner ? `<span class="foto-credito">Foto: ${esc(v.credito)}</span>` : ''}</a>
+    <div class="media">${v.foto ? `<img src="${B}${esc(v.foto)}?thumb=600x600" alt="${esc(v.nome)}" width="600" height="600" loading="lazy" decoding="async">` : MV.art('gear', 'vermelho')}${v.fotoDesigner && v.credito ? `<span class="foto-credito">Foto: ${esc(v.credito)}</span>` : ''}</div>
     <div class="info">
       <span class="label">Coleção de Natal</span>
       <h3>${esc(v.nome)}</h3>
-      <p class="desc">Modelo de <b>${esc(v.credito)}</b> no MakerWorld</p>
+      ${v.ref ? `<p class="desc">Ref. ${esc(v.ref)}</p>` : ''}
       <div class="ideia-acoes">
-        <a class="add" href="${B}encomenda/?modelo=${encodeURIComponent(v.nome)}&amp;link=${encodeURIComponent(v.link)}">Quero este</a>
-        <a class="ver-mw" href="${esc(v.link)}" target="_blank" rel="noopener nofollow">Ver no MakerWorld <span aria-hidden="true">↗</span></a>
+        <a class="add" href="${B}encomenda/?modelo=${encodeURIComponent(v.nome)}${v.ref ? `&amp;ref=${encodeURIComponent(v.ref)}` : ''}">Quero este</a>
       </div>
     </div>
   </article>`;
   add('natal/', layout({
     path: 'natal/', nav: 'natal/', titulo: `Ideias de Natal impressas em 3D | ${site.nome}`,
     descricao: `${VITRINE.length} ideias de decoração de Natal para imprimir em 3D sob encomenda: enfeites, presépios, árvores e presentes, na cor que você escolher.`,
-    conteudo: `${pageHero([['Início', B], ['Ideias de Natal']], 'Ideias de <em class="laranja">Natal</em>', 'Modelos criados por designers da comunidade MakerWorld, com licença que permite a venda de impressões. Toque em “Ver no MakerWorld” para conhecer o modelo original ou em “Quero este” para pedir o orçamento: imprimimos na cor que você escolher.')}
+    conteudo: `${pageHero([['Início', B], ['Ideias de Natal']], 'Ideias de <em class="laranja">Natal</em>', 'Enfeites, presépios, árvores e presentes para imprimir sob encomenda, na cor que você escolher. Toque em “Quero este” para pedir o orçamento.')}
 <section class="section"><div class="wrap"><div class="grid cat-grid ideias-grid">${VITRINE.map(cardIdeia).join('')}</div>
-<p class="ideias-nota">Os modelos e as fotos marcadas com “Foto:” pertencem aos seus designers. Cada peça é impressa por nós sob encomenda.</p></div></section>`,
+<p class="ideias-nota">Imagens ilustrativas. As fotos marcadas com “Foto:” são dos criadores dos modelos. Cada peça é impressa por nós sob encomenda.</p></div></section>`,
     jsonld: [crumbsLd([['Início', B], ['Ideias de Natal', B + 'natal/']])],
   }));
 }

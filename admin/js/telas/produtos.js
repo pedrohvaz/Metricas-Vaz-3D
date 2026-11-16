@@ -36,7 +36,7 @@ export async function render(el, ctx, acoes) {
         <input type="search" id="bProd" placeholder="Buscar nome, referência ou designer" value="${esc(busca)}">
       </div>
     </div>
-    <p class="dica">${aba === 'loja' ? 'Ao salvar um produto, a loja é atualizada sozinha em alguns segundos.' : 'Confira a licença na página do designer (link “abrir”). Ao marcar “Uso comercial liberado”, o modelo aparece na página Ideias de Natal da loja, com crédito e link para o MakerWorld. Os demais ficam só aqui.'}</p>
+    <p class="dica">${aba === 'loja' ? 'Ao salvar um produto, a loja é atualizada sozinha em alguns segundos.' : 'Confira a licença na página do designer (link “abrir”). Ao marcar “Uso comercial liberado”, o modelo aparece na página Ideias de Natal da loja só com a imagem (e o crédito da foto) e o botão “Quero este”, sem link para fora do site. Os demais ficam só aqui.'}</p>
     ${vis.length ? `<div class="tabela-wrap"><table class="tabela"><thead><tr><th></th><th>Produto</th><th>Categoria</th>${aba === 'interno' ? '<th>Designer</th><th>Licença</th>' : '<th class="num">Preço</th><th class="num">Custo estimado</th><th>Na loja</th>'}</tr></thead><tbody>
       ${vis.map(p => {
         const foto = p.fotos?.length ? pb.files.getURL(p, p.fotos[0], { thumb: '600x600' }) : p.foto_referencia && token ? pb.files.getURL(p, p.foto_referencia, { thumb: '600x600', token }) : '';

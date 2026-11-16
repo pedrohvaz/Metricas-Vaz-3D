@@ -277,9 +277,8 @@ if (qf) {
   // vindo da vitrine "Ideias de Natal": já preenche o modelo escolhido
   const pq = new URLSearchParams(location.search);
   if (pq.get('modelo')) {
-    const lk = /^https:\/\/makerworld\.com\//.test(pq.get('link') || '') ? pq.get('link') : '';
-    $('#q-desc').value = `Quero o modelo "${pq.get('modelo').slice(0, 120)}"${lk ? ' do MakerWorld' : ''}. Cor e tamanho: `;
-    if (lk) $('#q-link').value = lk;
+    const ref = (pq.get('ref') || '').replace(/[^\w-]/g, '').slice(0, 12);
+    $('#q-desc').value = `Quero o modelo "${pq.get('modelo').slice(0, 120)}"${ref ? ` (ref. ${ref})` : ''}. Cor e tamanho: `;
     setTimeout(() => { qf.scrollIntoView({ block: 'start' }); $('#q-nome').focus(); }, 150);
   }
   const LABEL_TEXTO = $('#quoteSendTxt').textContent, LABEL_FOTOS = 'Enviar orçamento com imagens';
