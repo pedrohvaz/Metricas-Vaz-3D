@@ -97,7 +97,12 @@ onRecordEnrich((e) => {
 /* Visitantes do site não veem os dados internos de produção dos produtos. */
 onRecordEnrich((e) => {
   const auth = e.requestInfo && e.requestInfo.auth;
-  if (!auth) e.record.hide('gramas', 'horas', 'interno', 'licenca', 'credito', 'link_modelo', 'obs_interna', 'foto_referencia');
+  if (!auth) {
+    // modelos da vitrine (licença comercial confirmada) mostram crédito, link e foto do designer
+    const vitrine = e.record.getBool('interno') && e.record.getString('licenca') === 'comercial_ok' && !e.record.getBool('marca');
+    e.record.hide('gramas', 'horas', 'obs_interna', 'marca');
+    if (!vitrine) e.record.hide('interno', 'licenca', 'credito', 'link_modelo', 'foto_referencia');
+  }
   e.next();
 }, 'produtos');
 

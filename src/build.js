@@ -17,14 +17,24 @@ const loja = JSON.parse(read('data/produtos.json'));
 /* Com --pb=http://127.0.0.1:8090 os produtos vêm do banco (painel administrativo);
    sem ele, de data/produtos.json. Categorias, cores e materiais continuam no arquivo. */
 const PB = (ARGS.find(a => a.startsWith('--pb=')) || '').slice(5).replace(/\/+$/, '');
+let VITRINE = [];
 if (PB) {
   const { execFileSync } = require('child_process');
-  const busca = `fetch(process.argv[1] + "/api/collections/produtos/records?perPage=500&sort=ordem,created&filter=" + encodeURIComponent("ativo=true"))
+  const busca = `fetch(process.argv[1] + "/api/collections/produtos/records?perPage=500&sort=ordem,created&filter=" + encodeURIComponent(process.argv[2]))
     .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); })
     .then(t => process.stdout.write(t)).catch(e => { console.error(e.message); process.exit(1); });`;
+  const ler = filtro => JSON.parse(execFileSync(process.execPath, ['-e', busca, PB, filtro], { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }));
   let dados;
-  try { dados = JSON.parse(execFileSync(process.execPath, ['-e', busca, PB], { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 })); }
+  try { dados = ler('ativo=true && interno!=true'); }
   catch (e) { console.error(`✖ Não foi possível ler os produtos do banco em ${PB}. O PocketBase está rodando?`); process.exit(1); }
+  // vitrine "Ideias de Natal": modelos do catálogo interno com licença comercial confirmada
+  try {
+    VITRINE = (ler('interno=true && licenca="comercial_ok" && marca!=true && categoria="natal"').items || []).map(r => {
+      const dir = `api/files/${r.collectionId}/${r.id}/`;
+      const propria = (r.fotos || [])[0];
+      return { nome: r.nome, credito: r.credito, link: r.link_modelo, foto: propria ? dir + propria : r.foto_referencia ? dir + r.foto_referencia : '', fotoDesigner: !propria && !!r.foto_referencia };
+    }).filter(v => v.link);
+  } catch (e) { VITRINE = []; }
   const recs = dados.items || [];
   if (!recs.length) console.log('! O banco ainda não tem produtos: a loja usa data/produtos.json até você importar o catálogo no painel (Produtos → Importar).');
   else loja.produtos = recs.map(r => ({
@@ -98,7 +108,7 @@ const ICON = {
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
   search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
 };
-const NAV = [['produtos/', 'Produtos'], ['encomenda/', 'Sob encomenda'], ['calculadora/', 'Calcular preço'], ['sobre/', 'Sobre'], ['duvidas/', 'Dúvidas']];
+const NAV = [['produtos/', 'Produtos'], ...(VITRINE.length ? [['natal/', 'Natal']] : []), ['encomenda/', 'Sob encomenda'], ['calculadora/', 'Calcular preço'], ['sobre/', 'Sobre'], ['duvidas/', 'Dúvidas']];
 
 function header(atual) {
   return `<div class="topbar"><div class="wrap">
@@ -435,6 +445,30 @@ ${partial('calculadora')}
 <script src="${B}assets/js/calculadora.js" defer></script>`,
   jsonld: [crumbsLd([['Início', B], ['Calcular preço', B + 'calculadora/']])],
 }));
+
+// Ideias de Natal (vitrine de modelos de designers com licença comercial)
+if (VITRINE.length) {
+  const cardIdeia = v => `<article class="card ideia">
+    <a class="media" href="${esc(v.link)}" target="_blank" rel="noopener nofollow" aria-label="Ver ${esc(v.nome)} no MakerWorld">${v.foto ? `<img src="${B}${esc(v.foto)}?thumb=600x600" alt="${esc(v.nome)}" width="600" height="600" loading="lazy" decoding="async">` : MV.art('gear', 'vermelho')}${v.fotoDesigner ? `<span class="foto-credito">Foto: ${esc(v.credito)}</span>` : ''}</a>
+    <div class="info">
+      <span class="label">Coleção de Natal</span>
+      <h3>${esc(v.nome)}</h3>
+      <p class="desc">Modelo de <b>${esc(v.credito)}</b> no MakerWorld</p>
+      <div class="ideia-acoes">
+        <a class="add" href="${B}encomenda/?modelo=${encodeURIComponent(v.nome)}&amp;link=${encodeURIComponent(v.link)}">Quero este</a>
+        <a class="ver-mw" href="${esc(v.link)}" target="_blank" rel="noopener nofollow">Ver no MakerWorld <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </article>`;
+  add('natal/', layout({
+    path: 'natal/', nav: 'natal/', titulo: `Ideias de Natal impressas em 3D | ${site.nome}`,
+    descricao: `${VITRINE.length} ideias de decoração de Natal para imprimir em 3D sob encomenda: enfeites, presépios, árvores e presentes, na cor que você escolher.`,
+    conteudo: `${pageHero([['Início', B], ['Ideias de Natal']], 'Ideias de <em class="laranja">Natal</em>', 'Modelos criados por designers da comunidade MakerWorld, com licença que permite a venda de impressões. Toque em “Ver no MakerWorld” para conhecer o modelo original ou em “Quero este” para pedir o orçamento: imprimimos na cor que você escolher.')}
+<section class="section"><div class="wrap"><div class="grid cat-grid ideias-grid">${VITRINE.map(cardIdeia).join('')}</div>
+<p class="ideias-nota">Os modelos e as fotos marcadas com “Foto:” pertencem aos seus designers. Cada peça é impressa por nós sob encomenda.</p></div></section>`,
+    jsonld: [crumbsLd([['Início', B], ['Ideias de Natal', B + 'natal/']])],
+  }));
+}
 
 // Dúvidas
 (function () {

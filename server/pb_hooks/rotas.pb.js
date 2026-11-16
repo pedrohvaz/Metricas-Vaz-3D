@@ -167,6 +167,7 @@ routerAdd('POST', '/api/mv/importar-colecao', (e) => {
       let existe = null;
       try { existe = e.app.findFirstRecordByData('produtos', 'codigo', it.codigo); } catch (err) { existe = null; }
       if (existe) { existentes++; continue; }
+      if (it.marca_registrada) continue; // personagens e marcas de terceiros não entram no catálogo
       const r = new Record(col);
       r.set('codigo', it.codigo);
       r.set('ref', 'NT-' + String(it.numero).padStart(3, '0'));
@@ -184,7 +185,6 @@ routerAdd('POST', '/api/mv/importar-colecao', (e) => {
       r.set('interno', true);
       r.set('ativo', false);
       r.set('ordem', 1000 + Number(it.numero || 0));
-      if (it.marca_registrada) r.set('obs_interna', 'Personagem ou marca de terceiros: não vender sem licença do dono da marca.');
       if (it.arquivo) {
         try { r.set('foto_referencia', $filesystem.fileFromPath(pastaImg + it.arquivo)); } catch (err) { semFoto++; }
       } else semFoto++;

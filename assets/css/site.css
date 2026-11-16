@@ -538,7 +538,7 @@ mark.todo{background:#FFE58A;color:#3A2E00;border-radius:4px;padding:.05em .3em;
 .menu-btn[aria-expanded="true"] .ico-x{display:block}
 .menu-btn[aria-expanded="true"] .ico-bars{display:none}
 .nav .nav-home{display:none}
-@media (max-width:1100px){
+@media (max-width:1200px){
   .hdr{gap:12px}
   .hdr-actions{margin-left:auto}
   .menu-btn{display:inline-grid}
@@ -724,3 +724,17 @@ html{scroll-padding-top:92px}
 /* contorno claro sutil: separa o cinza-escuro do "M" do fundo escuro sem mudar as cores da marca */
 .site-header .brand .logo,.footer .brand .logo,:root[data-theme="light"] .site-header .brand .logo,:root[data-theme="light"] .footer .brand .logo{
   filter:drop-shadow(0 0 .6px rgba(255,255,255,.75)) drop-shadow(0 0 .6px rgba(255,255,255,.5)) drop-shadow(0 0 10px rgba(255,255,255,.14))}
+
+/* vitrine Ideias de Natal */
+.cat-hero h1 em.laranja{font-style:normal;color:var(--laranja)}
+.ideias-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:1080px){.ideias-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){.ideias-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ideia .media{position:relative}
+.foto-credito{position:absolute;left:8px;bottom:8px;z-index:1;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:rgba(12,12,13,.78);color:#fff;border-radius:4px;padding:.3em .55em;font:500 .66rem/1 var(--font-mono)}
+.ideia .desc b{color:var(--ink);font-weight:600}
+.ideia-acoes{display:flex;flex-direction:column;gap:8px;margin-top:auto}
+.ideia-acoes .add{margin-top:10px}
+.ver-mw{display:block;text-align:center;font-weight:600;font-size:.86rem;color:var(--accent);text-decoration:none;padding:.4em}
+.ver-mw:hover{text-decoration:underline}
+.ideias-nota{margin-top:28px;color:var(--muted);font-size:.85rem;max-width:60em}

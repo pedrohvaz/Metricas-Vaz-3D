@@ -36,7 +36,7 @@ export async function render(el, ctx, acoes) {
         <input type="search" id="bProd" placeholder="Buscar nome, referência ou designer" value="${esc(busca)}">
       </div>
     </div>
-    <p class="dica">${aba === 'loja' ? 'Ao salvar um produto, a loja é atualizada sozinha em alguns segundos.' : 'O catálogo interno nunca aparece na loja. Para vender um modelo, confirme a licença comercial na página do designer, coloque uma foto sua, defina o preço e desmarque “Catálogo interno”.'}</p>
+    <p class="dica">${aba === 'loja' ? 'Ao salvar um produto, a loja é atualizada sozinha em alguns segundos.' : 'Confira a licença na página do designer (link “abrir”). Ao marcar “Uso comercial liberado”, o modelo aparece na página Ideias de Natal da loja, com crédito e link para o MakerWorld. Os demais ficam só aqui.'}</p>
     ${vis.length ? `<div class="tabela-wrap"><table class="tabela"><thead><tr><th></th><th>Produto</th><th>Categoria</th>${aba === 'interno' ? '<th>Designer</th><th>Licença</th>' : '<th class="num">Preço</th><th class="num">Custo estimado</th><th>Na loja</th>'}</tr></thead><tbody>
       ${vis.map(p => {
         const foto = p.fotos?.length ? pb.files.getURL(p, p.fotos[0], { thumb: '600x600' }) : p.foto_referencia && token ? pb.files.getURL(p, p.foto_referencia, { thumb: '600x600', token }) : '';
@@ -46,7 +46,7 @@ export async function render(el, ctx, acoes) {
           <td><b>${esc(p.nome)}</b><small>${esc(p.ref || '')}${p.destaque ? ' · destaque' : ''}${p.obs_interna ? ' · <span class="atraso">atenção</span>' : ''}</small></td>
           <td>${esc(catalogo.categorias?.[p.categoria] || p.categoria)}</td>
           ${aba === 'interno'
-            ? `<td>${esc(p.credito || '—')}${p.link_modelo ? ` <a href="${esc(p.link_modelo)}" target="_blank" rel="noopener" data-link>abrir ↗</a>` : ''}</td><td><span class="pil ${PIL_LIC[p.licenca] || 'st-novo'}">${esc((LICENCAS.find(l => l[0] === p.licenca) || LICENCAS[0])[1])}</span></td>`
+            ? `<td>${esc(p.credito || '—')}${p.link_modelo ? ` <a href="${esc(p.link_modelo)}" target="_blank" rel="noopener" data-link>abrir ↗</a>` : ''}</td><td><span class="pil ${PIL_LIC[p.licenca] || 'st-novo'}">${esc((LICENCAS.find(l => l[0] === p.licenca) || LICENCAS[0])[1])}</span>${p.licenca === 'comercial_ok' && p.categoria === 'natal' ? '<small>na vitrine Ideias de Natal</small>' : ''}</td>`
             : `<td class="num">${p.sob_consulta || !p.preco ? '<span class="pil">Sob consulta</span>' : money(p.preco)}</td>
                <td class="num">${custo ? `${money(custo)}${p.preco ? ` <small>${num((p.preco - custo) / custo * 100)}% lucro</small>` : ''}` : '<small>informe g e h</small>'}</td>
                <td>${p.ativo ? '<span class="pil st-aprovado">Visível</span>' : '<span class="pil">Oculto</span>'}</td>`}

@@ -274,6 +274,14 @@ function quoteMessage() {
   return L.join('\n');
 }
 if (qf) {
+  // vindo da vitrine "Ideias de Natal": já preenche o modelo escolhido
+  const pq = new URLSearchParams(location.search);
+  if (pq.get('modelo')) {
+    const lk = /^https:\/\/makerworld\.com\//.test(pq.get('link') || '') ? pq.get('link') : '';
+    $('#q-desc').value = `Quero o modelo "${pq.get('modelo').slice(0, 120)}"${lk ? ' do MakerWorld' : ''}. Cor e tamanho: `;
+    if (lk) $('#q-link').value = lk;
+    setTimeout(() => { qf.scrollIntoView({ block: 'start' }); $('#q-nome').focus(); }, 150);
+  }
   const LABEL_TEXTO = $('#quoteSendTxt').textContent, LABEL_FOTOS = 'Enviar orçamento com imagens';
   const updateQuoteLink = () => { $('#quoteSend').href = waLink(quoteMessage()); };
   const podeCompartilhar = () => { try { return !shareFalhou && fotos.length > 0 && !!navigator.canShare && navigator.canShare({ files: fotos.map(f => f.file) }); } catch (e) { return false; } };
@@ -396,7 +404,7 @@ if (menuBtn) {
   nav.addEventListener('click', e => { if (e.target.closest('a')) menu(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav.classList.contains('open')) { menu(false); menuBtn.focus(); } });
   document.addEventListener('click', e => { if (nav.classList.contains('open') && !e.target.closest('#mainNav') && !e.target.closest('#menuBtn')) menu(false); });
-  matchMedia('(min-width: 1101px)').addEventListener('change', e => { if (e.matches) menu(false); });
+  matchMedia('(min-width: 1201px)').addEventListener('change', e => { if (e.matches) menu(false); });
 }
 renderCart();
 })();
