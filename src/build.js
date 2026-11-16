@@ -263,7 +263,7 @@ function card(p) {
       <div class="pricerow"><span class="price${p.consulta ? ' consulta' : ''}">${precoTxt(p)}</span>
         <div class="dots" role="group" aria-label="Cores de ${esc(p.nome)}">${p.cores.map(c => `<button class="dot" type="button" style="--c:${loja.cores[c].hex}" data-dot="${p.id}" data-cor="${c}" aria-pressed="${c === cor}" title="${esc(loja.cores[c].nome)}"><span class="sr">${esc(loja.cores[c].nome)}</span></button>`).join('')}</div>
       </div>
-      ${p.consulta ? `<a class="add" href="${p.url}#consulta">Solicitar orçamento</a>` : p.personalizavel ? `<a class="add" href="${p.url}">Personalizar</a>` : `<button class="add" type="button" data-quick="${p.id}">${ICON.cart}Adicionar ao carrinho</button>`}
+      ${p.consulta ? `<a class="add" href="${p.url}#consulta">Solicitar orçamento</a>` : p.personalizavel ? `<a class="add" href="${p.url}">Personalizar</a>` : `<button class="add" type="button" data-quick="${p.id}" aria-label="Adicionar ${esc(p.nome)} ao carrinho">${ICON.cart}Adicionar<span class="add-extra"> ao carrinho</span></button>`}
     </div>
   </article>`;
 }

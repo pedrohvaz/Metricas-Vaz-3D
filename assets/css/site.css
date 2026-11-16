@@ -738,3 +738,5 @@ html{scroll-padding-top:92px}
 .ver-mw{display:block;text-align:center;font-weight:600;font-size:.86rem;color:var(--accent);text-decoration:none;padding:.4em}
 .ver-mw:hover{text-decoration:underline}
 .ideias-nota{margin-top:28px;color:var(--muted);font-size:.85rem;max-width:60em}
+/* celular: cabeçalho sem o botão de tema (sobrepunha o nome) e botão do card numa linha só */
+@media (max-width:560px){.site-header .theme-btn{display:none}.add-extra{display:none}.add,a.add{font-size:.9rem;padding:.7em .5em}}
