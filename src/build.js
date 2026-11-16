@@ -108,7 +108,7 @@ const ICON = {
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
   search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
 };
-const NAV = [['produtos/', 'Produtos'], ...(VITRINE.length ? [['natal/', 'Natal']] : []), ['encomenda/', 'Sob encomenda'], ['calculadora/', 'Calcular preço'], ['sobre/', 'Sobre'], ['duvidas/', 'Dúvidas']];
+const NAV = [['produtos/', 'Produtos'], ...(VITRINE.length ? [['natal/', 'Natal']] : []), ['encomenda/', 'Sob encomenda'], ...(PB ? [['calculadora/', 'Calcular preço']] : []), ['sobre/', 'Sobre'], ['duvidas/', 'Dúvidas']];
 
 function header(atual) {
   return `<div class="topbar"><div class="wrap">
@@ -435,8 +435,8 @@ for (const p of produtos) {
   add('encomenda/', layout({ path: 'encomenda/', nav: 'encomenda/', titulo: `Impressão 3D sob encomenda | ${site.nome}`, descricao: 'Peças únicas, reposições, protótipos e brindes impressos em 3D a partir do seu arquivo, desenho ou foto. Orçamento grátis pelo WhatsApp, com envio de imagens.', conteudo: html, jsonld: [faqLd, crumbsLd([['Início', B], ['Sob encomenda', B + 'encomenda/']])] }));
 })();
 
-// Calculadora de preço (STL)
-add('calculadora/', layout({
+// Calculadora de preço (STL): só existe com o servidor, que calcula a faixa (em hospedagem estática, como Vercel, fica de fora)
+if (PB) add('calculadora/', layout({
   path: 'calculadora/', nav: 'calculadora/', titulo: `Calcule o preço da sua peça em 3D | ${site.nome}`,
   descricao: 'Envie o arquivo STL e veja na hora uma estimativa de preço para imprimir sua peça em PLA, PETG ou TPU, em até 4 cores. Orçamento final grátis pelo WhatsApp.',
   conteudo: `${pageHero([['Início', B], ['Calcular preço']], 'Calcule o preço da sua peça', 'Envie o arquivo STL, escolha material, cores e quantidade e veja uma estimativa na hora.')}
