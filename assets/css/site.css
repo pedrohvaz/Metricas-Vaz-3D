@@ -538,7 +538,10 @@ mark.todo{background:#FFE58A;color:#3A2E00;border-radius:4px;padding:.05em .3em;
 .menu-btn[aria-expanded="true"] .ico-x{display:block}
 .menu-btn[aria-expanded="true"] .ico-bars{display:none}
 .nav .nav-home{display:none}
+/* Painel: ícone de cadeado no computador; item escrito no menu do celular */
+@media (min-width:1201px){.nav .nav-adm{display:none}}
 @media (max-width:1200px){
+  .adm-btn{display:none}
   .hdr{gap:12px}
   .hdr-actions{margin-left:auto}
   .menu-btn{display:inline-grid}

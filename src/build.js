@@ -116,7 +116,7 @@ const ICON = {
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
   search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
 };
-const NAV = [['produtos/', 'Produtos'], ...(VITRINE.length ? [['natal/', 'Natal']] : []), ['encomenda/', 'Sob encomenda'], ...(PB ? [['calculadora/', 'Calcular preço']] : []), ['sobre/', 'Sobre'], ['duvidas/', 'Dúvidas']];
+const NAV = [['produtos/', 'Produtos'], ...(VITRINE.length ? [['natal/', 'Natal']] : []), ['encomenda/', 'Sob encomenda'], ...(PB ? [['calculadora/', 'Calcular preço']] : []), ['sobre/', 'Sobre'], ['duvidas/', 'Dúvidas'], ['admin/', 'Painel']];
 
 function header(atual) {
   return `<div class="topbar"><div class="wrap">
@@ -130,13 +130,14 @@ function header(atual) {
     </a>
     <nav class="nav" id="mainNav" aria-label="Principal">
       <a href="${B}" class="nav-home"${atual === '' ? ' aria-current="page"' : ''}>Início</a>
-      ${NAV.map(([h, t]) => `<a href="${B}${h}"${atual === h ? ' aria-current="page"' : ''}>${t}</a>`).join('\n      ')}
+      ${NAV.map(([h, t]) => `<a href="${B}${h}"${h === 'admin/' ? ' class="nav-adm"' : ''}${atual === h ? ' aria-current="page"' : ''}>${t}</a>`).join('\n      ')}
     </nav>
     <div class="hdr-actions">
       <button class="icon-btn theme-btn" id="themeBtn" type="button" aria-label="Ativar modo claro" title="Modo claro / escuro">
         <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
         <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>
       </button>
+      <a class="icon-btn adm-btn" href="${B}admin/" aria-label="Painel administrativo" title="Painel administrativo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></a>
       <a class="icon-btn busca-btn" href="${B}produtos/#catQ" aria-label="Buscar produto" title="Buscar produto">${ICON.search}</a>
       <button class="icon-btn cart-btn" id="openCart" type="button" aria-label="Abrir carrinho">
         ${ICON.cart}<span class="count" id="cartCount">0</span>
@@ -523,6 +524,17 @@ textoPage('privacidade.html', 'privacidade/', 'Política de privacidade', 'Polí
 // 404
 add('404.html', layout({ path: '404.html', titulo: `Página não encontrada | ${site.nome}`, descricao: 'Página não encontrada.', conteudo: `${pageHero([['Início', B], ['Página não encontrada']], 'Página não encontrada', 'O endereço pode ter mudado ou ter sido digitado errado.', `<div class="enc-ctas"><a class="btn btn-primary" href="${B}produtos/">Ver produtos</a><a class="btn" href="${B}">Ir para o início</a></div>`)}` }));
 
+/* Sem o servidor (ex.: Netlify) o painel não roda aqui: a página admin/ leva até ele.
+   Com "painel_url" em data/site.json (endereço do VPS), redireciona direto. */
+if (!PB) {
+  const PAINEL = site.painel_url || 'http://127.0.0.1:8090/admin/';
+  add('admin/', layout({ path: 'admin/', nav: 'admin/', titulo: `Painel | ${site.nome}`, descricao: 'Acesso ao painel administrativo.',
+    extraHead: `<meta name="robots" content="noindex">${site.painel_url ? `<meta http-equiv="refresh" content="0;url=${esc(PAINEL)}">` : ''}`,
+    conteudo: pageHero([['Início', B], ['Painel']], 'Painel administrativo',
+      site.painel_url ? 'Abrindo o painel…' : 'O painel roda no computador da loja. Ligue o servidor (npm run servidor) e clique no botão abaixo.',
+      `<div class="enc-ctas"><a class="btn btn-primary" href="${esc(PAINEL)}">Abrir o painel</a><a class="btn" href="${B}">Voltar à loja</a></div>`) }));
+}
+
 /* ---------- gravação ---------- */
 fs.rmSync(DIST, { recursive: true, force: true });
 const write = (rel, data) => { const f = path.join(DIST, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, data); };
@@ -544,7 +556,7 @@ if (PB) {
   }));
 }
 
-const indexaveis = paginas.map(([p]) => p).filter(p => !p.endsWith('.html'));
+const indexaveis = paginas.map(([p]) => p).filter(p => !p.endsWith('.html') && p !== 'admin/');
 if (SITE_URL) {
   const hoje = new Date().toISOString().slice(0, 10);
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${indexaveis.map(p => `  <url><loc>${absUrl(p)}</loc><lastmod>${hoje}</lastmod></url>`).join('\n')}\n</urlset>\n`);
