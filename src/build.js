@@ -11,6 +11,30 @@ const DIST = path.join(ROOT, SAIDA);
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const site = JSON.parse(read('data/site.json'));
 const loja = JSON.parse(read('data/produtos.json'));
+
+/* Com --pb=http://127.0.0.1:8090 os produtos vêm do banco (painel administrativo);
+   sem ele, de data/produtos.json. Categorias, cores e materiais continuam no arquivo. */
+const PB = (ARGS.find(a => a.startsWith('--pb=')) || '').slice(5).replace(/\/+$/, '');
+if (PB) {
+  const { execFileSync } = require('child_process');
+  const busca = `fetch(process.argv[1] + "/api/collections/produtos/records?perPage=500&sort=ordem,created&filter=" + encodeURIComponent("ativo=true"))
+    .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); })
+    .then(t => process.stdout.write(t)).catch(e => { console.error(e.message); process.exit(1); });`;
+  let dados;
+  try { dados = JSON.parse(execFileSync(process.execPath, ['-e', busca, PB], { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 })); }
+  catch (e) { console.error(`✖ Não foi possível ler os produtos do banco em ${PB}. O PocketBase está rodando?`); process.exit(1); }
+  const recs = dados.items || [];
+  loja.produtos = recs.map(r => ({
+    id: r.codigo, ref: r.ref, nome: r.nome, cat: r.categoria,
+    preco: r.sob_consulta || !(r.preco > 0) ? null : r.preco,
+    material: r.material, tamanho: r.tamanho, tempo: r.tempo, camada: r.camada || undefined,
+    art: r.art || 'gear', tag: r.tag || undefined, personalizavel: !!r.personalizavel,
+    cores: Array.isArray(r.cores) && r.cores.length ? r.cores.filter(c => loja.cores[c]) : ['preto'],
+    desc: r.descricao, fotos: r.fotos || [], fotoDir: `api/files/${r.collectionId}/${r.id}/`,
+    previa: r.foto_previa ? `api/files/${r.collectionId}/${r.id}/${r.foto_previa}` : '',
+  }));
+  loja.destaques = recs.filter(r => r.destaque).map(r => r.codigo);
+}
 const MV = require('./art.js');
 MV.setCores(loja.cores);
 
@@ -39,20 +63,23 @@ const isTodo = s => !s || /\[PREENCHER/.test(s);
 const waLink = msg => `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(msg)}`;
 
 const CAT = loja.categorias;
-const produtos = loja.produtos.map((p, i) => ({ ...p, slug: slugify(p.nome), ordem: i, fotos: p.fotos || [] }));
-produtos.forEach(p => { p.url = `${B}produtos/${p.slug}/`; p.path = `produtos/${p.slug}/`; });
+const produtos = loja.produtos.map((p, i) => ({ ...p, slug: slugify(p.nome), ordem: i, fotos: p.fotos || [], fotoDir: p.fotoDir || 'assets/img/produtos/' }));
+produtos.forEach(p => { p.url = `${B}produtos/${p.slug}/`; p.path = `produtos/${p.slug}/`; p.consulta = !(p.preco > 0); });
 const P = Object.fromEntries(produtos.map(p => [p.id, p]));
 const matFam = p => /resina/i.test(p.material) ? 'Resina' : /petg/i.test(p.material) ? 'PETG' : /tpu/i.test(p.material) ? 'TPU' : 'PLA';
-const faixa = p => p.preco <= 30 ? 'ate30' : p.preco <= 60 ? '30a60' : '60mais';
+const faixa = p => p.consulta ? 'consulta' : p.preco <= 30 ? 'ate30' : p.preco <= 60 ? '30a60' : '60mais';
+const precoTxt = p => p.consulta ? 'Sob consulta' : money(p.preco);
 const camada = p => p.camada || (/resina/i.test(p.material) ? '0,05 mm' : '0,2 mm');
-const imgProduto = p => p.fotos.length ? `assets/img/produtos/${p.fotos[0]}` : `assets/img/produtos/${p.slug}.png`;
+const fotoUrl = (p, f, thumb) => `${p.fotoDir}${f}${thumb && PB ? `?thumb=${thumb}` : ''}`;
+const imgProduto = p => p.fotos.length ? fotoUrl(p, p.fotos[0]) : `assets/img/produtos/${p.slug}.png`;
 /* Prévia de link (WhatsApp, Instagram, Facebook): WebP nem sempre aparece, então usa a versão .jpg de mesmo nome quando existir. */
 const imgPrevia = p => {
+  if (p.previa) return p.previa;
   const img = imgProduto(p), jpg = img.replace(/\.webp$/i, '.jpg');
-  return jpg !== img && fs.existsSync(path.join(ROOT, jpg)) ? jpg : img;
+  return !PB && jpg !== img && fs.existsSync(path.join(ROOT, jpg)) ? jpg : img;
 };
 const fotoTag = (p, { classe = '', largura = 600, prioridade = false } = {}) =>
-  `<img${classe ? ` class="${classe}"` : ''} src="${B}assets/img/produtos/${esc(p.fotos[0])}" alt="${esc(p.nome)} impresso em 3D em ${esc(p.material)}" width="${largura}" height="${largura}" decoding="async"${prioridade ? ' fetchpriority="high"' : ' loading="lazy"'}>`;
+  `<img${classe ? ` class="${classe}"` : ''} src="${B}${esc(fotoUrl(p, p.fotos[0], largura <= 600 ? '600x600' : ''))}" alt="${esc(p.nome)} impresso em 3D em ${esc(p.material)}" width="${largura}" height="${largura}" decoding="async"${prioridade ? ' fetchpriority="high"' : ' loading="lazy"'}>`;
 const preload = src => `<link rel="preload" as="image" href="${src}" fetchpriority="high">`;
 const GA = (site.google_analytics || '').trim();
 const GSV = (site.google_verificacao || '').trim();
@@ -68,7 +95,7 @@ const ICON = {
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
   search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
 };
-const NAV = [['produtos/', 'Produtos'], ['encomenda/', 'Sob encomenda'], ['sobre/', 'Sobre'], ['duvidas/', 'Dúvidas']];
+const NAV = [['produtos/', 'Produtos'], ['encomenda/', 'Sob encomenda'], ['calculadora/', 'Calcular preço'], ['sobre/', 'Sobre'], ['duvidas/', 'Dúvidas']];
 
 function header(atual) {
   return `<div class="topbar"><div class="wrap">
@@ -141,7 +168,8 @@ function layout({ path: p, titulo, descricao, conteudo, nav = '', jsonld = [], o
   const dados = {
     base: '__PREFIXO__', whatsapp: site.whatsapp, whatsapp_exibir: site.whatsapp_exibir, nome: site.nome,
     cores: loja.cores, categorias: CAT,
-    produtos: produtos.map(x => ({ id: x.id, ref: x.ref, nome: x.nome, preco: x.preco, art: x.art, cores: x.cores, personalizavel: !!x.personalizavel, url: x.url, fotos: x.fotos })),
+    produtos: produtos.map(x => ({ id: x.id, ref: x.ref, nome: x.nome, preco: x.consulta ? null : x.preco, art: x.art, cores: x.cores, personalizavel: !!x.personalizavel, url: x.url, fotos: x.fotos, foto: x.fotos.length ? fotoUrl(x, x.fotos[0], '600x600') : '' })),
+    api: !!PB,
   };
   return `<!doctype html>
 <html lang="pt-BR">
@@ -203,16 +231,16 @@ const pageHero = (itens, h1, lead, extra = '', id = 'pageTitle') => `<div class=
 function card(p) {
   const cor = p.cores[0];
   const media = p.fotos.length ? fotoTag(p) : MV.art(p.art, cor);
-  return `<article class="card" data-id="${p.id}" data-cat="${p.cat}" data-mat="${matFam(p)}" data-faixa="${faixa(p)}" data-preco="${p.preco}" data-pers="${p.personalizavel ? 1 : 0}" data-ordem="${p.ordem}" data-busca="${esc((p.nome + ' ' + p.material + ' ' + CAT[p.cat] + ' ' + p.desc).toLowerCase())}">
+  return `<article class="card" data-id="${p.id}" data-cat="${p.cat}" data-mat="${matFam(p)}" data-faixa="${faixa(p)}" data-preco="${p.consulta ? 999999 : p.preco}" data-pers="${p.personalizavel ? 1 : 0}" data-ordem="${p.ordem}" data-busca="${esc((p.nome + ' ' + p.material + ' ' + CAT[p.cat] + ' ' + p.desc).toLowerCase())}">
     <a class="media" href="${p.url}" aria-label="Ver ${esc(p.nome)}" tabindex="-1">${p.tag ? `<span class="badge">${esc(p.tag)}</span>` : ''}${media}</a>
     <div class="info">
       <span class="label">${esc(CAT[p.cat])}</span>
       <h3><a href="${p.url}">${esc(p.nome)}</a></h3>
       <span class="meta">${esc(p.material)} · ${esc(p.tamanho)}</span>
-      <div class="pricerow"><span class="price">${money(p.preco)}</span>
+      <div class="pricerow"><span class="price${p.consulta ? ' consulta' : ''}">${precoTxt(p)}</span>
         <div class="dots" role="group" aria-label="Cores de ${esc(p.nome)}">${p.cores.map(c => `<button class="dot" type="button" style="--c:${loja.cores[c].hex}" data-dot="${p.id}" data-cor="${c}" aria-pressed="${c === cor}" title="${esc(loja.cores[c].nome)}"><span class="sr">${esc(loja.cores[c].nome)}</span></button>`).join('')}</div>
       </div>
-      ${p.personalizavel ? `<a class="add" href="${p.url}">Personalizar</a>` : `<button class="add" type="button" data-quick="${p.id}">Adicionar ao carrinho</button>`}
+      ${p.consulta ? `<a class="add" href="${p.url}#consulta">Solicitar orçamento</a>` : p.personalizavel ? `<a class="add" href="${p.url}">Personalizar</a>` : `<button class="add" type="button" data-quick="${p.id}">Adicionar ao carrinho</button>`}
     </div>
   </article>`;
 }
@@ -245,7 +273,7 @@ const add = (p, html) => paginas.push([p, html]);
     .replace('<figure class="showcase"', '<figure class="showcase has-foto"')
     .replace(/aria-label="[^"]*"/, `aria-label="${esc(heroP.nome)}"`)
     .replace(/<span class="label corner">[^<]*<\/span>/, '')
-    .replace(/<span>PLA · impresso em peça única<\/span>/, `<span>${esc(heroP.material)} · peça única · ${money(heroP.preco)}</span>`);
+    .replace(/<span>PLA · impresso em peça única<\/span>/, `<span>${esc(heroP.material)} · peça única · ${precoTxt(heroP)}</span>`);
   const destaques = loja.destaques.filter(id => P[id]).map(id => card(P[id])).join('');
   const make = partial('make').replace('<figure class="scene" id="makeScene"></figure>', `<figure class="scene" id="makeScene">${MV.cenaProcesso('#9B30FF')}</figure>`);
   const kinds = partial('kinds').replace('<div class="kinds-grid" id="kindsGrid"></div>', `<div class="kinds-grid" id="kindsGrid">${site.tipos.map(t => `<a class="kind" href="${t.cat ? `${B}produtos/?categoria=${t.cat}` : `${B}encomenda/`}">
@@ -289,7 +317,7 @@ ${materiais}
     path: '', nav: '', titulo: `${site.nome} | Impressão 3D sob encomenda e pronta entrega`,
     descricao: 'Peças impressas em 3D com acabamento de estúdio: decoração, colecionáveis, brinquedos articulados e projetos sob encomenda. Pedido pelo WhatsApp e envio para todo o Brasil.',
     conteudo, jsonld: [orgLd()],
-    extraHead: heroFoto ? preload(`${B}assets/img/produtos/${esc(heroP.fotos[0])}`) : '',
+    extraHead: heroFoto ? preload(`${B}${esc(fotoUrl(heroP, heroP.fotos[0]))}`) : '',
   }));
 })();
 
@@ -333,7 +361,7 @@ for (const p of produtos) {
   const cor = p.cores[0];
   const itens = [['Início', B], ['Produtos', B + 'produtos/'], [CAT[p.cat], `${B}produtos/?categoria=${p.cat}`], [p.nome]];
   const media = p.fotos.length
-    ? `<div class="pdp-gallery"><img id="pdpFoto" src="${B}assets/img/produtos/${esc(p.fotos[0])}" alt="${esc(p.nome)} impresso em 3D em ${esc(p.material)}" width="1000" height="1000" decoding="async" fetchpriority="high">${p.fotos.length > 1 ? `<div class="pdp-thumbs">${p.fotos.map((f, i) => `<button type="button" data-foto="${B}assets/img/produtos/${esc(f)}" aria-label="Foto ${i + 1}"><img src="${B}assets/img/produtos/${esc(f)}" alt="" loading="lazy"></button>`).join('')}</div>` : ''}</div>`
+    ? `<div class="pdp-gallery"><img id="pdpFoto" src="${B}${esc(fotoUrl(p, p.fotos[0]))}" alt="${esc(p.nome)} impresso em 3D em ${esc(p.material)}" width="1000" height="1000" decoding="async" fetchpriority="high">${p.fotos.length > 1 ? `<div class="pdp-thumbs">${p.fotos.map((f, i) => `<button type="button" data-foto="${B}${esc(fotoUrl(p, f))}" aria-label="Foto ${i + 1}"><img src="${B}${esc(fotoUrl(p, f, '600x600'))}" alt="" loading="lazy"></button>`).join('')}</div>` : ''}</div>`
     : `<div class="pdp-art" id="pdpArt">${MV.art(p.art, cor)}</div><span class="label corner">Ref. ${esc(p.ref)} · ${esc(p.tamanho)}</span>`;
   const relacionados = [...produtos.filter(x => x.cat === p.cat && x.id !== p.id), ...produtos.filter(x => x.cat !== p.cat)].slice(0, 4);
   const conteudo = `<div class="cat-hero slim"><div class="wrap">${crumbs(itens)}</div></div>
@@ -343,7 +371,7 @@ for (const p of produtos) {
     <div class="pdp-info">
       <span class="label">${esc(CAT[p.cat])} · Ref. ${esc(p.ref)}</span>
       <h1>${esc(p.nome)}</h1>
-      <div class="pm-price">${money(p.preco)}<small>frete calculado pelo CEP</small></div>
+      <div class="pm-price">${precoTxt(p)}<small>${p.consulta ? 'valor informado no orçamento, sem compromisso' : 'frete calculado pelo CEP'}</small></div>
       <p class="pm-desc">${esc(p.desc)}</p>
       <fieldset class="swatches"><legend>Cor <span id="pdpCorNome">· ${esc(loja.cores[cor].nome)}</span></legend>
         ${p.cores.map(c => `<label class="sw" style="--c:${loja.cores[c].hex}"><input type="radio" name="pdpCor" value="${c}"${c === cor ? ' checked' : ''}><i></i>${esc(loja.cores[c].nome)}</label>`).join('')}
@@ -355,10 +383,19 @@ for (const p of produtos) {
         <div><dt>Tempo de impressão</dt><dd>${esc(p.tempo)}</dd></div>
         <div><dt>Altura de camada</dt><dd>${camada(p)}</dd></div>
       </dl>
-      <div class="buyrow">
+      ${p.consulta ? `<form class="consulta form" id="consulta" novalidate>
+        <h2 class="consulta-tit">Solicitar orçamento</h2>
+        <p class="consulta-txt">Este produto é feito sob medida para cada pedido. Envie seus dados e respondemos pelo WhatsApp com o valor, sem compromisso.</p>
+        <div class="field"><label for="k-nome">Nome</label><input id="k-nome" autocomplete="name" required></div>
+        <div class="field"><label for="k-wa">WhatsApp com DDD</label><input id="k-wa" type="tel" inputmode="tel" autocomplete="tel" placeholder="(31) 99999-9999" required></div>
+        <div class="field"><label for="k-qtd">Quantidade</label><input id="k-qtd" type="number" min="1" max="999" value="1" inputmode="numeric"></div>
+        <div class="field full"><label for="k-obs">Detalhes <small>(opcional)</small></label><textarea id="k-obs" placeholder="Tamanho, cor, prazo, uso…" style="min-height:76px"></textarea></div>
+        <div class="full"><button class="btn btn-wa btn-block" type="submit" id="k-enviar">${ICON.wa}Solicitar orçamento</button>
+        <p class="err" id="k-err" role="alert" hidden></p><div class="ok" id="k-ok" hidden></div></div>
+      </form>` : `<div class="buyrow">
         <div class="qty" role="group" aria-label="Quantidade"><button type="button" data-q="-1" aria-label="Diminuir">−</button><span id="pdpQtd">1</span><button type="button" data-q="1" aria-label="Aumentar">+</button></div>
         <button class="btn btn-primary" type="button" id="pdpAdd">Adicionar · <span id="pdpSub">${money(p.preco)}</span></button>
-      </div>
+      </div>`}
       <ul class="pdp-notes">
         <li>Produzido depois do pedido · ${esc(site.prazo_producao)} de produção</li>
         <li>Envio pelos Correios para todo o Brasil</li>
@@ -377,9 +414,9 @@ for (const p of produtos) {
     '@context': 'https://schema.org', '@type': 'Product', name: p.nome, description: p.desc, sku: p.ref, category: CAT[p.cat], material: p.material,
     brand: { '@type': 'Brand', name: site.nome },
     image: SITE_URL ? absUrl(imgPrevia(p)) : B + imgPrevia(p),
-    offers: { '@type': 'Offer', price: p.preco.toFixed(2), priceCurrency: 'BRL', availability: 'https://schema.org/MadeToOrder', itemCondition: 'https://schema.org/NewCondition', ...(SITE_URL ? { url: absUrl(p.path) } : {}) },
+    offers: { '@type': 'Offer', ...(p.consulta ? {} : { price: p.preco.toFixed(2), priceCurrency: 'BRL' }), availability: 'https://schema.org/MadeToOrder', itemCondition: 'https://schema.org/NewCondition', ...(SITE_URL ? { url: absUrl(p.path) } : {}) },
   };
-  add(p.path, layout({ path: p.path, nav: 'produtos/', titulo: `${p.nome} em ${p.material} | ${site.nome}`, descricao: `${p.desc} ${money(p.preco)}. ${p.material}, ${p.tamanho}. Escolha a cor e peça pelo WhatsApp.`.slice(0, 300), conteudo, jsonld: [ld, crumbsLd(itens.map(([t, h], i) => [t, i === itens.length - 1 ? B + p.path : h]))], ogImage: imgPrevia(p), extraHead: p.fotos.length ? preload(`${B}assets/img/produtos/${esc(p.fotos[0])}`) : '' }));
+  add(p.path, layout({ path: p.path, nav: 'produtos/', titulo: `${p.nome} em ${p.material} | ${site.nome}`, descricao: `${p.desc} ${precoTxt(p)}. ${p.material}, ${p.tamanho}. Escolha a cor e peça pelo WhatsApp.`.slice(0, 300), conteudo, jsonld: [ld, crumbsLd(itens.map(([t, h], i) => [t, i === itens.length - 1 ? B + p.path : h]))], ogImage: imgPrevia(p), extraHead: p.fotos.length ? preload(`${B}${esc(fotoUrl(p, p.fotos[0]))}`) : '' }));
 }
 
 // Sob encomenda
@@ -391,6 +428,17 @@ for (const p of produtos) {
   const faqLd = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: site.faq.encomendas.map(f => ({ '@type': 'Question', name: f.pergunta, acceptedAnswer: { '@type': 'Answer', text: f.resposta.replace(/<[^>]+>/g, '') } })) };
   add('encomenda/', layout({ path: 'encomenda/', nav: 'encomenda/', titulo: `Impressão 3D sob encomenda | ${site.nome}`, descricao: 'Peças únicas, reposições, protótipos e brindes impressos em 3D a partir do seu arquivo, desenho ou foto. Orçamento grátis pelo WhatsApp, com envio de imagens.', conteudo: html, jsonld: [faqLd, crumbsLd([['Início', B], ['Sob encomenda', B + 'encomenda/']])] }));
 })();
+
+// Calculadora de preço (STL)
+add('calculadora/', layout({
+  path: 'calculadora/', nav: 'calculadora/', titulo: `Calcule o preço da sua peça em 3D | ${site.nome}`,
+  descricao: 'Envie o arquivo STL e veja na hora uma estimativa de preço para imprimir sua peça em PLA, PETG ou TPU, em até 4 cores. Orçamento final grátis pelo WhatsApp.',
+  conteudo: `${pageHero([['Início', B], ['Calcular preço']], 'Calcule o preço da sua peça', 'Envie o arquivo STL, escolha material, cores e quantidade e veja uma estimativa na hora.')}
+${partial('calculadora')}
+<script src="${B}assets/js/stl.js" defer></script>
+<script src="${B}assets/js/calculadora.js" defer></script>`,
+  jsonld: [crumbsLd([['Início', B], ['Calcular preço', B + 'calculadora/']])],
+}));
 
 // Dúvidas
 (function () {
@@ -447,13 +495,24 @@ const copyDir = (src, dst) => { if (!fs.existsSync(src)) return; for (const e of
 fs.mkdirSync(path.join(DIST, 'assets'), { recursive: true });
 copyDir(path.join(ROOT, 'assets'), path.join(DIST, 'assets'));
 copyDir(path.join(ROOT, 'static'), DIST);
+/* Painel administrativo: só faz sentido junto do servidor (PocketBase). */
+if (PB) {
+  fs.mkdirSync(path.join(DIST, 'admin'), { recursive: true });
+  copyDir(path.join(ROOT, 'admin'), path.join(DIST, 'admin'));
+  fs.copyFileSync(path.join(ROOT, 'server/pb_hooks/lib/calc.js'), path.join(DIST, 'admin/calc.js'));
+  fs.copyFileSync(path.join(ROOT, 'assets/js/stl.js'), path.join(DIST, 'admin/stl.js'));
+  fs.writeFileSync(path.join(DIST, 'admin/catalogo.json'), JSON.stringify({
+    categorias: loja.categorias, cores: loja.cores, materiais: loja.materiais.map(m => m.nome),
+    arts: ['dragon', 'vase', 'knight', 'moon', 'octopus', 'tower', 'cat', 'keychain', 'hex', 'pig', 'phone', 'gear'],
+  }));
+}
 
 const indexaveis = paginas.map(([p]) => p).filter(p => !p.endsWith('.html'));
 if (SITE_URL) {
   const hoje = new Date().toISOString().slice(0, 10);
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${indexaveis.map(p => `  <url><loc>${absUrl(p)}</loc><lastmod>${hoje}</lastmod></url>`).join('\n')}\n</urlset>\n`);
 }
-write('robots.txt', `User-agent: *\nAllow: /\n${SITE_URL ? `Sitemap: ${absUrl('sitemap.xml')}\n` : ''}`);
+write('robots.txt', `User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\n${SITE_URL ? `Sitemap: ${absUrl('sitemap.xml')}\n` : ''}`);
 
 /* ---------- relatório ---------- */
 console.log(`✔ ${paginas.length} páginas geradas em ${SAIDA}/ (${produtos.length} produtos)${RELATIVO ? ' com links relativos' : ''}`);

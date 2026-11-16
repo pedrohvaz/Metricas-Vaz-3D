@@ -14,7 +14,34 @@ const P = Object.fromEntries(S.produtos.map(p => [p.id, p]));
 const corNome = c => (S.cores[c] || {}).nome || c;
 const waLink = msg => `https://wa.me/${S.whatsapp}?text=${encodeURIComponent(msg)}`;
 const semAcento = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-const thumb = (p, cor, nome) => p.fotos && p.fotos.length ? `<img src="${S.base}assets/img/produtos/${esc(p.fotos[0])}" alt="">` : MV.art(p.art, cor, { nome });
+const thumb = (p, cor, nome) => p.foto ? `<img src="${S.base}${esc(p.foto)}" alt="">` : MV.art(p.art, cor, { nome });
+const soDigitos = s => String(s || '').replace(/\D/g, '');
+const waValido = s => { const d = soDigitos(s); return d.length >= 10 && d.length <= 13; };
+
+/* ---------- envio de pedidos ao painel (quando o site roda junto do servidor) ----------
+   dados: campos do pedido; arquivos: lista de File. Resolve com o registro criado. */
+async function enviarPedido(dados, arquivos) {
+  if (!S.api) throw new Error('offline');
+  const url = `${S.base}api/collections/pedidos/records`;
+  let opts;
+  if (arquivos && arquivos.length) {
+    const fd = new FormData();
+    Object.entries(dados).forEach(([k, v]) => { if (v != null) fd.append(k, typeof v === 'object' ? JSON.stringify(v) : String(v)); });
+    arquivos.forEach(f => fd.append('arquivos', f));
+    opts = { method: 'POST', body: fd };
+  } else {
+    opts = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados), keepalive: true };
+  }
+  const r = await fetch(url, opts);
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    const campo = j.data && Object.values(j.data)[0];
+    throw new Error((campo && campo.message) || j.message || 'Não foi possível enviar agora.');
+  }
+  return j;
+}
+const protocolo = reg => (reg && reg.id ? reg.id.slice(-6).toUpperCase() : '');
+window.MVPedido = { enviar: enviarPedido, waLink, protocolo, waValido, toast: t => toast(t) };
 
 /* ---------- aviso ---------- */
 let tt;
@@ -58,6 +85,7 @@ function cartMessage() {
   const L = [`Olá, ${S.nome}! Gostaria de fazer o seguinte pedido:`, ''];
   cart.forEach(i => { const p = P[i.id]; L.push(`• ${i.qtd}x ${p.nome} (${p.ref}) — ${corNome(i.cor)} — ${money(p.preco * i.qtd)}`); if (i.nome) L.push(`   Texto personalizado: ${i.nome}`); });
   L.push('', `Subtotal: ${money(total())} (frete não incluso)`, '', `Nome: ${$('#c-nome').value.trim() || '—'}`);
+  if ($('#c-wa') && $('#c-wa').value.trim()) L.push(`WhatsApp: ${$('#c-wa').value.trim()}`);
   L.push(f.entrega.value === 'correios' ? `Entrega: Correios — CEP ${$('#c-cep').value || '—'}` : 'Entrega: retirada combinada');
   L.push(`Pagamento: ${f.pag.value}`);
   const obs = $('#c-obs').value.trim(); if (obs) L.push(`Observações: ${obs}`);
@@ -79,11 +107,21 @@ if (cartDlg) {
   $('#checkout').addEventListener('change', () => { $('#cepField').hidden = $('#checkout').entrega.value !== 'correios'; updateCartLink(); });
   $('#checkout').addEventListener('submit', e => e.preventDefault());
   $('#cartSend').addEventListener('click', e => {
-    const nome = $('#c-nome'), cep = $('#c-cep'); let msg = '';
+    const nome = $('#c-nome'), cep = $('#c-cep'), wa = $('#c-wa'); let msg = '';
     if (!nome.value.trim()) { msg = 'Informe seu nome para finalizar o pedido.'; nome.classList.add('invalid'); nome.focus(); }
+    else if (wa && !waValido(wa.value)) { msg = 'Informe seu WhatsApp com DDD.'; wa.classList.add('invalid'); wa.focus(); }
     else if ($('#checkout').entrega.value === 'correios' && cep.value.replace(/\D/g, '').length !== 8) { msg = 'Confira o CEP: são 8 números.'; cep.classList.add('invalid'); cep.focus(); }
     if (msg) { e.preventDefault(); $('#cartErr').textContent = msg; $('#cartErr').hidden = false; return; }
     updateCartLink(); $('#cartOk').hidden = false;
+    // registra o pedido no painel sem atrasar a abertura do WhatsApp
+    if (S.api) {
+      const f = $('#checkout');
+      enviarPedido({
+        tipo: 'loja', nome: nome.value.trim(), whatsapp: wa ? wa.value : '',
+        itens: cart.map(i => ({ id: i.id, cor: corNome(i.cor), nome: i.nome, qtd: i.qtd })),
+        mensagem: [f.entrega.value === 'correios' ? `Entrega: Correios, CEP ${cep.value}` : 'Entrega: retirada combinada', `Pagamento: ${f.pag.value}`, $('#c-obs').value.trim()].filter(Boolean).join('\n'),
+      }).catch(() => { /* o WhatsApp continua sendo o canal principal */ });
+    }
   });
 }
 
@@ -121,6 +159,36 @@ if (pdp) {
       addToCart(p.id, st.cor, st.nome, st.qtd);
       if (cartDlg) { renderCart(); $('#cartOk').hidden = true; cartDlg.showModal(); }
     }
+  });
+}
+
+/* ---------- produto sob consulta: pedido de orçamento ---------- */
+const kf = $('#consulta');
+if (kf && pdp) {
+  const p = P[pdp.dataset.id];
+  if (location.hash === '#consulta') setTimeout(() => { kf.scrollIntoView({ block: 'center' }); $('#k-nome').focus(); }, 200);
+  let enviadoK = false;
+  kf.addEventListener('input', () => { $('#k-err').hidden = true; $$('#consulta .invalid').forEach(i => i.classList.remove('invalid')); });
+  kf.addEventListener('submit', e => {
+    e.preventDefault();
+    const nome = $('#k-nome'), wa = $('#k-wa'), btn = $('#k-enviar');
+    const corSel = (pdp.querySelector('input[name="pdpCor"]:checked') || {}).value || p.cores[0];
+    const qtd = Math.max(1, Math.min(999, parseInt($('#k-qtd').value, 10) || 1));
+    if (!nome.value.trim()) { nome.classList.add('invalid'); nome.focus(); $('#k-err').textContent = 'Informe seu nome.'; $('#k-err').hidden = false; return; }
+    if (!waValido(wa.value)) { wa.classList.add('invalid'); wa.focus(); $('#k-err').textContent = 'Informe seu WhatsApp com DDD.'; $('#k-err').hidden = false; return; }
+    const texto = `Olá, ${S.nome}! Gostaria de um orçamento: ${qtd}x ${p.nome} (${p.ref}), cor ${corNome(corSel)}.${$('#k-obs').value.trim() ? ' ' + $('#k-obs').value.trim() : ''} Meu nome é ${nome.value.trim()}.`;
+    const abrirWA = msg => { $('#k-ok').innerHTML = `<a class="btn btn-wa btn-block" href="${waLink(msg)}" target="_blank" rel="noopener">Continuar no WhatsApp</a>`; $('#k-ok').hidden = false; };
+    if (!S.api || enviadoK) { abrirWA(texto); window.open(waLink(texto), '_blank', 'noopener'); return; }
+    btn.disabled = true;
+    enviarPedido({ tipo: 'consulta', nome: nome.value.trim(), whatsapp: wa.value, itens: [{ id: p.id, cor: corNome(corSel), qtd }], mensagem: $('#k-obs').value.trim() })
+      .then(reg => {
+        enviadoK = true;
+        const n = protocolo(reg);
+        abrirWA(`Olá, ${S.nome}! Enviei pelo site um pedido de orçamento (nº ${n}) para ${qtd}x ${p.nome}. Meu nome é ${nome.value.trim()}.`);
+        $('#k-ok').insertAdjacentHTML('afterbegin', `<p><b>Pedido nº ${esc(n)} recebido.</b> Respondemos pelo WhatsApp com o valor.</p>`);
+      })
+      .catch(err => { $('#k-err').textContent = `${err.message} Você também pode chamar no WhatsApp.`; $('#k-err').hidden = false; abrirWA(texto); })
+      .finally(() => { btn.disabled = false; });
   });
 }
 
@@ -193,12 +261,12 @@ if (grid) {
 
 /* ---------- orçamento sob encomenda ---------- */
 const qf = $('#quoteForm');
-let fotos = [], shareFalhou = false;
+let fotos = [], shareFalhou = false, apiFalhou = false, enviado = false;
 const FOTO_MAX = 5, FOTO_MB = 10;
 function quoteMessage() {
   const v = id => $(id).value.trim();
   const L = [`Olá, ${S.nome}! Gostaria de um orçamento sob encomenda.`, ''];
-  L.push(`Nome: ${v('#q-nome') || '—'}`); if (v('#q-emp')) L.push(`Empresa: ${v('#q-emp')}`);
+  L.push(`Nome: ${v('#q-nome') || '—'}`); if ($('#q-wa') && v('#q-wa')) L.push(`WhatsApp: ${v('#q-wa')}`); if (v('#q-emp')) L.push(`Empresa: ${v('#q-emp')}`);
   L.push(`Descrição: ${v('#q-desc') || '—'}`); if (v('#q-tam')) L.push(`Dimensões: ${v('#q-tam')}`);
   L.push(`Quantidade: ${v('#q-qtd') || '1'}`, `Material: ${v('#q-mat')}`);
   if (v('#q-cor')) L.push(`Cor: ${v('#q-cor')}`); if (v('#q-link')) L.push(`Arquivo: ${v('#q-link')}`); if (v('#q-prazo')) L.push(`Prazo: ${v('#q-prazo')}`);
@@ -210,17 +278,22 @@ if (qf) {
   const updateQuoteLink = () => { $('#quoteSend').href = waLink(quoteMessage()); };
   const podeCompartilhar = () => { try { return !shareFalhou && fotos.length > 0 && !!navigator.canShare && navigator.canShare({ files: fotos.map(f => f.file) }); } catch (e) { return false; } };
   const renderFotos = () => {
-    $('#thumbs').innerHTML = fotos.map((f, i) => `<li><img src="${f.url}" alt="Imagem do projeto ${i + 1}"><button type="button" data-rmfoto="${i}" aria-label="Remover imagem ${i + 1}">×</button></li>`).join('');
+    $('#thumbs').innerHTML = fotos.map((f, i) => `<li>${f.url ? `<img src="${f.url}" alt="Imagem do projeto ${i + 1}">` : `<span class="arq" title="${esc(f.nome)}">${ICONE_ARQ}<small>${esc(f.nome.split('.').pop().toUpperCase())}</small></span>`}<button type="button" data-rmfoto="${i}" aria-label="Remover imagem ${i + 1}">×</button></li>`).join('');
     $('#fotoCount').textContent = fotos.length ? `${fotos.length} de ${FOTO_MAX} imagens selecionadas` : '';
     $('#quoteSendTxt').textContent = podeCompartilhar() ? LABEL_FOTOS : LABEL_TEXTO;
   };
+  const MODELO = /\.(stl|obj|3mf|step|stp|pdf)$/i;
+  const ICONE_ARQ = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3 4 7.5v9L12 21l8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg>';
+  if (S.api && $('#dropInfo')) $('#dropInfo').textContent = 'Fotos, desenhos ou o arquivo 3D · JPG, PNG, STL, OBJ, 3MF, STEP, PDF · imagens até 10 MB, arquivos 3D até 50 MB';
   const addFotos = list => {
     let aviso = '';
     for (const f of list) {
-      if (fotos.length >= FOTO_MAX) { aviso = `Limite de ${FOTO_MAX} imagens.`; break; }
-      if (!f.type.startsWith('image/')) { aviso = `${f.name} não é uma imagem.`; continue; }
-      if (f.size > FOTO_MB * 1024 * 1024) { aviso = `${f.name} excede ${FOTO_MB} MB.`; continue; }
-      fotos.push({ file: f, url: URL.createObjectURL(f) });
+      if (fotos.length >= FOTO_MAX) { aviso = `Limite de ${FOTO_MAX} arquivos.`; break; }
+      const ehModelo = S.api && MODELO.test(f.name);
+      if (!f.type.startsWith('image/') && !ehModelo) { aviso = S.api ? `${f.name}: envie imagem, STL, OBJ, 3MF, STEP ou PDF.` : `${f.name} não é uma imagem.`; continue; }
+      const limite = ehModelo ? 50 : FOTO_MB;
+      if (f.size > limite * 1024 * 1024) { aviso = `${f.name} excede ${limite} MB.`; continue; }
+      fotos.push({ file: f, url: ehModelo ? '' : URL.createObjectURL(f), nome: f.name });
     }
     shareFalhou = false; renderFotos(); updateQuoteLink(); if (aviso) toast(aviso);
   };
@@ -229,14 +302,36 @@ if (qf) {
   ['dragenter', 'dragover'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('over'); }));
   ['dragleave', 'drop'].forEach(t => drop.addEventListener(t, () => drop.classList.remove('over')));
   drop.addEventListener('drop', e => { e.preventDefault(); addFotos([...e.dataTransfer.files]); });
-  $('#thumbs').addEventListener('click', e => { const b = e.target.closest('[data-rmfoto]'); if (!b) return; const [f] = fotos.splice(+b.dataset.rmfoto, 1); URL.revokeObjectURL(f.url); renderFotos(); updateQuoteLink(); });
+  $('#thumbs').addEventListener('click', e => { const b = e.target.closest('[data-rmfoto]'); if (!b) return; const [f] = fotos.splice(+b.dataset.rmfoto, 1); if (f.url) URL.revokeObjectURL(f.url); renderFotos(); updateQuoteLink(); });
   qf.addEventListener('input', () => { updateQuoteLink(); $('#quoteErr').hidden = true; $$('#quoteForm .invalid').forEach(i => i.classList.remove('invalid')); });
   qf.addEventListener('submit', e => e.preventDefault());
   $('#quoteSend').addEventListener('click', e => {
-    const n = $('#q-nome'), d = $('#q-desc'); let msg = '';
+    const n = $('#q-nome'), d = $('#q-desc'), wa = $('#q-wa'); let msg = '';
     if (!n.value.trim()) { msg = 'Informe seu nome.'; n.classList.add('invalid'); n.focus(); }
+    else if (wa && !waValido(wa.value)) { msg = 'Informe seu WhatsApp com DDD.'; wa.classList.add('invalid'); wa.focus(); }
     else if (d.value.trim().length < 5) { msg = 'Descreva a peça que você precisa.'; d.classList.add('invalid'); d.focus(); }
     if (msg) { e.preventDefault(); $('#quoteErr').textContent = msg; $('#quoteErr').hidden = false; return; }
+    // Com o servidor: os arquivos vão direto para o painel e o WhatsApp vira só a continuação da conversa
+    if (S.api && !apiFalhou && !enviado) {
+      e.preventDefault();
+      const btn = $('#quoteSend'); btn.classList.add('loading'); btn.setAttribute('aria-disabled', 'true'); $('#quoteSendTxt').textContent = 'Enviando…';
+      enviarPedido({ tipo: 'encomenda', nome: n.value.trim(), whatsapp: wa.value, mensagem: quoteMessage() }, fotos.map(f => f.file))
+        .then(reg => {
+          enviado = true;
+          const p = protocolo(reg);
+          const m = `Olá, ${S.nome}! Acabei de enviar um pedido de orçamento pelo site (nº ${p}). Meu nome é ${n.value.trim()}.`;
+          btn.href = waLink(m); $('#quoteSendTxt').textContent = 'Continuar no WhatsApp';
+          $('#quoteOk').innerHTML = `<b>Pedido nº ${esc(p)} recebido.</b> ${fotos.length ? 'Seus arquivos chegaram para a nossa equipe. ' : ''}Respondemos pelo WhatsApp no horário de atendimento. Se quiser adiantar a conversa, toque em “Continuar no WhatsApp”.`;
+          $('#quoteOk').hidden = false; $('#quoteFotoTip').hidden = true;
+        })
+        .catch(err => {
+          apiFalhou = true; renderFotos();
+          $('#quoteErr').textContent = `${err.message} Toque no botão de novo para enviar pelo WhatsApp.`; $('#quoteErr').hidden = false;
+        })
+        .finally(() => { btn.classList.remove('loading'); btn.removeAttribute('aria-disabled'); });
+      return;
+    }
+    if (enviado) return; // o link já aponta para a conversa com o número do pedido
     if (podeCompartilhar()) {
       e.preventDefault();
       navigator.share({ files: fotos.map(f => f.file), text: quoteMessage() })
@@ -301,7 +396,7 @@ if (menuBtn) {
   nav.addEventListener('click', e => { if (e.target.closest('a')) menu(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav.classList.contains('open')) { menu(false); menuBtn.focus(); } });
   document.addEventListener('click', e => { if (nav.classList.contains('open') && !e.target.closest('#mainNav') && !e.target.closest('#menuBtn')) menu(false); });
-  matchMedia('(min-width: 821px)').addEventListener('change', e => { if (e.matches) menu(false); });
+  matchMedia('(min-width: 1101px)').addEventListener('change', e => { if (e.matches) menu(false); });
 }
 renderCart();
 })();

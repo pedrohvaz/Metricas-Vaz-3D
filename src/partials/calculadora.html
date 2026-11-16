@@ -1,0 +1,64 @@
+<section class="section calc-page" aria-label="Calculadora de preço">
+  <div class="wrap calc-grid">
+    <form class="panel calc-form" id="calcForm" novalidate>
+      <h2 class="calc-h"><span class="calc-n">1</span>Envie o arquivo da peça</h2>
+      <label class="drop" id="calcDrop" for="calcArq">
+        <input id="calcArq" type="file" accept=".stl">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 7.5v9L12 21l8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg>
+        <span><b>Selecionar arquivo STL</b> ou arraste para cá</span>
+        <small>Em milímetros · até 60 MB · o arquivo é lido no seu aparelho</small>
+      </label>
+      <dl class="tech calc-info" id="calcInfo" hidden>
+        <div><dt>Arquivo</dt><dd id="ciNome">—</dd></div>
+        <div><dt>Medidas</dt><dd id="ciDim">—</dd></div>
+        <div><dt>Volume</dt><dd id="ciVol">—</dd></div>
+        <div><dt>Triângulos</dt><dd id="ciTri">—</dd></div>
+      </dl>
+
+      <h2 class="calc-h"><span class="calc-n">2</span>Escolha material, cores e quantidade</h2>
+      <div class="form calc-opts">
+        <div class="field"><label for="calcMat">Material</label>
+          <select id="calcMat"><option value="PLA">PLA · decoração e uso geral</option><option value="PETG">PETG · resistente e para uso externo</option><option value="TPU">TPU · flexível</option></select></div>
+        <div class="field"><label for="calcQtd">Quantidade</label><input id="calcQtd" type="number" min="1" max="500" value="1" inputmode="numeric"></div>
+        <fieldset class="field full"><legend>Cores na mesma peça</legend>
+          <div class="radios">
+            <label class="sw"><input type="radio" name="calcCores" value="1" checked>1 cor</label>
+            <label class="sw"><input type="radio" name="calcCores" value="2">2 cores</label>
+            <label class="sw"><input type="radio" name="calcCores" value="3">3 cores</label>
+            <label class="sw"><input type="radio" name="calcCores" value="4">4 cores</label>
+          </div>
+        </fieldset>
+      </div>
+      <button class="btn btn-primary btn-block" type="submit" id="calcBtn">Calcular estimativa</button>
+      <p class="err" id="calcErr" role="alert" hidden></p>
+    </form>
+
+    <div class="calc-side">
+      <div class="panel calc-res" id="calcRes" hidden aria-live="polite">
+        <span class="label">Estimativa por <span id="crQtd">1 peça</span></span>
+        <p class="calc-faixa" id="crFaixa">—</p>
+        <p class="calc-sub" id="crSub"></p>
+        <ul class="calc-avisos" id="crAvisos"></ul>
+        <form class="form calc-pedido" id="calcPedido" novalidate>
+          <h2 class="calc-h"><span class="calc-n">3</span>Peça o orçamento final</h2>
+          <p class="calc-sub">Conferimos o arquivo, a orientação e os suportes e respondemos pelo WhatsApp com o valor fechado e o prazo.</p>
+          <div class="field"><label for="cpNome">Nome</label><input id="cpNome" autocomplete="name" required></div>
+          <div class="field"><label for="cpWa">WhatsApp com DDD</label><input id="cpWa" type="tel" inputmode="tel" autocomplete="tel" placeholder="(31) 99999-9999" required></div>
+          <div class="field full"><label for="cpObs">Observações <small>(opcional)</small></label><textarea id="cpObs" placeholder="Cores desejadas, prazo, uso da peça…" style="min-height:70px"></textarea></div>
+          <div class="full"><button class="btn btn-wa btn-block" type="submit" id="cpBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#wa-ico"/></svg>Pedir orçamento final</button>
+            <p class="err" id="cpErr" role="alert" hidden></p><div class="ok" id="cpOk" hidden></div></div>
+        </form>
+      </div>
+      <aside class="panel calc-como" id="calcComo">
+        <h2 class="calc-h">Como funciona</h2>
+        <ol class="calc-passos">
+          <li>O site lê o volume e as medidas do seu STL sem precisar enviar nada.</li>
+          <li>Calculamos uma faixa de preço com base no material, nas cores e na quantidade.</li>
+          <li>Se gostar, peça o orçamento final: o arquivo chega para a nossa equipe e respondemos pelo WhatsApp.</li>
+        </ol>
+        <p class="calc-sub">A faixa é uma estimativa. O valor final depende da orientação da peça, dos suportes e do acabamento. Área máxima por peça: 26 × 26 × 26 cm.</p>
+        <p class="calc-sub">Não tem o arquivo 3D? <a href="#encomenda">Peça sob encomenda</a> com uma foto ou desenho.</p>
+      </aside>
+    </div>
+  </div>
+</section>

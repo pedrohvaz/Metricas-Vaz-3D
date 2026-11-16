@@ -1,6 +1,6 @@
-# Métricas Vaz 3D: site
+# Métricas Vaz 3D: loja e painel
 
-Site da loja de impressão 3D, com catálogo, página de cada produto, carrinho, orçamento sob encomenda com envio de fotos e pedido pelo WhatsApp.
+Site da loja de impressão 3D, com catálogo, página de cada produto, carrinho, orçamento sob encomenda com envio de arquivos, calculadora de preço por STL e pedido pelo WhatsApp. Junto vem um **painel administrativo** para pedidos, projetos, estoque de filamento, clientes, produtos e financeiro.
 
 O site é **gerado**: você edita os dados em `data/` e o gerador monta todas as páginas em `dist/`. Não precisa instalar nada além do [Node.js](https://nodejs.org) (versão 18 ou mais nova).
 
@@ -11,11 +11,39 @@ O site é **gerado**: você edita os dados em `data/` e o gerador monta todas as
 | `/` | Início: destaques, como é feito, categorias, materiais, dúvidas |
 | `/produtos/` | Catálogo com filtros, busca e ordenação (`?categoria=brinquedos` abre já filtrado) |
 | `/produtos/<nome-do-produto>/` | Uma página por produto, com link próprio para compartilhar |
-| `/encomenda/` | Orçamento sob encomenda com envio de imagens |
+| `/encomenda/` | Orçamento sob encomenda com envio de imagens e arquivos 3D |
+| `/calculadora/` | Cliente envia o STL e vê uma faixa de preço na hora |
+| `/admin/` | Painel administrativo (só com o servidor ligado) |
 | `/duvidas/` | Todas as perguntas frequentes |
 | `/sobre/`, `/trocas/`, `/privacidade/` | Páginas institucionais (modelos para revisar) |
 
 Também são gerados `robots.txt`, `sitemap.xml` (quando `url` estiver preenchido), dados estruturados para o Google (produto, preço, loja, perguntas frequentes) e a prévia de link para WhatsApp e Instagram em cada página.
+
+## Painel administrativo
+
+O painel e o banco de dados rodam no [PocketBase](https://pocketbase.io) (um programa único, sem instalação). No computador:
+
+1. Baixe o PocketBase **0.40.6** para o seu sistema em https://github.com/pocketbase/pocketbase/releases/tag/v0.40.6 e coloque o executável em `server/bin/` (`pocketbase.exe` no Windows).
+2. Rode `npm run servidor`.
+3. Abra http://127.0.0.1:8090/admin/ e crie a conta do dono (primeiro acesso).
+4. Em **Produtos**, clique em **Importar os produtos do site atual**.
+
+| Tela | O que faz | Quem vê |
+|---|---|---|
+| Início | Pedidos novos, prazos da semana, carretéis acabando, resultado do mês | todos (valores só o dono) |
+| Pedidos | Tudo que chega do site (carrinho, encomenda, sob consulta, calculadora) com os arquivos; vira projeto com um clique | todos |
+| Projetos | Quadro por etapa (orçamento → entregue). Ao chegar em *Acabamento* o filamento é baixado do estoque; ao *aprovar* com preço, a conta a receber entra no financeiro | todos (preço e custo só o dono) |
+| Estoque | Carretéis por material e cor, peso restante, alerta de mínimo, entradas, saídas, ajustes e histórico | todos |
+| Clientes | Cadastro automático pelo WhatsApp e histórico de pedidos e projetos | todos |
+| Produtos | Cadastro da loja com fotos, cores, preço ou *Sob consulta*; salvar publica a loja sozinho | dono |
+| Financeiro | Entradas e saídas, contas a pagar e receber, taxas por forma de pagamento, lucro por projeto, gráfico de 6 meses e planilha para o contador | dono |
+| Calculadora | Custo detalhado (filamento, energia, máquina, falhas, mão de obra, embalagem), preço sugerido e lucro | dono |
+| Configurações | Tarifa de energia, valor da impressora, hora de trabalho, margem, taxas, materiais | dono |
+| Equipe | Acessos de dono e equipe | dono |
+
+Produto **sem preço** (ou com *Sob consulta* marcado) aparece na loja com o botão **Solicitar orçamento**, que grava o pedido no painel e abre o WhatsApp.
+
+Para publicar num servidor próprio, siga [docs/VPS.md](docs/VPS.md).
 
 ## Estrutura
 
@@ -28,8 +56,15 @@ src/partials/         blocos de HTML reaproveitados (início, encomenda, carrinh
 src/paginas/          textos de Sobre, Trocas e Privacidade
 assets/               estilos, JavaScript do navegador e imagens
 static/               ícones, imagem de prévia e manifesto (copiados para a raiz do site)
-scripts/              utilitários (gerar imagens dos produtos)
+scripts/              utilitários (servidor.js liga o sistema; gerar imagens dos produtos)
+admin/                painel administrativo (copiado para dist/admin/ quando o servidor gera a loja)
+server/pb_migrations/ estrutura do banco e regras de acesso
+server/pb_hooks/      regras de negócio (baixa de estoque, contas a receber, estimativa de preço, publicação)
+server/pb_hooks/lib/calc.js  cálculo de custo e preço (o mesmo no servidor e no painel)
+docs/VPS.md           como publicar num servidor próprio
 ```
+
+Com o servidor ligado, o gerador lê os produtos do banco (`node src/build.js --pb=http://127.0.0.1:8090`). Sem ele, lê `data/produtos.json` e gera uma loja estática que funciona no Netlify, mas sem painel, sem calculadora de preço e com os pedidos indo só pelo WhatsApp.
 
 ## Identidade visual
 

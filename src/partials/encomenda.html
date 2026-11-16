@@ -24,9 +24,10 @@
       </div>
       <div class="panel">
         <h3>Solicitar orçamento</h3>
-        <p>Preencha os campos, anexe imagens do projeto se tiver e envie pelo WhatsApp.</p>
+        <p>Preencha os campos, anexe imagens ou o arquivo 3D se tiver e envie. Respondemos pelo WhatsApp.</p>
         <form class="form" id="quoteForm" novalidate>
           <div class="field"><label for="q-nome">Nome</label><input id="q-nome" autocomplete="name" placeholder="Seu nome" required></div>
+          <div class="field"><label for="q-wa">WhatsApp com DDD</label><input id="q-wa" type="tel" inputmode="tel" autocomplete="tel" placeholder="(31) 99999-9999" required></div>
           <div class="field"><label for="q-emp">Empresa <small>(opcional)</small></label><input id="q-emp" autocomplete="organization" placeholder="Se for para empresa"></div>
           <div class="field full"><label for="q-desc">Descrição da peça</label><textarea id="q-desc" placeholder="Ex.: suporte de parede para dois controles de videogame, acabamento preto fosco" required></textarea></div>
           <div class="field"><label for="q-tam">Dimensões aproximadas</label><input id="q-tam" placeholder="Ex.: 150 × 100 × 50 mm"></div>
@@ -34,12 +35,12 @@
           <div class="field"><label for="q-mat">Material</label><select id="q-mat"><option>Preciso de indicação</option><option>PLA</option><option>PETG</option><option>TPU (flexível)</option></select></div>
           <div class="field"><label for="q-cor">Cor</label><input id="q-cor" placeholder="Ex.: preto fosco"></div>
           <div class="field full">
-            <span class="lbl" style="font-weight:500;font-size:.88rem">Imagens do projeto <small>(opcional, até 5)</small></span>
+            <span class="lbl" style="font-weight:500;font-size:.88rem">Imagens ou arquivo 3D <small>(opcional, até 5)</small></span>
             <label class="drop" id="drop" for="q-fotos">
-              <input id="q-fotos" type="file" accept="image/*" multiple>
+              <input id="q-fotos" type="file" accept="image/*,.stl,.obj,.3mf,.step,.stp,.pdf" multiple>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
-              <span><b>Selecionar imagens</b> ou arraste para cá</span>
-              <small>Fotos, desenhos técnicos ou referências · JPG, PNG, HEIC · até 10 MB cada</small>
+              <span><b>Selecionar arquivos</b> ou arraste para cá</span>
+              <small id="dropInfo">Fotos, desenhos ou referências · JPG, PNG, HEIC · até 10 MB cada</small>
             </label>
             <ul class="thumbs" id="thumbs" aria-label="Imagens selecionadas"></ul>
             <small id="fotoCount" aria-live="polite"></small>
