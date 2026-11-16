@@ -5,6 +5,7 @@ const LICENCAS = [['nao_verificada', 'Não verificada'], ['comercial_ok', 'Uso c
 const PIL_LIC = { nao_verificada: 'st-novo', comercial_ok: 'st-aprovado', sem_licenca_comercial: 'st-recusado', propria: 'st-aprovado' };
 let aba = 'loja', busca = '', fcat = '', flic = '';
 const sel = new Set(); // produtos selecionados para ações em massa
+let ultimaAcao = 'licenca', ultimoValor = { licenca: 'comercial_ok' }; // a barra lembra a última escolha
 const ACOES = [
   ['licenca', 'Mudar licença para…'], ['categoria', 'Mudar categoria para…'],
   ['ativo_on', 'Mostrar na loja'], ['ativo_off', 'Ocultar da loja'],
@@ -50,7 +51,7 @@ export async function render(el, ctx, acoes) {
     <div class="lote" id="lote" hidden>
       <span><b id="loteN">0</b> selecionados</span>
       <button type="button" class="link" id="loteTodos">Selecionar todos os ${vis.length} da lista</button>
-      <select id="loteAcao" aria-label="Ação">${opcoes(ACOES, '')}</select>
+      <select id="loteAcao" aria-label="Ação">${opcoes(ACOES, ultimaAcao)}</select>
       <span id="loteValor"></span>
       <button type="button" class="btn btn-primary sm" id="loteAplicar">Aplicar</button>
       <button type="button" class="link" id="loteLimpar">Limpar seleção</button>
@@ -79,6 +80,7 @@ export async function render(el, ctx, acoes) {
     el._vis = vis; el._lista = lista;
     const existentes = new Set(lista.map(p => p.id));
     for (const id of [...sel]) if (!existentes.has(id)) sel.delete(id); // produtos que não existem mais saem da seleção
+    campoValor(); // a segunda lista (licença, categoria, preço) aparece já com a ação escolhida
     atualizaLote();
     $('#importar', el)?.addEventListener('click', async ev => {
       try {
@@ -103,10 +105,13 @@ export async function render(el, ctx, acoes) {
     $$('tr[data-id]', el).forEach(tr => tr.classList.toggle('marcado', sel.has(tr.dataset.id)));
   }
   function campoValor() {
-    const acao = $('#loteAcao', el).value, alvo = $('#loteValor', el);
-    alvo.innerHTML = acao === 'licenca' ? `<select id="loteV" aria-label="Licença">${opcoes(LICENCAS, 'comercial_ok')}</select>`
-      : acao === 'categoria' ? `<select id="loteV" aria-label="Categoria">${opcoes(Object.entries(catalogo.categorias || {}), '')}</select>`
-      : acao === 'preco' ? '<input id="loteV" type="number" min="0" step="0.01" placeholder="R$" aria-label="Preço" style="width:110px">' : '';
+    const sAcao = $('#loteAcao', el), alvo = $('#loteValor', el);
+    if (!sAcao || !alvo) return;
+    const acao = sAcao.value; ultimaAcao = acao;
+    const v = ultimoValor[acao];
+    alvo.innerHTML = acao === 'licenca' ? `<select id="loteV" aria-label="Licença">${opcoes(LICENCAS, v || 'comercial_ok')}</select>`
+      : acao === 'categoria' ? `<select id="loteV" aria-label="Categoria">${opcoes(Object.entries(catalogo.categorias || {}), v || '')}</select>`
+      : acao === 'preco' ? `<input id="loteV" type="number" min="0" step="0.01" placeholder="R$" aria-label="Preço" style="width:110px" value="${esc(v || '')}">` : '';
   }
   async function aplicarLote(btn) {
     const acaoUI = $('#loteAcao', el).value;
@@ -114,7 +119,9 @@ export async function render(el, ctx, acoes) {
     const lista = el._lista || [];
     const [acao, valor] = acaoUI.endsWith('_on') ? [acaoUI.slice(0, -3), true] : acaoUI.endsWith('_off') ? [acaoUI.slice(0, -4), false]
       : [acaoUI, $('#loteV', el) ? $('#loteV', el).value : null];
-    if (acao === 'preco' && (valor === '' || !(Number(valor) >= 0))) return toast('Informe o preço.', 'erro');
+    if (['licenca', 'categoria', 'preco'].includes(acao) && (valor == null || valor === '')) return toast('Escolha o valor ao lado da ação.', 'erro');
+    if (acao === 'preco' && !(Number(valor) >= 0)) return toast('Informe o preço.', 'erro');
+    if (valor != null) ultimoValor[acao] = valor;
     const nome = (ACOES.find(a => a[0] === acaoUI) || [, acaoUI])[1].replace('…', '');
     if (acao === 'excluir' && !(await confirmar(`Excluir ${ids.length} produto(s)? Isso não pode ser desfeito.`, { ok: 'Excluir', perigo: true }))) return;
     // itens que passariam a aparecer na loja sem licença confirmada
