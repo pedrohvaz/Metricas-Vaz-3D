@@ -127,3 +127,72 @@ routerAdd('POST', '/api/mv/importar-catalogo', (e) => {
   const pub = U.publicarSite(e.app);
   return e.json(200, { importados: n, publicado: pub.ok, saida: pub.saida });
 }, $apis.requireAuth('users', '_superusers'));
+
+/* Catálogos internos disponíveis em data/importar/<nome>.json (ex.: natal). */
+routerAdd('GET', '/api/mv/colecoes', (e) => {
+  const U = require(`${__hooks}/lib/util.js`);
+  if (!U.ehDono(e.auth)) throw new ForbiddenError('Apenas o dono.');
+  const lista = [];
+  let arquivos = [];
+  try { arquivos = $os.readDir(U.RAIZ + '/data/importar'); } catch (err) { arquivos = []; }
+  for (const a of arquivos) {
+    const nome = a.name();
+    if (a.isDir() || !/\.json$/.test(nome)) continue;
+    try {
+      const d = JSON.parse(toString($os.readFile(U.RAIZ + '/data/importar/' + nome)));
+      const colecao = String(d.colecao || nome.replace(/\.json$/, ''));
+      const ja = e.app.findRecordsByFilter('produtos', 'codigo ~ {:p}', '', 0, 0, { p: colecao + '-%' }).length;
+      lista.push({ colecao, arquivo: nome, total: (d.itens || []).length, importados: ja, fonte: d.fonte || '' });
+    } catch (err) { /* arquivo inválido */ }
+  }
+  return e.json(200, lista);
+}, $apis.requireAuth('users', '_superusers'));
+
+/* Importa um catálogo interno como produtos OCULTOS (interno = true), sem duplicar os que já existem. */
+routerAdd('POST', '/api/mv/importar-colecao', (e) => {
+  const U = require(`${__hooks}/lib/util.js`);
+  if (!U.ehDono(e.auth)) throw new ForbiddenError('Apenas o dono pode importar catálogos.');
+  const colecao = String((e.requestInfo().body || {}).colecao || '').replace(/[^a-z0-9-]/g, '');
+  if (!colecao) throw new BadRequestError('Informe a coleção.');
+  let d;
+  try { d = JSON.parse(toString($os.readFile(U.RAIZ + '/data/importar/' + colecao + '.json'))); }
+  catch (err) { throw new NotFoundError('Catálogo não encontrado em data/importar/' + colecao + '.json'); }
+  const col = e.app.findCollectionByNameOrId('produtos');
+  const pastaImg = U.RAIZ + '/data/importar/' + colecao + '/';
+  const categoria = colecao === 'natal' ? 'natal' : 'decoracao';
+  let criados = 0, existentes = 0, semFoto = 0;
+  e.app.store().set('mv_pausar_publicacao', true);
+  try {
+    for (const it of (d.itens || [])) {
+      let existe = null;
+      try { existe = e.app.findFirstRecordByData('produtos', 'codigo', it.codigo); } catch (err) { existe = null; }
+      if (existe) { existentes++; continue; }
+      const r = new Record(col);
+      r.set('codigo', it.codigo);
+      r.set('ref', 'NT-' + String(it.numero).padStart(3, '0'));
+      r.set('nome', String(it.nome).slice(0, 100));
+      r.set('categoria', categoria);
+      r.set('preco', 0);
+      r.set('sob_consulta', true);
+      r.set('material', 'PLA');
+      r.set('art', 'gear');
+      r.set('cores', ['vermelho', 'verde', 'branco', 'dourado']);
+      r.set('descricao', ('Modelo "' + it.nome_original + '" de ' + it.criador + ' (' + (d.fonte || 'MakerWorld') + ').').slice(0, 1000));
+      r.set('credito', String(it.criador || '').slice(0, 120));
+      if (it.link) r.set('link_modelo', it.link);
+      r.set('licenca', 'nao_verificada');
+      r.set('interno', true);
+      r.set('ativo', false);
+      r.set('ordem', 1000 + Number(it.numero || 0));
+      if (it.marca_registrada) r.set('obs_interna', 'Personagem ou marca de terceiros: não vender sem licença do dono da marca.');
+      if (it.arquivo) {
+        try { r.set('foto_referencia', $filesystem.fileFromPath(pastaImg + it.arquivo)); } catch (err) { semFoto++; }
+      } else semFoto++;
+      e.app.save(r);
+      criados++;
+    }
+  } finally {
+    e.app.store().remove('mv_pausar_publicacao');
+  }
+  return e.json(200, { colecao, criados, existentes, sem_foto: semFoto });
+}, $apis.requireAuth('users', '_superusers'));

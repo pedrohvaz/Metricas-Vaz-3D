@@ -41,6 +41,8 @@ O painel e o banco de dados rodam no [PocketBase](https://pocketbase.io) (um pro
 | Configurações | Tarifa de energia, valor da impressora, hora de trabalho, margem, taxas, materiais | dono |
 | Equipe | Acessos de dono e equipe | dono |
 
+**Catálogo interno:** em **Produtos → Catálogo interno** ficam modelos de terceiros só para consulta da equipe (ex.: a Coleção de Natal com 220 modelos do MakerWorld). Eles nunca aparecem na loja, mesmo marcados como visíveis. Para importar uma coleção, coloque `data/importar/<nome>.json` e as imagens em `data/importar/<nome>/` (pasta fora do Git) e clique em **Importar** no painel. Antes de vender um modelo de terceiro, confira na página dele se a licença permite vender impressões, troque a foto do designer por uma foto sua e desmarque “Catálogo interno”.
+
 Produto **sem preço** (ou com *Sob consulta* marcado) aparece na loja com o botão **Solicitar orçamento**, que grava o pedido no painel e abre o WhatsApp.
 
 Para publicar num servidor próprio, siga [docs/VPS.md](docs/VPS.md).

@@ -97,7 +97,7 @@ onRecordEnrich((e) => {
 /* Visitantes do site não veem os dados internos de produção dos produtos. */
 onRecordEnrich((e) => {
   const auth = e.requestInfo && e.requestInfo.auth;
-  if (!auth) e.record.hide('gramas', 'horas');
+  if (!auth) e.record.hide('gramas', 'horas', 'interno', 'licenca', 'credito', 'link_modelo', 'obs_interna', 'foto_referencia');
   e.next();
 }, 'produtos');
 

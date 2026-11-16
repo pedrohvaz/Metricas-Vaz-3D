@@ -171,7 +171,7 @@ function layout({ path: p, titulo, descricao, conteudo, nav = '', jsonld = [], o
   const og = SITE_URL ? absUrl(ogImage) : B + ogImage;
   const dados = {
     base: '__PREFIXO__', whatsapp: site.whatsapp, whatsapp_exibir: site.whatsapp_exibir, nome: site.nome,
-    cores: loja.cores, categorias: CAT,
+    cores: loja.cores, categorias: Object.fromEntries(Object.entries(CAT).filter(([k]) => produtos.some(p => p.cat === k))),
     produtos: produtos.map(x => ({ id: x.id, ref: x.ref, nome: x.nome, preco: x.consulta ? null : x.preco, art: x.art, cores: x.cores, personalizavel: !!x.personalizavel, url: x.url, fotos: x.fotos, foto: x.fotos.length ? fotoUrl(x, x.fotos[0], '600x600') : '' })),
     api: !!PB,
   };
@@ -328,7 +328,7 @@ ${materiais}
   <div class="wrap cat-layout">
     <aside class="filters" id="filters" aria-label="Filtros">
       <div class="f-head"><h2>Filtros</h2><button class="linkbtn" type="button" data-clear>Limpar</button></div>
-      <fieldset><legend>Categoria</legend><div id="fCat">${opt('radio', 'fcat', 'todos', 'Todas', produtos.length, true)}${Object.entries(CAT).map(([k, v]) => opt('radio', 'fcat', k, v, conta(p => p.cat === k))).join('')}</div></fieldset>
+      <fieldset><legend>Categoria</legend><div id="fCat">${opt('radio', 'fcat', 'todos', 'Todas', produtos.length, true)}${Object.entries(CAT).filter(([k]) => conta(p => p.cat === k) > 0).map(([k, v]) => opt('radio', 'fcat', k, v, conta(p => p.cat === k))).join('')}</div></fieldset>
       <fieldset><legend>Material</legend><div id="fMat">${MATS.map(m => opt('checkbox', 'fmat', m, m, conta(p => matFam(p) === m))).join('')}</div></fieldset>
       <fieldset><legend>Preço</legend><div id="fPreco">${PRECOS.map(([k, v, f], i) => opt('radio', 'fpreco', k, v, conta(f), i === 0)).join('')}</div></fieldset>
       <fieldset><legend>Personalização</legend><label class="opt"><input type="checkbox" id="fPers"><span>Com nome personalizado</span></label></fieldset>

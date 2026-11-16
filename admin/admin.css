@@ -257,3 +257,12 @@ dialog.mdl::backdrop{background:rgba(3,2,8,.7);backdrop-filter:blur(3px)}
 #conteudo,#fConteudo,#lista{display:flex;flex-direction:column;gap:16px}
 .dica:empty{display:none}
 .mdl-body p,.det-info p{margin:0}
+/* catálogo interno */
+.aviso-col{flex-direction:row;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-color:rgba(242,101,34,.45)}
+.filtros-linha{display:flex;gap:8px;flex-wrap:wrap}
+.filtros-linha select{width:auto}
+.filtros-linha input{width:280px;max-width:100%}
+.ref-foto{margin:0;display:flex;gap:12px;align-items:center}
+.ref-foto img{width:110px;height:110px;object-fit:cover;border-radius:10px;border:1px solid var(--line-strong)}
+.ref-foto figcaption{color:var(--muted);font-size:.84rem}
+.interno-grupo{border-color:rgba(242,101,34,.35)}
