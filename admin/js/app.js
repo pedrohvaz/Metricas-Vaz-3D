@@ -36,7 +36,7 @@ async function telaAcesso() {
   try { primeiro = (await (await fetch(`${BASE}/api/mv/status`)).json()).primeiro_acesso; } catch (e) { /* servidor fora do ar */ }
   $('#app').innerHTML = `<main class="login">
     <div class="login-card">
-      <img src="${BASE}/assets/img/logo-256.webp" alt="Logotipo MV 3D" width="116" height="96">
+      <img src="${BASE}/assets/img/logo-256.webp?v=mv3d2" alt="Logotipo MV 3D" width="116" height="96">
       <h1>${primeiro ? 'Primeiro acesso' : 'Painel Métricas Vaz 3D'}</h1>
       <p>${primeiro ? 'Crie a conta do dono do sistema. Depois você cadastra a equipe em Equipe.' : 'Entre com seu e-mail e senha.'}</p>
       <form id="fAcesso" class="frm" novalidate>
@@ -73,7 +73,7 @@ function montarLayout() {
   const telas = TELAS.filter(t => !t.dono || ctx.dono);
   $('#app').innerHTML = `
   <aside class="lateral" id="lateral">
-    <a class="marca" href="#/inicio"><img src="${BASE}/assets/img/logo-128.webp" alt="" width="46" height="38"><span><b>Métricas Vaz 3D</b><small>Painel</small></span></a>
+    <a class="marca" href="#/inicio"><img src="${BASE}/assets/img/logo-256.webp?v=mv3d2" alt="" width="46" height="38"><span><b>Métricas Vaz 3D</b><small>Painel</small></span></a>
     <nav class="menu" aria-label="Painel">${telas.map(t => `<a href="#/${t.id}" data-tela="${t.id}">${t.ic}<span>${t.nome}</span>${t.id === 'pedidos' ? '<em class="badge" id="bPedidos" hidden></em>' : ''}</a>`).join('')}</nav>
     <div class="lateral-pe">
       <a href="${BASE}/" target="_blank" rel="noopener">Ver a loja ↗</a>

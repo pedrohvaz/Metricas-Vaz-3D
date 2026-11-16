@@ -9,6 +9,8 @@ const ARGS = process.argv.slice(2);
 const SAIDA = (ARGS.find(a => a.startsWith('--saida=')) || '--saida=dist').split('=')[1];
 const DIST = path.resolve(ROOT, SAIDA);
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
+/* Versão no endereço das imagens da marca: quando o arquivo muda, o navegador baixa de novo em vez de usar o cache. */
+const ver = rel => { try { return '?v=' + require('crypto').createHash('md5').update(fs.readFileSync(path.join(ROOT, rel))).digest('hex').slice(0, 8); } catch (e) { return ''; } };
 const site = JSON.parse(read('data/site.json'));
 const loja = JSON.parse(read('data/produtos.json'));
 
@@ -105,7 +107,7 @@ function header(atual) {
 <header class="site-header">
   <div class="wrap hdr">
     <a class="brand" href="${B}" aria-label="${esc(site.nome)}, página inicial">
-      <img class="logo" src="${B}assets/img/logo-128.webp" alt="" width="128" height="106">
+      <img class="logo" src="${B}assets/img/logo-256.webp${ver('assets/img/logo-256.webp')}" alt="" width="256" height="212">
       <span><b>${esc(site.nome)}</b><small>${esc(site.slogan)}</small></span>
     </a>
     <nav class="nav" id="mainNav" aria-label="Principal">
@@ -145,7 +147,7 @@ function footer() {
   <div class="wrap">
     <div class="foot">
       <div>
-        <a class="brand" href="${B}"><img class="logo" src="${B}assets/img/logo-256.webp" alt="Logotipo MV 3D" width="256" height="212" loading="lazy"><span><b>${esc(site.nome)}</b><small>${esc(site.slogan)}</small></span></a>
+        <a class="brand" href="${B}"><img class="logo" src="${B}assets/img/logo-256.webp${ver('assets/img/logo-256.webp')}" alt="Logotipo MV 3D" width="256" height="212" loading="lazy"><span><b>${esc(site.nome)}</b><small>${esc(site.slogan)}</small></span></a>
         <p style="margin-top:16px;max-width:30em">Impressão 3D de decoração, colecionáveis, brinquedos e projetos sob encomenda, com envio para todo o Brasil.</p>
       </div>
       <div><h4>Loja</h4><ul><li><a href="${B}produtos/">Produtos</a></li><li><a href="${B}encomenda/">Sob encomenda</a></li><li><a href="${B}#materiais">Materiais</a></li><li><a href="${B}sobre/">Sobre</a></li></ul></div>
@@ -164,7 +166,7 @@ function footer() {
 </footer>`;
 }
 
-function layout({ path: p, titulo, descricao, conteudo, nav = '', jsonld = [], ogImage = 'og-image.png', extraHead = '' }) {
+function layout({ path: p, titulo, descricao, conteudo, nav = '', jsonld = [], ogImage = 'og-image.png' + ver('static/og-image.png'), extraHead = '' }) {
   const canonical = absUrl(p);
   const og = SITE_URL ? absUrl(ogImage) : B + ogImage;
   const dados = {
@@ -182,10 +184,10 @@ function layout({ path: p, titulo, descricao, conteudo, nav = '', jsonld = [], o
 <title>${esc(titulo)}</title>
 <meta name="description" content="${esc(descricao)}">
 ${canonical ? `<link rel="canonical" href="${canonical}">\n` : ''}<meta name="theme-color" content="#0C0C0D" id="themeColor">
-<link rel="icon" href="${B}favicon-32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="${B}favicon-48.png" sizes="48x48" type="image/png">
-<link rel="apple-touch-icon" href="${B}apple-touch-icon.png">
-<link rel="manifest" href="${B}site.webmanifest">
+<link rel="icon" href="${B}favicon-32.png${ver('static/favicon-32.png')}" sizes="32x32" type="image/png">
+<link rel="icon" href="${B}favicon-48.png${ver('static/favicon-48.png')}" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="${B}apple-touch-icon.png${ver('static/apple-touch-icon.png')}">
+<link rel="manifest" href="${B}site.webmanifest${ver('static/site.webmanifest')}">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="${esc(site.nome)}">
@@ -250,7 +252,7 @@ function card(p) {
 
 const orgLd = () => {
   const e = site.empresa, o = { '@context': 'https://schema.org', '@type': 'Store', name: site.nome, description: 'Impressão 3D de decoração, colecionáveis, brinquedos e peças sob encomenda.', telephone: '+' + site.whatsapp, priceRange: 'R$' };
-  if (SITE_URL) { o.url = absUrl(''); o.logo = absUrl('assets/img/logo-512.webp'); o.image = absUrl('og-image.png'); }
+  if (SITE_URL) { o.url = absUrl(''); o.logo = absUrl('assets/img/logo-512.webp' + ver('assets/img/logo-512.webp')); o.image = absUrl('og-image.png' + ver('static/og-image.png')); }
   if (!isTodo(e.email)) o.email = e.email;
   if (!isTodo(e.razao_social)) o.legalName = e.razao_social;
   if (!isTodo(e.cidade_uf)) o.address = { '@type': 'PostalAddress', addressLocality: e.cidade_uf.split('/')[0].trim(), addressRegion: (e.cidade_uf.split('/')[1] || '').trim(), addressCountry: 'BR' };

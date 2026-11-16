@@ -715,3 +715,12 @@ mark.todo{background:#FFE58A;color:#3A2E00;border-radius:4px;padding:.05em .3em;
 @media (min-width:1100px){.hero-bg{left:30%}}
 .assure > div:nth-child(n){padding:20px 22px}
 @media (max-width:520px){.assure > div:nth-child(n){padding:16px 18px}}
+/* logotipo maior no cabeçalho */
+.hdr{height:78px}
+.brand .logo,:root[data-theme="light"] .brand .logo{height:60px}
+.brand b{font-size:1.3rem}
+@media (max-width:560px){.hdr{height:66px}.brand .logo,:root[data-theme="light"] .brand .logo{height:46px}}
+html{scroll-padding-top:92px}
+/* contorno claro sutil: separa o cinza-escuro do "M" do fundo escuro sem mudar as cores da marca */
+.site-header .brand .logo,.footer .brand .logo,:root[data-theme="light"] .site-header .brand .logo,:root[data-theme="light"] .footer .brand .logo{
+  filter:drop-shadow(0 0 .6px rgba(255,255,255,.75)) drop-shadow(0 0 .6px rgba(255,255,255,.5)) drop-shadow(0 0 10px rgba(255,255,255,.14))}
