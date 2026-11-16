@@ -45,6 +45,8 @@ O painel e o banco de dados rodam no [PocketBase](https://pocketbase.io) (um pro
 
 Produto **sem preço** (ou com *Sob consulta* marcado) aparece na loja com o botão **Solicitar orçamento**, que grava o pedido no painel e abre o WhatsApp.
 
+**Site no Netlify (sem servidor):** o Netlify só publica páginas prontas, então o painel não roda lá. Para levar ao Netlify o que você mudou no painel (produtos, preços, fotos e a vitrine Ideias de Natal), clique em **Produtos → Publicar no Netlify** com o servidor ligado no seu computador (ou rode `npm run publicar:netlify`). Isso grava um retrato do que é público em `data/produtos.json`, `data/vitrine.json` e `assets/img/`, envia ao GitHub e o Netlify atualiza em 1 a 2 minutos.
+
 Para publicar num servidor próprio, siga [docs/VPS.md](docs/VPS.md).
 
 ## Estrutura

@@ -6,7 +6,8 @@
     "build": "node src/build.js",
     "build:relativo": "node src/build.js --relativo --saida=preview",
     "imagens": "node scripts/gerar-imagens.js",
-    "servidor": "node scripts/servidor.js"
+    "servidor": "node scripts/servidor.js",
+    "publicar:netlify": "node scripts/publicar-netlify.js"
   },
   "engines": {
     "node": ">=18"

@@ -16,7 +16,7 @@ const ACOES = [
 
 export async function render(el, ctx, acoes) {
   const { pb, catalogo } = ctx;
-  acoes.innerHTML = '<button class="btn" type="button" id="publicar">Publicar loja</button><button class="btn btn-primary" type="button" id="novoProd">+ Produto</button>';
+  acoes.innerHTML = '<button class="btn" type="button" id="publicar">Publicar loja</button><button class="btn" type="button" id="publicarNetlify" title="Envia os produtos da loja e a vitrine de Natal para o site no Netlify">Publicar no Netlify</button><button class="btn btn-primary" type="button" id="novoProd">+ Produto</button>';
   let token = '';
   try { token = await pb.files.getToken(); } catch (e) { /* sem token: fotos de referência não aparecem */ }
 
@@ -170,6 +170,17 @@ export async function render(el, ctx, acoes) {
   });
   el.addEventListener('keydown', e => { const tr = e.target.closest('tr[data-id]'); if (tr && e.key === 'Enter' && !e.target.closest('td.sel')) editar(ctx, tr.dataset.id, carregar, token); });
   $('#novoProd').addEventListener('click', () => editar(ctx, null, carregar, token));
+  $('#publicarNetlify').addEventListener('click', async ev => {
+    if (!(await confirmar('Enviar os produtos da loja (preços e fotos) e os modelos liberados da vitrine de Natal para o site no Netlify? O site atualiza em 1 a 2 minutos.', { ok: 'Publicar no Netlify' }))) return;
+    try {
+      const j = await ocupado(ev.target, async () => {
+        const r = await fetch(`${ctx.BASE}/api/mv/publicar-netlify`, { method: 'POST', headers: { Authorization: pb.authStore.token } });
+        const d = await r.json(); if (!r.ok || !d.ok) throw new Error((d.saida || d.message || 'Falha ao publicar').replace(/^[\s\S]*✖\s*/, '').slice(0, 300)); return d;
+      });
+      const linhas = (j.saida || '').trim().split('\n').filter(Boolean);
+      toast(linhas.slice(-2).join(' '), 'info');
+    } catch (e) { toast(msgErro(e), 'erro'); }
+  });
   $('#publicar').addEventListener('click', async ev => {
     try {
       await ocupado(ev.target, async () => {

@@ -153,3 +153,22 @@ routerAdd('POST', '/api/mv/produtos/lote', (e) => {
   const pub = U.publicarSite(e.app);
   return e.json(200, { feitos, publicado: pub.ok });
 }, $apis.requireAuth('users', '_superusers'));
+
+/* Publica no Netlify: exporta o que é público no banco (produtos da loja e vitrine de Natal) e envia ao GitHub. */
+routerAdd('POST', '/api/mv/publicar-netlify', (e) => {
+  const U = require(`${__hooks}/lib/util.js`);
+  if (!U.ehDono(e.auth)) throw new ForbiddenError('Apenas o dono pode publicar no Netlify.');
+  const node = $os.getenv('MV_NODE') || 'node';
+  let saida = '', ok = true;
+  try {
+    const cmd = $os.cmd(node, U.RAIZ + '/scripts/publicar-netlify.js', '--painel');
+    cmd.dir = U.RAIZ;
+    saida = toString(cmd.combinedOutput());
+    if (saida.indexOf('✖') >= 0) ok = false;
+  } catch (err) {
+    ok = false;
+    saida = String(err);
+  }
+  e.app.logger().info('Publicação no Netlify', 'ok', ok, 'saida', saida.slice(0, 3000));
+  return e.json(ok ? 200 : 500, { ok, saida: saida.slice(0, 3000) });
+}, $apis.requireAuth('users', '_superusers'));

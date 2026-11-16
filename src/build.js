@@ -32,7 +32,8 @@ if (PB) {
     VITRINE = (ler('interno=true && licenca="comercial_ok" && marca!=true && categoria="natal"').items || []).map(r => {
       const dir = `api/files/${r.collectionId}/${r.id}/`;
       const propria = (r.fotos || [])[0];
-      return { nome: r.nome, ref: r.ref, credito: r.credito, foto: propria ? dir + propria : r.foto_referencia ? dir + r.foto_referencia : '', fotoDesigner: !propria && !!r.foto_referencia };
+      const arq = propria || r.foto_referencia;
+      return { nome: r.nome, ref: r.ref, credito: r.credito, foto: arq ? `${dir}${arq}?thumb=600x600` : '', fotoDesigner: !propria && !!r.foto_referencia };
     });
   } catch (e) { VITRINE = []; }
   const recs = dados.items || [];
@@ -47,6 +48,10 @@ if (PB) {
     previa: r.foto_previa ? `api/files/${r.collectionId}/${r.id}/${r.foto_previa}` : '',
   }));
   if (recs.length) loja.destaques = recs.filter(r => r.destaque).map(r => r.codigo);
+}
+/* Sem servidor (Netlify): a vitrine vem do retrato gerado por scripts/publicar-netlify.js */
+if (!PB) {
+  try { VITRINE = (JSON.parse(read('data/vitrine.json')).itens || []).filter(v => v.nome); } catch (e) { VITRINE = []; }
 }
 const MV = require('./art.js');
 MV.setCores(loja.cores);
@@ -449,7 +454,7 @@ ${partial('calculadora')}
 // Ideias de Natal (vitrine de modelos de designers com licença comercial)
 if (VITRINE.length) {
   const cardIdeia = v => `<article class="card ideia">
-    <div class="media">${v.foto ? `<img src="${B}${esc(v.foto)}?thumb=600x600" alt="${esc(v.nome)}" width="600" height="600" loading="lazy" decoding="async">` : MV.art('gear', 'vermelho')}${v.fotoDesigner && v.credito ? `<span class="foto-credito">Foto: ${esc(v.credito)}</span>` : ''}</div>
+    <div class="media">${v.foto ? `<img src="${B}${esc(v.foto)}" alt="${esc(v.nome)}" width="600" height="600" loading="lazy" decoding="async">` : MV.art('gear', 'vermelho')}${v.fotoDesigner && v.credito ? `<span class="foto-credito">Foto: ${esc(v.credito)}</span>` : ''}</div>
     <div class="info">
       <span class="label">Coleção de Natal</span>
       <h3>${esc(v.nome)}</h3>
