@@ -7,7 +7,7 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const ARGS = process.argv.slice(2);
 const SAIDA = (ARGS.find(a => a.startsWith('--saida=')) || '--saida=dist').split('=')[1];
-const DIST = path.join(ROOT, SAIDA);
+const DIST = path.resolve(ROOT, SAIDA);
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const site = JSON.parse(read('data/site.json'));
 const loja = JSON.parse(read('data/produtos.json'));
@@ -24,7 +24,8 @@ if (PB) {
   try { dados = JSON.parse(execFileSync(process.execPath, ['-e', busca, PB], { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 })); }
   catch (e) { console.error(`✖ Não foi possível ler os produtos do banco em ${PB}. O PocketBase está rodando?`); process.exit(1); }
   const recs = dados.items || [];
-  loja.produtos = recs.map(r => ({
+  if (!recs.length) console.log('! O banco ainda não tem produtos: a loja usa data/produtos.json até você importar o catálogo no painel (Produtos → Importar).');
+  else loja.produtos = recs.map(r => ({
     id: r.codigo, ref: r.ref, nome: r.nome, cat: r.categoria,
     preco: r.sob_consulta || !(r.preco > 0) ? null : r.preco,
     material: r.material, tamanho: r.tamanho, tempo: r.tempo, camada: r.camada || undefined,
@@ -33,7 +34,7 @@ if (PB) {
     desc: r.descricao, fotos: r.fotos || [], fotoDir: `api/files/${r.collectionId}/${r.id}/`,
     previa: r.foto_previa ? `api/files/${r.collectionId}/${r.id}/${r.foto_previa}` : '',
   }));
-  loja.destaques = recs.filter(r => r.destaque).map(r => r.codigo);
+  if (recs.length) loja.destaques = recs.filter(r => r.destaque).map(r => r.codigo);
 }
 const MV = require('./art.js');
 MV.setCores(loja.cores);

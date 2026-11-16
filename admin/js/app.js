@@ -120,6 +120,7 @@ let renderizando = 0;
 export async function navegar() {
   const id = (location.hash.match(/^#\/([\w-]+)/) || [])[1] || 'inicio';
   const t = TELAS.find(x => x.id === id && (!x.dono || ctx.dono)) || TELAS[0];
+  $$('dialog.mdl').forEach(d => { d.close(); d.remove(); }); // janelas abertas não sobrevivem à troca de tela
   $$('.menu a').forEach(a => a.toggleAttribute('aria-current', a.dataset.tela === t.id));
   $('#titulo').textContent = t.nome;
   document.title = `${t.nome} · Painel Métricas Vaz 3D`;

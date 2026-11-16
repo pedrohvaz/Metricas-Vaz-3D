@@ -53,7 +53,8 @@ async function abrir(ctx, id, aoMudar) {
   let token = '';
   if (p.arquivos?.length) { try { token = await pb.files.getToken(); } catch (e) { /* sem token */ } }
   const arqs = (p.arquivos || []).map(f => `<li><a href="${pb.files.getURL(p, f, { token, download: true })}" target="_blank" rel="noopener">${esc(f)}</a></li>`).join('');
-  const est = p.estimativa && p.estimativa.min ? `<p class="dica">Estimativa mostrada ao cliente: <b>${money(p.estimativa.min)} a ${money(p.estimativa.max)}</b> · ${num(p.estimativa.gramas)} g · ${num(p.estimativa.horas, 1)} h · ${esc(p.estimativa.material || '')}</p>` : '';
+  const e = p.estimativa || {};
+  const est = e.min ? `<p class="dica">Estimativa mostrada ao cliente: <b>${money(e.min)} a ${money(e.max)}</b>${[e.gramas && `${num(e.gramas)} g`, e.horas && `${num(e.horas, 1)} h`, e.material, e.cores > 1 && `${e.cores} cores`, e.quantidade > 1 && `${e.quantidade} un.`].filter(Boolean).map(x => ` · ${esc(x)}`).join('')}</p>` : '';
   const itens = Array.isArray(p.itens) && p.itens.length ? `<table class="tabela mini"><thead><tr><th>Item</th><th>Cor / texto</th><th class="num">Qtd</th><th class="num">Preço</th></tr></thead><tbody>${p.itens.map(i => `<tr><td>${esc(i.nome || i.arquivo || '—')}${i.ref ? ` <small>${esc(i.ref)}</small>` : ''}</td><td>${esc([i.cor, i.texto && `“${i.texto}”`, i.material].filter(Boolean).join(' · ') || '—')}</td><td class="num">${i.qtd || 1}</td><td class="num">${i.sob_consulta ? 'consulta' : i.preco ? money(i.preco * (i.qtd || 1)) : '—'}</td></tr>`).join('')}</tbody></table>` : '';
   const m = modal({
     titulo: `${TIPO_PEDIDO[p.tipo] || 'Pedido'} · ${p.nome}`, largo: true,

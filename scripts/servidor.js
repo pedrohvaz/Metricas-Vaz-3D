@@ -9,6 +9,9 @@ const ROOT = path.join(__dirname, '..');
 const PORTA = process.env.MV_PORTA || '8090';
 const HOST = process.env.MV_HOST || '127.0.0.1';
 const URL_LOCAL = `http://127.0.0.1:${PORTA}`;
+// pastas configuráveis (usadas em testes para não mexer no banco e na loja de verdade)
+const DADOS = path.resolve(ROOT, process.env.MV_DADOS || 'server/pb_data');
+const SAIDA = path.resolve(ROOT, process.env.MV_SAIDA || 'dist');
 const bin = path.join(ROOT, 'server', 'bin', process.platform === 'win32' ? 'pocketbase.exe' : 'pocketbase');
 
 if (!fs.existsSync(bin)) {
@@ -19,16 +22,16 @@ if (!fs.existsSync(bin)) {
 }
 
 // a loja precisa existir antes de o servidor subir (o PocketBase serve a pasta dist/)
-if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) execFileSync(process.execPath, [path.join(ROOT, 'src/build.js')], { stdio: 'inherit' });
+if (!fs.existsSync(path.join(SAIDA, 'index.html'))) execFileSync(process.execPath, [path.join(ROOT, 'src/build.js'), `--saida=${SAIDA}`], { stdio: 'inherit' });
 
 const pb = spawn(bin, [
   'serve', `--http=${HOST}:${PORTA}`,
-  `--dir=${path.join(ROOT, 'server', 'pb_data')}`,
+  `--dir=${DADOS}`,
   `--hooksDir=${path.join(ROOT, 'server', 'pb_hooks')}`,
   `--migrationsDir=${path.join(ROOT, 'server', 'pb_migrations')}`,
-  `--publicDir=${path.join(ROOT, 'dist')}`,
+  `--publicDir=${SAIDA}`,
   '--indexFallback=false', '--automigrate=false',
-], { stdio: ['ignore', 'pipe', 'inherit'], env: { ...process.env, MV_PB_URL: URL_LOCAL, MV_NODE: process.env.MV_NODE || process.execPath } });
+], { stdio: ['ignore', 'pipe', 'inherit'], env: { ...process.env, MV_PB_URL: URL_LOCAL, MV_SAIDA: SAIDA, MV_NODE: process.env.MV_NODE || process.execPath } });
 
 // o PocketBase imprime um link de instalação do superusuário no primeiro uso: mostramos tudo
 pb.stdout.on('data', d => process.stdout.write(d));
@@ -41,7 +44,7 @@ for (const s of ['SIGINT', 'SIGTERM']) process.on(s, () => pb.kill(s));
     await new Promise(r => setTimeout(r, 500));
   }
   try {
-    execFileSync(process.execPath, [path.join(ROOT, 'src/build.js'), `--pb=${URL_LOCAL}`], { stdio: 'inherit' });
+    execFileSync(process.execPath, [path.join(ROOT, 'src/build.js'), `--pb=${URL_LOCAL}`, `--saida=${SAIDA}`], { stdio: 'inherit' });
   } catch (e) { console.error('! Não foi possível gerar a loja com os dados do banco. Veja a mensagem acima.'); }
   console.log(`
   ┌──────────────────────────────────────────────────────────┐

@@ -5,7 +5,9 @@ import { CATEGORIAS_FIN, FORMAS, nomeDe } from '../rotulos.js';
 let mes = hojeISO().slice(0, 7), aba = 'mes';
 const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 const nomeMes = ym => { const [a, m] = ym.split('-'); return `${MESES[+m - 1]}/${a.slice(2)}`; };
-const refData = l => (l.pago ? l.data_pagamento : l.vencimento || l.created || '').slice(0, 10);
+/* datas de calendário são gravadas ao meio-dia UTC; 'created' é um instante real, convertido para o dia local */
+const diaLocal = v => { const d = new Date(String(v).replace(' ', 'T')); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+const refData = l => l.pago && l.data_pagamento ? l.data_pagamento.slice(0, 10) : l.vencimento ? l.vencimento.slice(0, 10) : l.created ? diaLocal(l.created) : '';
 const liquido = l => l.tipo === 'entrada' ? l.valor - (l.taxa || 0) : l.valor;
 
 export async function render(el, ctx, acoes) {
@@ -50,7 +52,7 @@ export async function render(el, ctx, acoes) {
       <div class="kpi"><span>A pagar (total)</span><b>${money(pagar)}</b></div>
       <div class="kpi${vencidos.length ? ' alerta' : ''}"><span>Contas vencidas</span><b>${vencidos.length}</b></div>
     </div>
-    <section class="bloco">${grafico(serie)}</section>
+    <section class="bloco">${grafico(serie, el.clientWidth - 40)}</section>
     <div class="barra"><div class="abas" role="tablist">
       ${[['mes', `Lançamentos de ${nomeMes(mes)}`], ['contas', `Contas em aberto (${pend.length})`], ['categorias', 'Por categoria'], ['projetos', 'Lucro por projeto']].map(([k, t]) => `<button type="button" role="tab" data-aba="${k}" aria-selected="${k === aba}">${t}</button>`).join('')}
     </div></div>
@@ -113,8 +115,8 @@ function lucroProjetos(projetos) {
 }
 
 /* Barras agrupadas: entradas x saídas pagas, 6 meses. Cores validadas para daltonismo e contraste no fundo escuro. */
-function grafico(serie) {
-  const W = 640, H = 220, M = { t: 16, r: 8, b: 28, l: 64 };
+function grafico(serie, largura) {
+  const W = Math.max(320, Math.round(largura || 640)), H = 240, M = { t: 16, r: 8, b: 28, l: 64 };
   const max = Math.max(1, ...serie.flatMap(s => [s.entradas, s.saidas]));
   const passo = 10 ** Math.floor(Math.log10(max));
   const topo = Math.ceil(max / passo) * passo;
@@ -127,7 +129,7 @@ function grafico(serie) {
     return `<g data-tip="${esc(rot)}"><rect x="${x - 3}" y="${M.t}" width="${bw + 6}" height="${H - M.t - M.b}" fill="transparent"/>${d ? `<path class="${cls}" d="${d}"/>` : ''}</g>`;
   };
   return `<div class="bloco-head"><h2>Entradas e saídas pagas · últimos 6 meses</h2><div class="legenda"><span><i class="lg-ent"></i>Entradas (líquidas)</span><span><i class="lg-sai"></i>Saídas</span><button type="button" class="link" data-tabela>Ver em tabela</button></div></div>
-  <div class="grafico"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Entradas e saídas dos últimos 6 meses">
+  <div class="grafico"><svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Entradas e saídas dos últimos 6 meses">
     ${ticks.map(t => `<line class="grade" x1="${M.l}" x2="${W - M.r}" y1="${y(t)}" y2="${y(t)}"/><text class="eixo" x="${M.l - 8}" y="${y(t) + 4}" text-anchor="end">${t >= 1000 ? `R$ ${num(t / 1000, 1)} mil` : `R$ ${num(t)}`}</text>`).join('')}
     ${serie.map((s, i) => { const cx = M.l + gw * i + gw / 2; return `${barra(cx - bw - 1, s.entradas, 'b-ent', `<b>${nomeMes(s.ym)}</b><br>Entradas: ${money(s.entradas)}<br>Saídas: ${money(s.saidas)}`)}${barra(cx + 1, s.saidas, 'b-sai', `<b>${nomeMes(s.ym)}</b><br>Entradas: ${money(s.entradas)}<br>Saídas: ${money(s.saidas)}`)}<text class="eixo" x="${cx}" y="${H - 8}" text-anchor="middle">${nomeMes(s.ym)}</text>`; }).join('')}
   </svg><div class="tip" id="gTip" hidden></div></div>

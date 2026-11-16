@@ -6,3 +6,4 @@ preview/
 # Servidor (PocketBase): binário e banco de dados ficam fora do Git
 server/bin/
 server/pb_data/
+server/pb_data-*/

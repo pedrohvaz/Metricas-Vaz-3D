@@ -109,13 +109,14 @@ onRecordCreate((e) => {
   if (r.getString('tipo') === 'entrada' && r.getString('forma_pagamento') && !(r.getFloat('taxa') > 0)) {
     r.set('taxa', C.taxaPagamento(U.custos(e.app), r.getString('forma_pagamento'), r.getFloat('valor')));
   }
-  if (r.getBool('pago') && !r.getString('data_pagamento')) r.set('data_pagamento', new DateTime());
+  if (r.getBool('pago') && !r.getString('data_pagamento')) r.set('data_pagamento', U.hojeBR());
   e.next();
 }, 'lancamentos');
 
 onRecordUpdate((e) => {
+  const U = require(`${__hooks}/lib/util.js`);
   const r = e.record;
-  if (r.getBool('pago') && !r.getString('data_pagamento')) r.set('data_pagamento', new DateTime());
+  if (r.getBool('pago') && !r.getString('data_pagamento')) r.set('data_pagamento', U.hojeBR());
   if (!r.getBool('pago')) r.set('data_pagamento', '');
   e.next();
 }, 'lancamentos');

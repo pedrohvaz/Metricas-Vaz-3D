@@ -54,7 +54,7 @@ body.acesso{min-height:100vh;display:grid;place-items:center;background:radial-g
 .voltar{font-size:.85rem;margin-top:4px}
 
 /* estrutura */
-body.painel{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
+body.painel #app{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
 .lateral{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:18px;padding:18px 14px;background:var(--bg-alt);border-right:1px solid var(--line);overflow-y:auto}
 .marca{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);padding:4px 6px}
 .marca img{border-radius:50%}
@@ -76,7 +76,7 @@ body.painel{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:10
 .menu-btn{display:none}
 .tela{padding:24px 28px 64px;display:flex;flex-direction:column;gap:20px;outline:none}
 @media (max-width:900px){
-  body.painel{grid-template-columns:1fr}
+  body.painel #app{grid-template-columns:1fr}
   .lateral{position:fixed;inset:0 auto 0 0;z-index:30;width:260px;transform:translateX(-100%);transition:transform .2s ease;box-shadow:20px 0 60px rgba(0,0,0,.6)}
   body.menu-aberto .lateral{transform:none}
   .menu-btn{display:inline-grid}
@@ -229,7 +229,7 @@ dialog.mdl::backdrop{background:rgba(3,2,8,.7);backdrop-filter:blur(3px)}
 .legenda i{width:12px;height:12px;border-radius:3px;display:inline-block}
 .lg-ent{background:var(--s-ent)} .lg-sai{background:var(--s-sai)}
 .grafico{position:relative}
-.grafico svg{width:100%;height:auto;display:block}
+.grafico svg{max-width:100%;height:auto;display:block}
 .grafico .grade{stroke:var(--line);stroke-width:1}
 .grafico .eixo{fill:var(--muted);font:500 11px var(--font-mono)}
 .grafico .b-ent{fill:var(--s-ent)} .grafico .b-sai{fill:var(--s-sai)}
@@ -252,3 +252,8 @@ dialog.mdl::backdrop{background:rgba(3,2,8,.7);backdrop-filter:blur(3px)}
 .calc-preco b{font:800 2.4rem/1.1 var(--font-display);font-stretch:88%;background:var(--grad-bright);-webkit-background-clip:text;background-clip:text;color:transparent}
 .calc-preco small{color:var(--muted);font-size:.84rem}
 @media (max-width:900px){.calc{grid-template-columns:1fr}#cRes{position:static}}
+
+/* conteúdo das telas empilhado com espaço */
+#conteudo,#fConteudo,#lista{display:flex;flex-direction:column;gap:16px}
+.dica:empty{display:none}
+.mdl-body p,.det-info p{margin:0}

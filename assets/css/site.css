@@ -608,8 +608,8 @@ mark.todo{background:#FFE58A;color:#3A2E00;border-radius:4px;padding:.05em .3em;
 .drop.done{border-style:solid;border-color:var(--accent)}
 .calc-side{display:flex;flex-direction:column;gap:20px;position:sticky;top:calc(88px + env(safe-area-inset-top,0px))}
 .calc-res{display:flex;flex-direction:column;gap:10px;border-color:rgba(155,48,255,.4)}
-.calc-faixa{font:800 clamp(2rem,4vw,2.6rem)/1.1 var(--font-display);font-stretch:88%;background:var(--grad-bright);-webkit-background-clip:text;background-clip:text;color:transparent}
-.calc-sub{color:var(--muted);font-size:.9rem}
+.calc-res > .calc-faixa{margin:0;font:800 clamp(2rem,4vw,2.6rem)/1.1 var(--font-display);font-stretch:88%;background:var(--grad-bright);-webkit-background-clip:text;background-clip:text;color:transparent}
+.calc-sub,.calc-res > .calc-sub{color:var(--muted);font-size:.9rem;margin:0}
 .calc-avisos{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:.86rem;color:var(--ink)}
 .calc-avisos:empty{display:none}
 .calc-pedido{margin-top:10px;padding-top:18px;border-top:1px solid var(--line)}

@@ -20,7 +20,8 @@ function custos(app) {
 
 const ehDono = auth => !!auth && (auth.isSuperuser() || auth.getString('papel') === 'dono');
 const soDigitos = s => String(s || '').replace(/\D/g, '');
-const hojeISO = () => new Date().toISOString().replace('T', ' ').slice(0, 19) + 'Z';
+/* Data de hoje em Brasília (UTC-3, sem horário de verão desde 2019), gravada ao meio-dia UTC como o painel faz. */
+const hojeBR = () => new Date(Date.now() - 3 * 3600 * 1000).toISOString().slice(0, 10) + ' 12:00:00.000Z';
 
 /* Liga o pedido a um cliente (procura pelo WhatsApp; cria se não existir). */
 function vincularCliente(app, pedido) {
@@ -114,7 +115,9 @@ function publicarSite(app) {
   const node = $os.getenv('MV_NODE') || 'node';
   const url = $os.getenv('MV_PB_URL') || 'http://127.0.0.1:8090';
   try {
-    const cmd = $os.cmd(node, RAIZ + '/src/build.js', '--pb=' + url);
+    const args = [RAIZ + '/src/build.js', '--pb=' + url];
+    if ($os.getenv('MV_SAIDA')) args.push('--saida=' + $os.getenv('MV_SAIDA'));
+    const cmd = $os.cmd(node, ...args);
     cmd.dir = RAIZ;
     const saida = toString(cmd.combinedOutput());
     app.logger().info('Site publicado', 'saida', saida.slice(0, 3000));
@@ -127,6 +130,6 @@ function publicarSite(app) {
 
 module.exports = {
   RAIZ, CONFIG_ID, STATUS_PRODUZIDO, STATUS_RECEITA,
-  lerJSON, custos, ehDono, soDigitos, hojeISO,
+  lerJSON, custos, ehDono, soDigitos, hojeBR,
   vincularCliente, normalizarItensLoja, processarProjeto, acoesDoProjeto, publicarSite,
 };
