@@ -1,0 +1,1419 @@
+{
+ "_leia": "Gerado por scripts/publicar-netlify.js a partir do banco. Não edite à mão.",
+ "itens": [
+  {
+   "nome": "Placa Feliz Natal com floco de neve",
+   "ref": "NT-001",
+   "credito": "DreamsLab3D",
+   "foto": "assets/img/natal/natal-001-placa-feliz-natal-com-floco-de.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvore de Natal minimalista decorativa",
+   "ref": "NT-002",
+   "credito": "NowCraft3D",
+   "foto": "assets/img/natal/natal-002-arvore-de-natal-minimalista-de.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Enfeites de Natal personalizáveis",
+   "ref": "NT-003",
+   "credito": "3dplux",
+   "foto": "assets/img/natal/natal-003-enfeites-de-natal-personalizav.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bandeja natalina",
+   "ref": "NT-004",
+   "credito": "Prin3DLab",
+   "foto": "assets/img/natal/natal-004-bandeja-natalina.jpg",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Poste vitoriano de Natal com lanterna de bengala doce",
+   "ref": "NT-005",
+   "credito": "Maurelia",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Presépio decorativo natalino",
+   "ref": "NT-006",
+   "credito": "Vianax3D",
+   "foto": "assets/img/natal/natal-006-presepio-decorativo-natalino.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bolas de Natal modernas",
+   "ref": "NT-007",
+   "credito": "LuckyDuck",
+   "foto": "assets/img/natal/natal-007-bolas-de-natal-modernas.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Presépio minimalista (conjunto)",
+   "ref": "NT-008",
+   "credito": "Urban Mix Studio",
+   "foto": "assets/img/natal/natal-008-presepio-minimalista-conjunto.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Papai Noel de tricô",
+   "ref": "NT-009",
+   "credito": "Smoggy3D",
+   "foto": "assets/img/natal/natal-009-papai-noel-de-trico.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Gnomo nórdico de Natal estilo tricô",
+   "ref": "NT-010",
+   "credito": "Clean Studio",
+   "foto": "assets/img/natal/natal-010-gnomo-nordico-de-natal-estilo.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Chalé de pinha para vela rechaud",
+   "ref": "NT-011",
+   "credito": "Ligurio",
+   "foto": "assets/img/natal/natal-011-chale-de-pinha-para-vela-recha.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvore de Natal minimalista estilo japandi",
+   "ref": "NT-012",
+   "credito": "NowCraft3D",
+   "foto": "assets/img/natal/natal-012-arvore-de-natal-minimalista-es.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Rena de Natal",
+   "ref": "NT-013",
+   "credito": "SabreDesign",
+   "foto": "assets/img/natal/natal-013-rena-de-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bandeja decorativa de Natal",
+   "ref": "NT-014",
+   "credito": "3DeGalo",
+   "foto": "assets/img/natal/natal-014-bandeja-decorativa-de-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Rena de crochê decorativa",
+   "ref": "NT-015",
+   "credito": "LetHimPrint",
+   "foto": "assets/img/natal/natal-015-rena-de-croche-decorativa.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Caixa \"You Rock\" impressa montada",
+   "ref": "NT-016",
+   "credito": "3D Karl",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Bandeja natalina para doces e chocolates",
+   "ref": "NT-017",
+   "credito": "astavr",
+   "foto": "assets/img/natal/natal-017-bandeja-natalina-para-doces-e.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Rena de tricô",
+   "ref": "NT-019",
+   "credito": "Smoggy3D",
+   "foto": "assets/img/natal/natal-019-rena-de-trico.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Boneco de neve de tricô",
+   "ref": "NT-020",
+   "credito": "Clean Studio",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Enfeites de Natal em traço (line art)",
+   "ref": "NT-021",
+   "credito": "SliQ",
+   "foto": "assets/img/natal/natal-021-enfeites-de-natal-em-traco-lin.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Poste de Natal modular com caixa",
+   "ref": "NT-022",
+   "credito": "Savy_Maker",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Casinha para vela rechaud",
+   "ref": "NT-023",
+   "credito": "GulagHias",
+   "foto": "assets/img/natal/natal-023-casinha-para-vela-rechaud.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Enfeite espiral minimalista",
+   "ref": "NT-024",
+   "credito": "Bedan Designs",
+   "foto": "assets/img/natal/natal-024-enfeite-espiral-minimalista.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Placa \"Ho Ho Ho\"",
+   "ref": "NT-025",
+   "credito": "MikeMartins",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Tigela Papai Noel",
+   "ref": "NT-026",
+   "credito": "piodeer",
+   "foto": "assets/img/natal/natal-026-tigela-papai-noel.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvores de Natal",
+   "ref": "NT-027",
+   "credito": "gabriele_ristallo",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Biscoito de gengibre personalizado com nome",
+   "ref": "NT-028",
+   "credito": "SoSoul Studio 3D",
+   "foto": "assets/img/natal/natal-028-biscoito-de-gengibre-personali.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Casinha de Natal em kit card",
+   "ref": "NT-029",
+   "credito": "Choosse23",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Caixa de presente árvore de Natal",
+   "ref": "NT-030",
+   "credito": "Knoa",
+   "foto": "assets/img/natal/natal-030-caixa-de-presente-arvore-de-na.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Cenário de Natal com porta-vela LED",
+   "ref": "NT-031",
+   "credito": "Deltaprints",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Árvore espiral com estrela",
+   "ref": "NT-032",
+   "credito": "SliQ",
+   "foto": "assets/img/natal/natal-032-arvore-espiral-com-estrela.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Globo de neve com trem de inverno",
+   "ref": "NT-033",
+   "credito": "DQM1N1K",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Calendário do Advento do Papai Noel",
+   "ref": "NT-034",
+   "credito": "3DPrintBunny",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Árvore de Natal com nomes da família",
+   "ref": "NT-035",
+   "credito": "migueljeronimoa",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Árvore de Natal realista (vários tamanhos)",
+   "ref": "NT-036",
+   "credito": "nyx_nk",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Bondinho de Natal",
+   "ref": "NT-038",
+   "credito": "Martin",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Porta-papel-toalha gorro do Papai Noel",
+   "ref": "NT-039",
+   "credito": "Jades Print House",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Natal na vila da montanha",
+   "ref": "NT-040",
+   "credito": "F3D",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Árvore de Natal japandi sem suporte",
+   "ref": "NT-041",
+   "credito": "Babylone",
+   "foto": "assets/img/natal/natal-041-arvore-de-natal-japandi-sem-su.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Porta-retrato árvore de Natal",
+   "ref": "NT-042",
+   "credito": "Luigi_Totto",
+   "foto": "assets/img/natal/natal-042-porta-retrato-arvore-de-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Kit de miniaturas fofas de Natal",
+   "ref": "NT-043",
+   "credito": "orama3dvibes",
+   "foto": "assets/img/natal/natal-043-kit-de-miniaturas-fofas-de-nat.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Presépio com figuras da história de Natal",
+   "ref": "NT-044",
+   "credito": "Filamentflow28",
+   "foto": "assets/img/natal/natal-044-presepio-com-figuras-da-histor.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Placa decorativa Feliz Natal",
+   "ref": "NT-045",
+   "credito": "iarema",
+   "foto": "assets/img/natal/natal-045-placa-decorativa-feliz-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Vila de Natal porta-vela LED",
+   "ref": "NT-046",
+   "credito": "GRDesigns3D",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Presépio iluminado",
+   "ref": "NT-047",
+   "credito": "Sevro",
+   "foto": "assets/img/natal/natal-047-presepio-iluminado.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Porta-velas LED árvore de Natal (4 modelos)",
+   "ref": "NT-048",
+   "credito": "Vaporone",
+   "foto": "assets/img/natal/natal-048-porta-velas-led-arvore-de-nata.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Urso polar de Natal",
+   "ref": "NT-049",
+   "credito": "Keylor",
+   "foto": "assets/img/natal/natal-049-urso-polar-de-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Papai Noel preso na chaminé (porta-papel-toalha)",
+   "ref": "NT-050",
+   "credito": "Jades Print House",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Bola de Natal com rena (8 cm)",
+   "ref": "NT-051",
+   "credito": "kamilp14a",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Enfeite porta-retrato presente de Natal",
+   "ref": "NT-052",
+   "credito": "SliQ",
+   "foto": "assets/img/natal/natal-052-enfeite-porta-retrato-presente.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Globo fábrica mágica de presentes",
+   "ref": "NT-053",
+   "credito": "cuncg",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Tigela e enfeite gorro de Natal",
+   "ref": "NT-054",
+   "credito": "FiBaLi",
+   "foto": "assets/img/natal/natal-054-tigela-e-enfeite-gorro-de-nata.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Presépio minimalista completo",
+   "ref": "NT-055",
+   "credito": "Afetti3D",
+   "foto": "assets/img/natal/natal-055-presepio-minimalista-completo.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Urso polar de tricô",
+   "ref": "NT-056",
+   "credito": "MeltMotive",
+   "foto": "assets/img/natal/natal-056-urso-polar-de-trico.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Kit de enfeites flocos de neve",
+   "ref": "NT-057",
+   "credito": "3DVPrint",
+   "foto": "assets/img/natal/natal-057-kit-de-enfeites-flocos-de-neve.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Pote Papai Noel caindo",
+   "ref": "NT-058",
+   "credito": "Jash",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Rena mágica de Natal",
+   "ref": "NT-059",
+   "credito": "DElex3D",
+   "foto": "assets/img/natal/natal-059-rena-magica-de-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bola de Natal com trem e montanhas",
+   "ref": "NT-060",
+   "credito": "Old Fart Network",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Papai Noel",
+   "ref": "NT-061",
+   "credito": "model lover",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Enfeite rena de suéter personalizado",
+   "ref": "NT-062",
+   "credito": "Aleksandra's models",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Árvore de Natal articulada decorada",
+   "ref": "NT-064",
+   "credito": "Fresh_Design",
+   "foto": "assets/img/natal/natal-064-arvore-de-natal-articulada-dec.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Rena de Natal estilizada",
+   "ref": "NT-065",
+   "credito": "Yura",
+   "foto": "assets/img/natal/natal-065-rena-de-natal-estilizada.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Cachorrinho de Natal de tricô",
+   "ref": "NT-066",
+   "credito": "MeltMotive",
+   "foto": "assets/img/natal/natal-066-cachorrinho-de-natal-de-trico.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bengala doce gigante",
+   "ref": "NT-067",
+   "credito": "Selli91",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Kit Natal país das maravilhas de inverno",
+   "ref": "NT-068",
+   "credito": "sistagull",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Boneco de neve luminoso LED",
+   "ref": "NT-069",
+   "credito": "OssiWerk3D",
+   "foto": "assets/img/natal/natal-069-boneco-de-neve-luminoso-led.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Tigelas árvore de Natal empilháveis",
+   "ref": "NT-070",
+   "credito": "ML Designe",
+   "foto": "assets/img/natal/natal-070-tigelas-arvore-de-natal-empilh.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Roda-gigante de flocos de neve",
+   "ref": "NT-071",
+   "credito": "A-E-D 3D-DRUCK",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Presépio clássico",
+   "ref": "NT-072",
+   "credito": "3D Drucker",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Kit de enfeites de Natal 01",
+   "ref": "NT-073",
+   "credito": "SliQ",
+   "foto": "assets/img/natal/natal-073-kit-de-enfeites-de-natal-01.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Quebra-nozes decorativo",
+   "ref": "NT-074",
+   "credito": "SabreDesign",
+   "foto": "assets/img/natal/natal-074-quebra-nozes-decorativo.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Kit de enfeites flocos de neve para árvore",
+   "ref": "NT-075",
+   "credito": "Denka",
+   "foto": "assets/img/natal/natal-075-kit-de-enfeites-flocos-de-neve.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Duende escandinavo de Natal",
+   "ref": "NT-076",
+   "credito": "Creative-Werkstatt",
+   "foto": "assets/img/natal/natal-076-duende-escandinavo-de-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Boneco de neve na fogueira",
+   "ref": "NT-077",
+   "credito": "GJX3D",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Boneco de neve de tricô",
+   "ref": "NT-078",
+   "credito": "Smoggy3D",
+   "foto": "assets/img/natal/natal-078-boneco-de-neve-de-trico.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Placa Feliz Natal com árvore e floco",
+   "ref": "NT-079",
+   "credito": "NextLab.3D",
+   "foto": "assets/img/natal/natal-079-placa-feliz-natal-com-arvore-e.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Porta-trecos presépio",
+   "ref": "NT-080",
+   "credito": "FV Racing",
+   "foto": "assets/img/natal/natal-080-porta-trecos-presepio.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bola de Natal personalizável",
+   "ref": "NT-081",
+   "credito": "rauloko11500",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Casinha de Natal para vela",
+   "ref": "NT-082",
+   "credito": "Hesic",
+   "foto": "assets/img/natal/natal-082-casinha-de-natal-para-vela.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvore de Natal torcida",
+   "ref": "NT-083",
+   "credito": "3dPrintInPlace",
+   "foto": "assets/img/natal/natal-083-arvore-de-natal-torcida.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Enfeite Feliz Natal",
+   "ref": "NT-084",
+   "credito": "SliQ",
+   "foto": "assets/img/natal/natal-084-enfeite-feliz-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Coleção de Natal moderna orgânica",
+   "ref": "NT-085",
+   "credito": "DecoDejw",
+   "foto": "assets/img/natal/natal-085-colecao-de-natal-moderna-organ.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Boneco de neve tricotado",
+   "ref": "NT-086",
+   "credito": "Jone 3D Design",
+   "foto": "assets/img/natal/natal-086-boneco-de-neve-tricotado.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Presépio estilo madeira entalhada com estrela",
+   "ref": "NT-087",
+   "credito": "vaclav.klich",
+   "foto": "assets/img/natal/natal-087-presepio-estilo-madeira-entalh.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvore de Natal sem suportes",
+   "ref": "NT-088",
+   "credito": "PDFYYC",
+   "foto": "assets/img/natal/natal-088-arvore-de-natal-sem-suportes.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Anjo de tricô",
+   "ref": "NT-089",
+   "credito": "Smoggy3D",
+   "foto": "assets/img/natal/natal-089-anjo-de-trico.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Gorro de Natal sanfonado (slinky)",
+   "ref": "NT-090",
+   "credito": "fanf",
+   "foto": "assets/img/natal/natal-090-gorro-de-natal-sanfonado-slink.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvore com estrela e enfeites (LED)",
+   "ref": "NT-091",
+   "credito": "vajcnerd",
+   "foto": "assets/img/natal/natal-091-arvore-com-estrela-e-enfeites.jpg",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bandeja organizadora vila de Natal",
+   "ref": "NT-092",
+   "credito": "MandyPAN",
+   "foto": "assets/img/natal/natal-092-bandeja-organizadora-vila-de-n.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Trem de biscoito de gengibre",
+   "ref": "NT-093",
+   "credito": "Tomany",
+   "foto": "assets/img/natal/natal-093-trem-de-biscoito-de-gengibre.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvore de Natal expansível (fidget)",
+   "ref": "NT-094",
+   "credito": "Raven",
+   "foto": "assets/img/natal/natal-094-arvore-de-natal-expansivel-fid.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Mini Papai Noel com saco de presentes",
+   "ref": "NT-095",
+   "credito": "Borhi Márton",
+   "foto": "assets/img/natal/natal-095-mini-papai-noel-com-saco-de-pr.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Vila de Natal com iluminação LED",
+   "ref": "NT-096",
+   "credito": "OssiWerk3D",
+   "foto": "assets/img/natal/natal-096-vila-de-natal-com-iluminacao-l.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bandeja natalina decorativa",
+   "ref": "NT-097",
+   "credito": "astavr",
+   "foto": "assets/img/natal/natal-097-bandeja-natalina-decorativa.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Placa LOVE com presépio",
+   "ref": "NT-098",
+   "credito": "vaclav.klich",
+   "foto": "assets/img/natal/natal-098-placa-love-com-presepio.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Calendário do Advento",
+   "ref": "NT-099",
+   "credito": "Mickel'",
+   "foto": "assets/img/natal/natal-099-calendario-do-advento.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvore espiral em kit card",
+   "ref": "NT-100",
+   "credito": "MeltMotive",
+   "foto": "assets/img/natal/natal-100-arvore-espiral-em-kit-card.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Papai Noel escalador",
+   "ref": "NT-101",
+   "credito": "Sevro",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Rena de inverno",
+   "ref": "NT-102",
+   "credito": "3DMerchandMore",
+   "foto": "assets/img/natal/natal-102-rena-de-inverno.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvore luminosa com rena",
+   "ref": "NT-104",
+   "credito": "3D Drucker",
+   "foto": "assets/img/natal/natal-104-arvore-luminosa-com-rena.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Presépio estábulo de Natal",
+   "ref": "NT-105",
+   "credito": "WB3Design",
+   "foto": "assets/img/natal/natal-105-presepio-estabulo-de-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Desafio árvore de Natal",
+   "ref": "NT-106",
+   "credito": "c00g96",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Porta-vela rena de Natal",
+   "ref": "NT-107",
+   "credito": "AllThingsCool",
+   "foto": "assets/img/natal/natal-107-porta-vela-rena-de-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Contagem regressiva estrelada de Natal",
+   "ref": "NT-108",
+   "credito": "SwissPrints",
+   "foto": "assets/img/natal/natal-108-contagem-regressiva-estrelada.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Enfeite gato pendurado no floco de neve",
+   "ref": "NT-109",
+   "credito": "Kataforma",
+   "foto": "assets/img/natal/natal-109-enfeite-gato-pendurado-no-floc.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Decoração de Natal",
+   "ref": "NT-110",
+   "credito": "raven.log",
+   "foto": "assets/img/natal/natal-110-decoracao-de-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Placa \"Papai Noel pare aqui\"",
+   "ref": "NT-111",
+   "credito": "Jades Print House",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Mini casinha de gengibre em kit card",
+   "ref": "NT-113",
+   "credito": "berri3D",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Cervo Voronoi de Natal",
+   "ref": "NT-115",
+   "credito": "Štístkáč",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Figuras de Natal aconchegantes",
+   "ref": "NT-116",
+   "credito": "Biťo1",
+   "foto": "assets/img/natal/natal-116-figuras-de-natal-aconchegantes.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Rena nórdica canelada",
+   "ref": "NT-117",
+   "credito": "Nordly Studio",
+   "foto": "assets/img/natal/natal-117-rena-nordica-canelada.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Argolas de guardanapo natalinas",
+   "ref": "NT-118",
+   "credito": "3DVisuals",
+   "foto": "assets/img/natal/natal-118-argolas-de-guardanapo-natalina.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bola de Natal vila",
+   "ref": "NT-119",
+   "credito": "Wickieprints",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Alce de Natal de tricô",
+   "ref": "NT-121",
+   "credito": "raven.log",
+   "foto": "assets/img/natal/natal-121-alce-de-natal-de-trico.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Cantoneira de porta Papai Noel",
+   "ref": "NT-122",
+   "credito": "MASK3D",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Árvore estrelada para vela LED",
+   "ref": "NT-124",
+   "credito": "LetHimPrint",
+   "foto": "assets/img/natal/natal-124-arvore-estrelada-para-vela-led.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Anjo de tricô delicado",
+   "ref": "NT-125",
+   "credito": "vaclav.klich",
+   "foto": "assets/img/natal/natal-125-anjo-de-trico-delicado.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvore de Natal de tricô",
+   "ref": "NT-126",
+   "credito": "Smoggy3D",
+   "foto": "assets/img/natal/natal-126-arvore-de-natal-de-trico.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Presépio moderno minimalista (Sagrada Família)",
+   "ref": "NT-127",
+   "credito": "Shades",
+   "foto": "assets/img/natal/natal-127-presepio-moderno-minimalista-s.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Estrelas (conjunto com 3)",
+   "ref": "NT-128",
+   "credito": "Chris 3d World",
+   "foto": "assets/img/natal/natal-128-estrelas-conjunto-com-3.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Rena grande 75 cm",
+   "ref": "NT-129",
+   "credito": "O.HA 3D",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Porta-trecos rena e trenó",
+   "ref": "NT-130",
+   "credito": "TheHexArtist",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Gnomo árvore de Natal",
+   "ref": "NT-131",
+   "credito": "Borhi Márton",
+   "foto": "assets/img/natal/natal-131-gnomo-arvore-de-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bola litofania de Natal 90 mm (4 modelos)",
+   "ref": "NT-132",
+   "credito": "PLAyful Prints",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Bola de Natal termoformada",
+   "ref": "NT-133",
+   "credito": "MIHAI_T",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Enfeite gatos empilhados",
+   "ref": "NT-134",
+   "credito": "faffi",
+   "foto": "assets/img/natal/natal-134-enfeite-gatos-empilhados.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Urso polar de tricô com gorro",
+   "ref": "NT-135",
+   "credito": "Smoggy3D",
+   "foto": "assets/img/natal/natal-135-urso-polar-de-trico-com-gorro.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bola de Natal com sobras de impressão",
+   "ref": "NT-136",
+   "credito": "Sebo3D",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Menino Jesus de tricô",
+   "ref": "NT-137",
+   "credito": "shredderrich",
+   "foto": "assets/img/natal/natal-137-menino-jesus-de-trico.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Arco de luz vila de Natal com gnomos",
+   "ref": "NT-138",
+   "credito": "littleprintlove",
+   "foto": "assets/img/natal/natal-138-arco-de-luz-vila-de-natal-com.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Porta-panetone Papai Noel com presente",
+   "ref": "NT-139",
+   "credito": "MeshBeeLab 3d",
+   "foto": "assets/img/natal/natal-139-porta-panetone-papai-noel-com.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Sagrada Família (presépio)",
+   "ref": "NT-140",
+   "credito": "Victor Rangel",
+   "foto": "assets/img/natal/natal-140-sagrada-familia-presepio.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Mini Papai Noel para monitor",
+   "ref": "NT-141",
+   "credito": "Poneko 3D",
+   "foto": "assets/img/natal/natal-141-mini-papai-noel-para-monitor.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Rena de Natal de tricô",
+   "ref": "NT-142",
+   "credito": "MeltMotive",
+   "foto": "assets/img/natal/natal-142-rena-de-natal-de-trico.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Laço decorativo para árvore",
+   "ref": "NT-143",
+   "credito": "Domax Lab",
+   "foto": "assets/img/natal/natal-143-laco-decorativo-para-arvore.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Porta-garrafa de vinho Papai Noel",
+   "ref": "NT-144",
+   "credito": "Mad power",
+   "foto": "assets/img/natal/natal-144-porta-garrafa-de-vinho-papai-n.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvores de Natal realistas impressas montadas",
+   "ref": "NT-145",
+   "credito": "Rexi Studios",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Tigela Papai Noel (modelo 2)",
+   "ref": "NT-146",
+   "credito": "AstroDex",
+   "foto": "assets/img/natal/natal-146-tigela-papai-noel-modelo-2.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Kit de enfeites para árvore",
+   "ref": "NT-147",
+   "credito": "Martin S.",
+   "foto": "assets/img/natal/natal-147-kit-de-enfeites-para-arvore.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvore decorativa LED",
+   "ref": "NT-149",
+   "credito": "3d project",
+   "foto": "assets/img/natal/natal-149-arvore-decorativa-led.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Luminária árvore escandinava",
+   "ref": "NT-152",
+   "credito": "Konfettiracker",
+   "foto": "assets/img/natal/natal-152-luminaria-arvore-escandinava.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bolas vazadas (conjunto com 4)",
+   "ref": "NT-153",
+   "credito": "RJ Design",
+   "foto": "assets/img/natal/natal-153-bolas-vazadas-conjunto-com-4.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Enfeite de Natal personalizado paramétrico",
+   "ref": "NT-154",
+   "credito": "Clube das ferramentas",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Molde de vela personalizável",
+   "ref": "NT-157",
+   "credito": "MakerVerse Designs",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Enfeites low poly para árvore",
+   "ref": "NT-158",
+   "credito": "Inventarix",
+   "foto": "assets/img/natal/natal-158-enfeites-low-poly-para-arvore.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Ganchos para enfeites em kit card",
+   "ref": "NT-159",
+   "credito": "mlodybuk",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Bola de Natal personalizada com nome",
+   "ref": "NT-160",
+   "credito": "Galai",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Pinheiro de tricô porta-vela",
+   "ref": "NT-161",
+   "credito": "The Filming Tinkerer",
+   "foto": "assets/img/natal/natal-161-pinheiro-de-trico-porta-vela.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Lanterna gnomo porta-vela",
+   "ref": "NT-162",
+   "credito": "Eredin",
+   "foto": "assets/img/natal/natal-162-lanterna-gnomo-porta-vela.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Porta-rolos natalinos com elfos",
+   "ref": "NT-163",
+   "credito": "Almaxon 3D",
+   "foto": "assets/img/natal/natal-163-porta-rolos-natalinos-com-elfo.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Ganchos de janela para decoração de Natal",
+   "ref": "NT-164",
+   "credito": "K3V-3D",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Cortadores de biscoito natalinos",
+   "ref": "NT-165",
+   "credito": "The_echoscapes",
+   "foto": "assets/img/natal/natal-165-cortadores-de-biscoito-natalin.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bolas de Natal de tricô",
+   "ref": "NT-166",
+   "credito": "DecoDejw",
+   "foto": "assets/img/natal/natal-166-bolas-de-natal-de-trico.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Presépio parte 2",
+   "ref": "NT-167",
+   "credito": "kreativmilli",
+   "foto": "assets/img/natal/natal-167-presepio-parte-2.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Rena elegante grande 20 cm",
+   "ref": "NT-168",
+   "credito": "RobsonPrinter",
+   "foto": "assets/img/natal/natal-168-rena-elegante-grande-20-cm.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Porta-velas flutuantes",
+   "ref": "NT-169",
+   "credito": "iam miike",
+   "foto": "assets/img/natal/natal-169-porta-velas-flutuantes.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Trio de renas minimalista",
+   "ref": "NT-170",
+   "credito": "risi_enma",
+   "foto": "assets/img/natal/natal-170-trio-de-renas-minimalista.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Casal de cervos minimalista japandi",
+   "ref": "NT-172",
+   "credito": "NowCraft3D",
+   "foto": "assets/img/natal/natal-172-casal-de-cervos-minimalista-ja.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Cesta para panetone",
+   "ref": "NT-173",
+   "credito": "marart3D",
+   "foto": "assets/img/natal/natal-173-cesta-para-panetone.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Floco de neve giratório",
+   "ref": "NT-174",
+   "credito": "Mafagrafos",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Ponteira de árvore estrela filigrana",
+   "ref": "NT-175",
+   "credito": "Cosa_93",
+   "foto": "assets/img/natal/natal-175-ponteira-de-arvore-estrela-fil.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Porta-velas árvore de Natal (3 tamanhos)",
+   "ref": "NT-176",
+   "credito": "3DVisionPT",
+   "foto": "assets/img/natal/natal-176-porta-velas-arvore-de-natal-3.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bolas de Natal personalizadas com nome",
+   "ref": "NT-177",
+   "credito": "PCnno81",
+   "foto": "assets/img/natal/natal-177-bolas-de-natal-personalizadas.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Rena de tricô fofa",
+   "ref": "NT-178",
+   "credito": "Clean Studio",
+   "foto": "assets/img/natal/natal-178-rena-de-trico-fofa.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Porta-guardanapos de Natal",
+   "ref": "NT-180",
+   "credito": "Miaowoo~",
+   "foto": "assets/img/natal/natal-180-porta-guardanapos-de-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Enfeites de Natal sortidos",
+   "ref": "NT-181",
+   "credito": "Biťo1",
+   "foto": "assets/img/natal/natal-181-enfeites-de-natal-sortidos.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Mamãe Noel de tricô",
+   "ref": "NT-182",
+   "credito": "Smoggy3D",
+   "foto": "assets/img/natal/natal-182-mamae-noel-de-trico.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Calendário do Advento cabeça de boneco de blocos",
+   "ref": "NT-183",
+   "credito": "da_max",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Amigos mágicos de Natal",
+   "ref": "NT-184",
+   "credito": "3D Drucker",
+   "foto": "assets/img/natal/natal-184-amigos-magicos-de-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvore de Natal com nome personalizado",
+   "ref": "NT-185",
+   "credito": "eric.willms",
+   "foto": "assets/img/natal/natal-185-arvore-de-natal-com-nome-perso.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvore de Natal com saia",
+   "ref": "NT-187",
+   "credito": "cbass419",
+   "foto": "assets/img/natal/natal-187-arvore-de-natal-com-saia.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Presépio clássico detalhado",
+   "ref": "NT-188",
+   "credito": "Tbridge3D",
+   "foto": "assets/img/natal/natal-188-presepio-classico-detalhado.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Boneco de neve grande montável",
+   "ref": "NT-189",
+   "credito": "ShapeShift 3D Creations",
+   "foto": "assets/img/natal/natal-189-boneco-de-neve-grande-montavel.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bola de Natal japandi",
+   "ref": "NT-190",
+   "credito": "SabreDesign",
+   "foto": "assets/img/natal/natal-190-bola-de-natal-japandi.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Gnomo aconchegante com chocolate quente",
+   "ref": "NT-191",
+   "credito": "Eredin",
+   "foto": "assets/img/natal/natal-191-gnomo-aconchegante-com-chocola.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Luminária cervo, pinheiro e estrela",
+   "ref": "NT-192",
+   "credito": "littleprintlove",
+   "foto": "assets/img/natal/natal-192-luminaria-cervo-pinheiro-e-est.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvore de Natal simples",
+   "ref": "NT-193",
+   "credito": "Steve",
+   "foto": "assets/img/natal/natal-193-arvore-de-natal-simples.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Guardanapeira Papai Noel",
+   "ref": "NT-194",
+   "credito": "MeshBeeLab 3d",
+   "foto": "assets/img/natal/natal-194-guardanapeira-papai-noel.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bola de Natal gato",
+   "ref": "NT-195",
+   "credito": "Sebo3D",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Bolas de Natal (conjunto com 9)",
+   "ref": "NT-196",
+   "credito": "Liora3D",
+   "foto": "assets/img/natal/natal-196-bolas-de-natal-conjunto-com-9.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Caixa de presente",
+   "ref": "NT-197",
+   "credito": "Lukas",
+   "foto": "assets/img/natal/natal-197-caixa-de-presente.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Quebra-nozes gigante 88 cm",
+   "ref": "NT-198",
+   "credito": "O.HA 3D",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Cartão infinito personalizável",
+   "ref": "NT-200",
+   "credito": "InfinityAndBeyond",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Quebra-nozes 40 cm colorido",
+   "ref": "NT-201",
+   "credito": "AWPrintz",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Enfeite porta-retrato guirlanda",
+   "ref": "NT-202",
+   "credito": "Craftastic",
+   "foto": "assets/img/natal/natal-202-enfeite-porta-retrato-guirland.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Globo de neve moderno com trem",
+   "ref": "NT-204",
+   "credito": "DQM1N1K",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Presépio minimalista José, Maria e Menino Jesus",
+   "ref": "NT-205",
+   "credito": "The Maf Lab",
+   "foto": "assets/img/natal/natal-205-presepio-minimalista-jose-mari.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bola de Natal com anjo",
+   "ref": "NT-206",
+   "credito": "Lukas",
+   "foto": "assets/img/natal/natal-206-bola-de-natal-com-anjo.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bola de Natal decorativa",
+   "ref": "NT-207",
+   "credito": "Sebo3D",
+   "foto": "assets/img/natal/natal-207-bola-de-natal-decorativa.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Presépio minimalista Sagrada Família",
+   "ref": "NT-208",
+   "credito": "Afetti3D",
+   "foto": "assets/img/natal/natal-208-presepio-minimalista-sagrada-f.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Cachorrinho salsicha de Natal",
+   "ref": "NT-209",
+   "credito": "3D URSA",
+   "foto": "assets/img/natal/natal-209-cachorrinho-salsicha-de-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Porta-guardanapo de Natal",
+   "ref": "NT-210",
+   "credito": "worldcat3d",
+   "foto": "assets/img/natal/natal-210-porta-guardanapo-de-natal.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bolas de Natal termoformadas",
+   "ref": "NT-211",
+   "credito": "MIHAI_T",
+   "foto": "assets/img/natal/natal-211-bolas-de-natal-termoformadas.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Porta-chocolate rena para crianças",
+   "ref": "NT-212",
+   "credito": "LetHimPrint",
+   "foto": "assets/img/natal/natal-212-porta-chocolate-rena-para-cria.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Bola porta-retrato com laço",
+   "ref": "NT-213",
+   "credito": "Craftastic",
+   "foto": "assets/img/natal/natal-213-bola-porta-retrato-com-laco.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Porta-vela LED árvore espiral minimalista",
+   "ref": "NT-214",
+   "credito": "TheHexArtist",
+   "foto": "assets/img/natal/natal-214-porta-vela-led-arvore-espiral.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Árvore de Natal sem suportes (modelo 2)",
+   "ref": "NT-215",
+   "credito": "PDFYYC",
+   "foto": "assets/img/natal/natal-215-arvore-de-natal-sem-suportes-m.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Pingentes de Natal (conjunto com 10)",
+   "ref": "NT-216",
+   "credito": "3dprimolayer",
+   "foto": "assets/img/natal/natal-216-pingentes-de-natal-conjunto-co.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Caixa de presente estilo crochê multicolor",
+   "ref": "NT-217",
+   "credito": "Tactical Kaoz",
+   "foto": "assets/img/natal/natal-217-caixa-de-presente-estilo-croch.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Presépio minimalista (modelo 2)",
+   "ref": "NT-218",
+   "credito": "Matt",
+   "foto": "assets/img/natal/natal-218-presepio-minimalista-modelo-2.webp",
+   "fotoDesigner": true
+  },
+  {
+   "nome": "Enfeite teleférico em miniatura",
+   "ref": "NT-219",
+   "credito": "schuylab",
+   "foto": "",
+   "fotoDesigner": false
+  },
+  {
+   "nome": "Enfeites flocos de neve",
+   "ref": "NT-220",
+   "credito": "LL-3d",
+   "foto": "assets/img/natal/natal-220-enfeites-flocos-de-neve.webp",
+   "fotoDesigner": true
+  }
+ ]
+}

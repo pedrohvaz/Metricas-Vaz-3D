@@ -110,7 +110,6 @@
       "tamanho": "300 mm de comprimento",
       "tempo": "7 h",
       "art": "dragon",
-      "tag": "Mais vendido",
       "cores": [
         "roxo",
         "verde",
@@ -120,7 +119,73 @@
       "desc": "Impresso em peça única com articulações funcionais: cada segmento do corpo se movimenta sem montagem.",
       "fotos": [
         "dragao.webp"
-      ]
+      ],
+      "tag": "Mais vendido"
+    },
+    {
+      "id": "lua",
+      "ref": "DC-021",
+      "nome": "Luminária Lua",
+      "cat": "decoracao",
+      "preco": 89.9,
+      "material": "PLA translúcido",
+      "tamanho": "120 mm de diâmetro",
+      "tempo": "9 h",
+      "art": "moon",
+      "cores": [
+        "perola",
+        "amarelo"
+      ],
+      "desc": "Relevo de crateras que aparece com a luz acesa. Acompanha base de madeira e LED de luz quente com cabo USB.",
+      "fotos": [
+        "lua.webp"
+      ],
+      "tag": "LED incluso"
+    },
+    {
+      "id": "guerreira",
+      "ref": "CL-007",
+      "nome": "Miniatura Guerreira",
+      "cat": "colecionaveis",
+      "preco": 34.9,
+      "material": "PLA",
+      "tamanho": "Escala 32 mm",
+      "tempo": "3 h",
+      "art": "knight",
+      "cores": [
+        "cinza",
+        "preto"
+      ],
+      "desc": "Impressa em PLA com camada fina de 0,08 mm para preservar os detalhes da armadura e do rosto. Entregue sem pintura, com suportes removidos e pronta para o primer.",
+      "fotos": [
+        "guerreira.webp"
+      ],
+      "camada": "0,08 mm",
+      "tag": "Detalhe fino"
+    },
+    {
+      "id": "chaveiro",
+      "ref": "PC-010",
+      "nome": "Chaveiro Personalizado",
+      "cat": "brinquedos",
+      "preco": 14.9,
+      "material": "PLA",
+      "tamanho": "60 × 30 mm",
+      "tempo": "40 min",
+      "art": "keychain",
+      "cores": [
+        "preto",
+        "azul",
+        "rosa",
+        "verde",
+        "amarelo"
+      ],
+      "desc": "Nome em alto-relevo, com até 10 caracteres. Argola metálica inclusa. Disponível em quantidade para eventos e empresas.",
+      "fotos": [
+        "chaveiro.webp"
+      ],
+      "tag": "Personalizado",
+      "personalizavel": true
     },
     {
       "id": "vaso",
@@ -141,47 +206,6 @@
       "desc": "Parede contínua em espiral, impressa em modo vaso. O PETG torna a peça estanque, própria para flores naturais.",
       "fotos": [
         "vaso.webp"
-      ]
-    },
-    {
-      "id": "guerreira",
-      "ref": "CL-007",
-      "nome": "Miniatura Guerreira",
-      "cat": "colecionaveis",
-      "preco": 34.9,
-      "material": "PLA",
-      "tamanho": "Escala 32 mm",
-      "tempo": "3 h",
-      "art": "knight",
-      "tag": "Detalhe fino",
-      "cores": [
-        "cinza",
-        "preto"
-      ],
-      "desc": "Impressa em PLA com camada fina de 0,08 mm para preservar os detalhes da armadura e do rosto. Entregue sem pintura, com suportes removidos e pronta para o primer.",
-      "fotos": [
-        "guerreira.webp"
-      ],
-      "camada": "0,08 mm"
-    },
-    {
-      "id": "lua",
-      "ref": "DC-021",
-      "nome": "Luminária Lua",
-      "cat": "decoracao",
-      "preco": 89.9,
-      "material": "PLA translúcido",
-      "tamanho": "120 mm de diâmetro",
-      "tempo": "9 h",
-      "art": "moon",
-      "tag": "LED incluso",
-      "cores": [
-        "perola",
-        "amarelo"
-      ],
-      "desc": "Relevo de crateras que aparece com a luz acesa. Acompanha base de madeira e LED de luz quente com cabo USB.",
-      "fotos": [
-        "lua.webp"
       ]
     },
     {
@@ -244,30 +268,6 @@
       "desc": "Para suculentas e cactos, com furo de drenagem e prato encaixável.",
       "fotos": [
         "gato.webp"
-      ]
-    },
-    {
-      "id": "chaveiro",
-      "ref": "PC-010",
-      "nome": "Chaveiro Personalizado",
-      "cat": "brinquedos",
-      "preco": 14.9,
-      "material": "PLA",
-      "tamanho": "60 × 30 mm",
-      "tempo": "40 min",
-      "art": "keychain",
-      "tag": "Personalizado",
-      "personalizavel": true,
-      "cores": [
-        "preto",
-        "azul",
-        "rosa",
-        "verde",
-        "amarelo"
-      ],
-      "desc": "Nome em alto-relevo, com até 10 caracteres. Argola metálica inclusa. Disponível em quantidade para eventos e empresas.",
-      "fotos": [
-        "chaveiro.webp"
       ]
     },
     {
