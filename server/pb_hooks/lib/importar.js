@@ -58,7 +58,13 @@ function lerColecao(colecao) {
 
 const jaImportados = (app, colecao) => app.findRecordsByFilter('produtos', 'codigo ~ {:p}', '', 0, 0, { p: colecao + '-%' }).length;
 
+function importacoesFeitas(app) {
+  try { return (JSON.parse(app.findRecordById('config', 'configuracao001').getString('custos') || '{}') || {})._importacoes || {}; }
+  catch (err) { return {}; }
+}
+
 function listarColecoes(app) {
+  const feitas = importacoesFeitas(app);
   const lista = [];
   let arquivos = [];
   try { arquivos = $os.readDir(RAIZ + '/data/importar'); } catch (err) { arquivos = []; }
@@ -68,7 +74,8 @@ function listarColecoes(app) {
     try {
       const d = JSON.parse(toString($os.readFile(RAIZ + '/data/importar/' + nome)));
       const colecao = String(d.colecao || nome.replace(/\.json$/, ''));
-      lista.push({ colecao, arquivo: nome, total: (d.itens || []).length, importados: jaImportados(app, colecao), fonte: d.fonte || '' });
+      // ja_feita: a coleção já foi importada uma vez (itens apagados depois não são oferecidos de novo)
+      lista.push({ colecao, arquivo: nome, total: (d.itens || []).length, importados: jaImportados(app, colecao), fonte: d.fonte || '', ja_feita: !!feitas[colecao] });
     } catch (err) { /* arquivo inválido */ }
   }
   return lista;

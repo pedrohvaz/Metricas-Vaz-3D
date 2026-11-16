@@ -108,3 +108,48 @@ routerAdd('POST', '/api/mv/importar-colecao', (e) => {
   try { return e.json(200, require(`${__hooks}/lib/importar.js`).importarColecao(e.app, colecao)); }
   catch (err) { throw new NotFoundError('Catálogo não encontrado em data/importar/' + colecao + '.json'); }
 }, $apis.requireAuth('users', '_superusers'));
+
+/* Ações em massa nos produtos (painel → Produtos → selecionar). Aplica tudo numa transação e publica a loja uma vez. */
+routerAdd('POST', '/api/mv/produtos/lote', (e) => {
+  const U = require(`${__hooks}/lib/util.js`);
+  if (!U.ehDono(e.auth)) throw new ForbiddenError('Apenas o dono pode alterar produtos em massa.');
+  const b = e.requestInfo().body || {};
+  const ids = (Array.isArray(b.ids) ? b.ids : []).map(String).filter(id => /^[a-z0-9]{15}$/.test(id)).slice(0, 1000);
+  const acao = String(b.acao || '');
+  const valor = b.valor;
+  if (!ids.length) throw new BadRequestError('Nenhum produto selecionado.');
+  const LIC = ['nao_verificada', 'comercial_ok', 'sem_licenca_comercial', 'propria'];
+  const CAT = e.app.findCollectionByNameOrId('produtos').fields.getByName('categoria').values;
+  const cats = []; for (let i = 0; i < CAT.length; i++) cats.push(String(CAT[i]));
+  const aplica = {
+    licenca: r => { if (LIC.indexOf(valor) < 0) throw new BadRequestError('Licença inválida.'); r.set('licenca', valor); },
+    categoria: r => { if (cats.indexOf(valor) < 0) throw new BadRequestError('Categoria inválida.'); r.set('categoria', valor); },
+    ativo: r => r.set('ativo', !!valor),
+    interno: r => r.set('interno', !!valor),
+    destaque: r => r.set('destaque', !!valor),
+    preco: r => {
+      const p = Math.round(Number(valor) * 100) / 100;
+      if (!(p >= 0) || p > 100000) throw new BadRequestError('Preço inválido.');
+      r.set('preco', p); r.set('sob_consulta', !(p > 0));
+    },
+    sob_consulta: r => { r.set('sob_consulta', true); r.set('preco', 0); },
+  };
+  if (acao !== 'excluir' && !aplica[acao]) throw new BadRequestError('Ação inválida.');
+  let feitos = 0;
+  e.app.store().set('mv_pausar_publicacao', true);
+  try {
+    e.app.runInTransaction((tx) => {
+      for (const id of ids) {
+        let r;
+        try { r = tx.findRecordById('produtos', id); } catch (err) { continue; }
+        if (acao === 'excluir') tx.delete(r);
+        else { aplica[acao](r); tx.save(r); }
+        feitos++;
+      }
+    });
+  } finally {
+    e.app.store().remove('mv_pausar_publicacao');
+  }
+  const pub = U.publicarSite(e.app);
+  return e.json(200, { feitos, publicado: pub.ok });
+}, $apis.requireAuth('users', '_superusers'));

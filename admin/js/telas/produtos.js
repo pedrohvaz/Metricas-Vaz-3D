@@ -3,7 +3,15 @@ import { $, $$, esc, money, num, toast, msgErro, modal, confirmar, lerForm, ocup
 
 const LICENCAS = [['nao_verificada', 'Não verificada'], ['comercial_ok', 'Uso comercial liberado'], ['sem_licenca_comercial', 'Sem licença comercial'], ['propria', 'Modelo próprio']];
 const PIL_LIC = { nao_verificada: 'st-novo', comercial_ok: 'st-aprovado', sem_licenca_comercial: 'st-recusado', propria: 'st-aprovado' };
-let aba = 'loja', busca = '', fcat = '';
+let aba = 'loja', busca = '', fcat = '', flic = '';
+const sel = new Set(); // produtos selecionados para ações em massa
+const ACOES = [
+  ['licenca', 'Mudar licença para…'], ['categoria', 'Mudar categoria para…'],
+  ['ativo_on', 'Mostrar na loja'], ['ativo_off', 'Ocultar da loja'],
+  ['interno_on', 'Mover para o catálogo interno'], ['interno_off', 'Tirar do catálogo interno'],
+  ['destaque_on', 'Marcar como destaque'], ['destaque_off', 'Tirar do destaque'],
+  ['preco', 'Definir preço…'], ['sob_consulta', 'Marcar como sob consulta'], ['excluir', 'Excluir'],
+];
 
 export async function render(el, ctx, acoes) {
   const { pb, catalogo } = ctx;
@@ -19,9 +27,10 @@ export async function render(el, ctx, acoes) {
     const internos = lista.filter(p => p.interno), loja = lista.filter(p => !p.interno);
     let vis = aba === 'interno' ? internos : loja;
     if (fcat) vis = vis.filter(p => p.categoria === fcat);
+    if (flic) vis = vis.filter(p => (p.licenca || 'nao_verificada') === flic);
     if (busca) { const q = busca.toLowerCase(); vis = vis.filter(p => `${p.nome} ${p.ref} ${p.credito || ''} ${p.codigo}`.toLowerCase().includes(q)); }
     const cats = Object.entries(catalogo.categorias || {});
-    const pend = colecoes.filter(c => c.importados < c.total);
+    const pend = colecoes.filter(c => !c.ja_feita && c.importados < c.total);
     el.innerHTML = `
     ${pend.map(c => `<div class="bloco aviso-col"><div><b>Catálogo interno disponível: ${esc(catalogo.categorias?.[c.colecao] || c.colecao)}</b>
       <p class="dica">${c.total} modelos de ${esc(c.fonte || 'terceiros')}${c.importados ? ` · ${c.importados} já importados` : ''}. Entram ocultos, só para consulta interna; nada aparece na loja.</p></div>
@@ -33,15 +42,25 @@ export async function render(el, ctx, acoes) {
       </div>
       <div class="filtros-linha">
         <select id="fCatP" aria-label="Categoria"><option value="">Todas as categorias</option>${opcoes(cats, fcat)}</select>
+        <select id="fLicP" aria-label="Licença"><option value="">Todas as licenças</option>${opcoes(LICENCAS, flic)}</select>
         <input type="search" id="bProd" placeholder="Buscar nome, referência ou designer" value="${esc(busca)}">
       </div>
     </div>
     <p class="dica">${aba === 'loja' ? 'Ao salvar um produto, a loja é atualizada sozinha em alguns segundos.' : 'Confira a licença na página do designer (link “abrir”). Ao marcar “Uso comercial liberado”, o modelo aparece na página Ideias de Natal da loja só com a imagem (e o crédito da foto) e o botão “Quero este”, sem link para fora do site. Os demais ficam só aqui.'}</p>
-    ${vis.length ? `<div class="tabela-wrap"><table class="tabela"><thead><tr><th></th><th>Produto</th><th>Categoria</th>${aba === 'interno' ? '<th>Designer</th><th>Licença</th>' : '<th class="num">Preço</th><th class="num">Custo estimado</th><th>Na loja</th>'}</tr></thead><tbody>
+    <div class="lote" id="lote" hidden>
+      <span><b id="loteN">0</b> selecionados</span>
+      <button type="button" class="link" id="loteTodos">Selecionar todos os ${vis.length} da lista</button>
+      <select id="loteAcao" aria-label="Ação">${opcoes(ACOES, '')}</select>
+      <span id="loteValor"></span>
+      <button type="button" class="btn btn-primary sm" id="loteAplicar">Aplicar</button>
+      <button type="button" class="link" id="loteLimpar">Limpar seleção</button>
+    </div>
+    ${vis.length ? `<div class="tabela-wrap"><table class="tabela"><thead><tr><th class="sel"><input type="checkbox" id="selTodos" aria-label="Selecionar todos os ${vis.length} da lista"></th><th></th><th>Produto</th><th>Categoria</th>${aba === 'interno' ? '<th>Designer</th><th>Licença</th>' : '<th class="num">Preço</th><th class="num">Custo estimado</th><th>Na loja</th>'}</tr></thead><tbody>
       ${vis.map(p => {
         const foto = p.fotos?.length ? pb.files.getURL(p, p.fotos[0], { thumb: '600x600' }) : p.foto_referencia && token ? pb.files.getURL(p, p.foto_referencia, { thumb: '600x600', token }) : '';
         const custo = aba === 'loja' && p.gramas && p.horas && ctx.config ? window.MVCalc.calcular(ctx.config, { gramas: p.gramas, horas: p.horas, material: (p.material || 'PLA').split(' ')[0], embalagem: false }).custo : 0;
-        return `<tr data-id="${p.id}" tabindex="0">
+        return `<tr data-id="${p.id}" tabindex="0"${sel.has(p.id) ? ' class="marcado"' : ''}>
+          <td class="sel"><input type="checkbox" data-sel="${p.id}" aria-label="Selecionar ${esc(p.nome)}"${sel.has(p.id) ? ' checked' : ''}></td>
           <td class="foto">${foto ? `<img src="${foto}" alt="" width="48" height="48" loading="lazy">` : ''}</td>
           <td><b>${esc(p.nome)}</b><small>${esc(p.ref || '')}${p.destaque ? ' · destaque' : ''}${p.obs_interna ? ' · <span class="atraso">atenção</span>' : ''}</small></td>
           <td>${esc(catalogo.categorias?.[p.categoria] || p.categoria)}</td>
@@ -56,6 +75,11 @@ export async function render(el, ctx, acoes) {
 
     $('#bProd', el).addEventListener('input', ev => { clearTimeout(el._t); el._t = setTimeout(() => { busca = ev.target.value.trim(); carregar(); }, 250); });
     $('#fCatP', el).addEventListener('change', ev => { fcat = ev.target.value; carregar(); });
+    $('#fLicP', el).addEventListener('change', ev => { flic = ev.target.value; carregar(); });
+    el._vis = vis; el._lista = lista;
+    const existentes = new Set(lista.map(p => p.id));
+    for (const id of [...sel]) if (!existentes.has(id)) sel.delete(id); // produtos que não existem mais saem da seleção
+    atualizaLote();
     $('#importar', el)?.addEventListener('click', async ev => {
       try {
         const r = await ocupado(ev.target, async () => {
@@ -67,10 +91,61 @@ export async function render(el, ctx, acoes) {
     });
   }
 
+  /* ---------- seleção e ações em massa ---------- */
+  function atualizaLote() {
+    const lote = $('#lote', el); if (!lote) return;
+    const vis = el._vis || [];
+    lote.hidden = !sel.size;
+    $('#loteN', el).textContent = sel.size;
+    const todos = $('#selTodos', el);
+    if (todos) { const n = vis.filter(p => sel.has(p.id)).length; todos.checked = n > 0 && n === vis.length; todos.indeterminate = n > 0 && n < vis.length; }
+    $('#loteTodos', el).hidden = vis.every(p => sel.has(p.id));
+    $$('tr[data-id]', el).forEach(tr => tr.classList.toggle('marcado', sel.has(tr.dataset.id)));
+  }
+  function campoValor() {
+    const acao = $('#loteAcao', el).value, alvo = $('#loteValor', el);
+    alvo.innerHTML = acao === 'licenca' ? `<select id="loteV" aria-label="Licença">${opcoes(LICENCAS, 'comercial_ok')}</select>`
+      : acao === 'categoria' ? `<select id="loteV" aria-label="Categoria">${opcoes(Object.entries(catalogo.categorias || {}), '')}</select>`
+      : acao === 'preco' ? '<input id="loteV" type="number" min="0" step="0.01" placeholder="R$" aria-label="Preço" style="width:110px">' : '';
+  }
+  async function aplicarLote(btn) {
+    const acaoUI = $('#loteAcao', el).value;
+    const ids = [...sel];
+    const lista = el._lista || [];
+    const [acao, valor] = acaoUI.endsWith('_on') ? [acaoUI.slice(0, -3), true] : acaoUI.endsWith('_off') ? [acaoUI.slice(0, -4), false]
+      : [acaoUI, $('#loteV', el) ? $('#loteV', el).value : null];
+    if (acao === 'preco' && (valor === '' || !(Number(valor) >= 0))) return toast('Informe o preço.', 'erro');
+    const nome = (ACOES.find(a => a[0] === acaoUI) || [, acaoUI])[1].replace('…', '');
+    if (acao === 'excluir' && !(await confirmar(`Excluir ${ids.length} produto(s)? Isso não pode ser desfeito.`, { ok: 'Excluir', perigo: true }))) return;
+    // itens que passariam a aparecer na loja sem licença confirmada
+    const vaiPublicar = p => (acao === 'ativo' && valor ? !p.interno : acao === 'interno' && !valor ? p.ativo : false);
+    const semLic = lista.filter(p => sel.has(p.id) && vaiPublicar(p) && !['comercial_ok', 'propria'].includes(p.licenca));
+    if (semLic.length && !(await confirmar(`${semLic.length} dos selecionados vão aparecer na loja sem a licença marcada como “Uso comercial liberado” ou “Modelo próprio”. Continuar?`, { ok: 'Continuar', perigo: true }))) return;
+    try {
+      const r = await ocupado(btn, async () => {
+        const resp = await fetch(`${ctx.BASE}/api/mv/produtos/lote`, { method: 'POST', headers: { Authorization: pb.authStore.token, 'Content-Type': 'application/json' }, body: JSON.stringify({ ids, acao, valor }) });
+        const j = await resp.json(); if (!resp.ok) throw new Error(j.message); return j;
+      });
+      toast(`${nome}: ${r.feitos} produto(s)${r.publicado ? ' · loja atualizada' : ''}`);
+      sel.clear(); carregar();
+    } catch (err) { toast(msgErro(err), 'erro'); }
+  }
+  const marcar = (id, sim) => (sim ? sel.add(id) : sel.delete(id));
+  el.addEventListener('change', e => {
+    const c = e.target.closest('[data-sel]');
+    if (c) { marcar(c.dataset.sel, c.checked); return atualizaLote(); }
+    if (e.target.id === 'selTodos') { (el._vis || []).forEach(p => marcar(p.id, e.target.checked)); $$('[data-sel]', el).forEach(i => { i.checked = e.target.checked; }); return atualizaLote(); }
+    if (e.target.id === 'loteAcao') campoValor();
+  });
+
   el.addEventListener('click', async e => {
     if (e.target.closest('[data-link]')) return; // link do designer abre em nova aba
+    if (e.target.closest('td.sel, th.sel')) return; // clicar na caixa não abre o produto
+    if (e.target.id === 'loteTodos') { (el._vis || []).forEach(p => sel.add(p.id)); $$('[data-sel]', el).forEach(i => { i.checked = true; }); return atualizaLote(); }
+    if (e.target.id === 'loteLimpar') { sel.clear(); $$('[data-sel]', el).forEach(i => { i.checked = false; }); return atualizaLote(); }
+    if (e.target.id === 'loteAplicar') return aplicarLote(e.target);
     const a = e.target.closest('[data-aba]');
-    if (a) { aba = a.dataset.aba; return carregar(); }
+    if (a) { aba = a.dataset.aba; sel.clear(); return carregar(); }
     const imp = e.target.closest('[data-importar]');
     if (imp) {
       try {
@@ -86,7 +161,7 @@ export async function render(el, ctx, acoes) {
     const tr = e.target.closest('tr[data-id]');
     if (tr) editar(ctx, tr.dataset.id, carregar, token);
   });
-  el.addEventListener('keydown', e => { const tr = e.target.closest('tr[data-id]'); if (tr && e.key === 'Enter') editar(ctx, tr.dataset.id, carregar, token); });
+  el.addEventListener('keydown', e => { const tr = e.target.closest('tr[data-id]'); if (tr && e.key === 'Enter' && !e.target.closest('td.sel')) editar(ctx, tr.dataset.id, carregar, token); });
   $('#novoProd').addEventListener('click', () => editar(ctx, null, carregar, token));
   $('#publicar').addEventListener('click', async ev => {
     try {
